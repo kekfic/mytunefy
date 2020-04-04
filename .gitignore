@@ -1,0 +1,25 @@
+# Prerequisites
+*.d
+
+# Project files
+*.project
+*.pydevproject
+*.pro.user
+
+# ZIP
+*.zip
+
+# TXT
+*.txt
+*.docx
+*.xlsx
+
+
+#Latex aux files
+*.aux
+*.log
+
+#Python cache
+*.pyc
+
+.settings
