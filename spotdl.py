@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import os
 import sys
 import platform
@@ -7,14 +6,11 @@ import pprint
 import logzero
 from logzero import logger as log
 
-# from spotdl import __version__
-# from spotdl import const
-# from spotdl import handle
-# from spotdl import internals
-# from spotdl import spotify_tools
-# from spotdl import youtube_tools
-# from spotdl import downloader
+from getmac import get_mac_address
+from hashlib import pbkdf2_hmac
+import binascii
 
+# Todo: check why __version__ in not working
 #import __version__
 import const
 import handle
@@ -23,6 +19,7 @@ import spotify_tools
 import youtube_tools
 import downloader
 
+from __init__ import personal_key
 
 # My modification
 from PySide2.QtWidgets import QMainWindow, QApplication
@@ -69,6 +66,13 @@ def match_args():
             username=const.args.username, text_file=const.args.write_to
         )
 
+def user_checker():
+    mac_address = bytes(get_mac_address(), 'utf8')
+    dk = pbkdf2_hmac('sha256', mac_address, b'salt', 100000)
+    key_bin = binascii.hexlify(dk)
+
+    return key_bin
+
 
 def main():
     const.args = handle.get_arguments()
@@ -96,11 +100,17 @@ if __name__ == "__main__":
         # If it's not use the path we're on now
     else:
         CurrentPath = os.path.dirname(__file__)
-        
-    app = QApplication(sys.argv)
 
-    gui=MainWin() 
-    gui.mainwindow.show() 
-    #gui.mainwindow.showMaximized()
-    
-    sys.exit(app.exec_())
+    if personal_key == user_checker():
+
+        print('User allowed.')
+
+        app = QApplication(sys.argv)
+
+        gui=MainWin()
+        gui.mainwindow.show()
+        #gui.mainwindow.showMaximized()
+
+        sys.exit(app.exec_())
+    else:
+        print('User not allowed')

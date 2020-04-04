@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>906</width>
-    <height>730</height>
+    <width>867</width>
+    <height>813</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -181,7 +181,7 @@
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>250</height>
+        <height>190</height>
        </size>
       </property>
       <property name="frameShape">
@@ -219,6 +219,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -243,7 +249,7 @@
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>25</height>
+             <height>20</height>
             </size>
            </property>
           </spacer>
@@ -259,19 +265,22 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>25</height>
+             <height>20</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>16777215</width>
-             <height>45</height>
+             <width>500</width>
+             <height>35</height>
             </size>
            </property>
            <property name="font">
             <font>
              <pointsize>11</pointsize>
             </font>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
            </property>
            <property name="currentText">
             <string/>
@@ -292,7 +301,7 @@
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>25</height>
+             <height>15</height>
             </size>
            </property>
           </spacer>
@@ -325,7 +334,7 @@
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>30</height>
+             <height>25</height>
             </size>
            </property>
            <property name="font">
@@ -355,7 +364,7 @@
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>25</height>
+             <height>10</height>
             </size>
            </property>
           </spacer>
@@ -368,13 +377,19 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(83, 141, 191);
+            <string notr="true">background-color: rgb(253, 253, 253);
 color: rgb(255, 255, 255);</string>
            </property>
            <property name="text">
@@ -382,13 +397,16 @@ color: rgb(255, 255, 255);</string>
            </property>
            <property name="icon">
             <iconset resource="icons.qrc">
-             <normaloff>:/spotify/resources/icons/folder2.png</normaloff>:/spotify/resources/icons/folder2.png</iconset>
+             <normaloff>:/spotify/resources/icons/folder.png</normaloff>:/spotify/resources/icons/folder.png</iconset>
            </property>
            <property name="iconSize">
             <size>
              <width>40</width>
              <height>40</height>
             </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -400,7 +418,7 @@ color: rgb(255, 255, 255);</string>
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>40</height>
+             <height>10</height>
             </size>
            </property>
           </spacer>
@@ -419,13 +437,13 @@ color: rgb(255, 255, 255);</string>
            <property name="minimumSize">
             <size>
              <width>200</width>
-             <height>25</height>
+             <height>30</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>45</height>
+             <height>40</height>
             </size>
            </property>
            <property name="font">
@@ -504,13 +522,13 @@ color: rgb(255, 255, 255);</string>
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>30</height>
+        <height>150</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>60</height>
+        <height>400</height>
        </size>
       </property>
       <property name="font">
@@ -519,7 +537,10 @@ color: rgb(255, 255, 255);</string>
        </font>
       </property>
       <property name="plainText">
-       <string>https://open.spotify.com/track/6xNaObGQT8V8OM5OEm6p3G?si=AYRlNNQdQx6gfZNlC4hsaQ</string>
+       <string/>
+      </property>
+      <property name="centerOnScroll">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -541,7 +562,13 @@ color: rgb(255, 255, 255);</string>
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>40</height>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>1500</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -549,12 +576,34 @@ color: rgb(255, 255, 255);</string>
         <pointsize>15</pointsize>
        </font>
       </property>
+      <property name="toolTip">
+       <string>download</string>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(83, 141, 191);
+       <string notr="true">background-color: rgb(76, 76, 76);
 color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
-       <string>Start Download</string>
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="icons.qrc">
+        <normaloff>:/spotify/resources/icons/down_music_red.png</normaloff>:/spotify/resources/icons/down_music_red.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>80</width>
+        <height>80</height>
+       </size>
+      </property>
+      <property name="autoRepeat">
+       <bool>true</bool>
+      </property>
+      <property name="flat">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -573,8 +622,11 @@ color: rgb(255, 255, 255);</string>
     </item>
     <item>
      <widget class="QProgressBar" name="progressBar">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="value">
-       <number>20</number>
+       <number>0</number>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -674,7 +726,7 @@ color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>906</width>
+     <width>867</width>
      <height>26</height>
     </rect>
    </property>
