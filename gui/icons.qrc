@@ -1,0 +1,21 @@
+<RCC>
+  <qresource prefix="spotify">
+    <file>../resources/icons/cuffie.png</file>
+    <file>../resources/icons/eng.png</file>
+    <file>../resources/icons/folder.png</file>
+    <file>../resources/icons/folder2.png</file>
+    <file>../resources/icons/info.png</file>
+    <file>../resources/icons/interrogativo1.png</file>
+    <file>../resources/icons/ita.png</file>
+    <file>../resources/icons/language.png</file>
+    <file>../resources/icons/locker.png</file>
+    <file>../resources/icons/music_down1.png</file>
+    <file>../resources/icons/music1.png</file>
+    <file>../resources/icons/music3.png</file>
+    <file>../resources/icons/music4.png</file>
+    <file>../resources/icons/play1.png</file>
+    <file>../resources/icons/program3.ico</file>
+    <file>../resources/icons/setting-advanced.png</file>
+    <file>../resources/icons/spotify-com.png</file>
+  </qresource>
+</RCC>
