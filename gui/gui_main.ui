@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>690</width>
-    <height>816</height>
+    <width>579</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -420,6 +420,7 @@ color: rgb(255, 255, 255);</string>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);
+
 </string>
       </property>
       <property name="frameShape">
@@ -456,7 +457,7 @@ color: rgb(255, 255, 255);</string>
      </spacer>
     </item>
     <item>
-     <widget class="QPushButton" name="StartButton">
+     <widget class="QPushButton" name="StartPushButton">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -624,7 +625,7 @@ color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>690</width>
+     <width>579</width>
      <height>26</height>
     </rect>
    </property>

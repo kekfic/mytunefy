@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main.ui',
 # licensing of '.\gui_main.ui' applies.
 #
-# Created: Sat Apr  4 21:22:06 2020
+# Created: Sun Apr  5 10:47:24 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(690, 816)
+        MainWindow.resize(579, 800)
         MainWindow.setMaximumSize(QtCore.QSize(1920, 1080))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -160,6 +160,7 @@ class Ui_MainWindow(object):
         self.plainTextEdit.setFont(font)
         self.plainTextEdit.setAutoFillBackground(True)
         self.plainTextEdit.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"\n"
 "")
         self.plainTextEdit.setFrameShape(QtWidgets.QFrame.Box)
         self.plainTextEdit.setFrameShadow(QtWidgets.QFrame.Plain)
@@ -171,24 +172,24 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addWidget(self.plainTextEdit)
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem3)
-        self.StartButton = QtWidgets.QPushButton(self.centralwidget)
-        self.StartButton.setMinimumSize(QtCore.QSize(0, 100))
-        self.StartButton.setMaximumSize(QtCore.QSize(1500, 16777215))
+        self.StartPushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.StartPushButton.setMinimumSize(QtCore.QSize(0, 100))
+        self.StartPushButton.setMaximumSize(QtCore.QSize(1500, 16777215))
         font = QtGui.QFont()
         font.setPointSize(15)
-        self.StartButton.setFont(font)
-        self.StartButton.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.StartButton.setStyleSheet("background-color: rgb(76, 76, 76);\n"
+        self.StartPushButton.setFont(font)
+        self.StartPushButton.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.StartPushButton.setStyleSheet("background-color: rgb(76, 76, 76);\n"
 "color: rgb(255, 255, 255);")
-        self.StartButton.setText("")
+        self.StartPushButton.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/down_music_red.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.StartButton.setIcon(icon2)
-        self.StartButton.setIconSize(QtCore.QSize(80, 80))
-        self.StartButton.setAutoRepeat(True)
-        self.StartButton.setFlat(True)
-        self.StartButton.setObjectName("StartButton")
-        self.verticalLayout_3.addWidget(self.StartButton)
+        self.StartPushButton.setIcon(icon2)
+        self.StartPushButton.setIconSize(QtCore.QSize(80, 80))
+        self.StartPushButton.setAutoRepeat(True)
+        self.StartPushButton.setFlat(True)
+        self.StartPushButton.setObjectName("StartPushButton")
+        self.verticalLayout_3.addWidget(self.StartPushButton)
         spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem4)
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
@@ -232,7 +233,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 690, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 579, 26))
         self.menubar.setObjectName("menubar")
         self.menuMenu = QtWidgets.QMenu(self.menubar)
         self.menuMenu.setObjectName("menuMenu")
@@ -293,7 +294,7 @@ class Ui_MainWindow(object):
         self.plainTextDirectory.setWhatsThis(QtWidgets.QApplication.translate("MainWindow", "Download folder", None, -1))
         self.plainTextDirectory.setPlainText(QtWidgets.QApplication.translate("MainWindow", "C:\\Music", None, -1))
         self.label_4.setText(QtWidgets.QApplication.translate("MainWindow", "URL", None, -1))
-        self.StartButton.setToolTip(QtWidgets.QApplication.translate("MainWindow", "download", None, -1))
+        self.StartPushButton.setToolTip(QtWidgets.QApplication.translate("MainWindow", "download", None, -1))
         self.label_3.setText(QtWidgets.QApplication.translate("MainWindow", "Where words fail, music speaks.", None, -1))
         self.menuMenu.setTitle(QtWidgets.QApplication.translate("MainWindow", "Menu", None, -1))
         self.menuHelp.setTitle(QtWidgets.QApplication.translate("MainWindow", "Help", None, -1))
@@ -307,4 +308,4 @@ class Ui_MainWindow(object):
         self.actionOverride_Policy.setText(QtWidgets.QApplication.translate("MainWindow", "Override Policy", None, -1))
 
 from .import icon_rc
-
+#import icons_rc

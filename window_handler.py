@@ -13,6 +13,94 @@ import os
 from gui.gui_main import Ui_MainWindow
 import re
 
+import sys
+import platform
+import pprint
+import logzero
+from logzero import logger as log
+
+#import __version__
+import const
+import handle
+import internals
+import spotify_tools
+import youtube_tools
+import downloader
+
+
+
+def debug_sys_info():
+    log.debug("Python version: {}".format(sys.version))
+    log.debug("Platform: {}".format(platform.platform()))
+    log.debug(pprint.pformat(const.args.__dict__))
+
+
+def match_args():
+    # Todo major changing here, I shall probably change everything,
+    # I add operation variable, for now it is a patch
+    operation = ''
+    if const.args.song:
+        for track in const.args.song:
+            print(track)
+            track_dl = downloader.Downloader(raw_song=track)
+            track_dl.download_single()
+        operation = 'track'
+    elif const.args.list:
+        if const.args.write_m3u:
+            youtube_tools.generate_m3u(
+                track_file=const.args.list
+            )
+        else:
+            list_dl = downloader.ListDownloader(
+                tracks_file=const.args.list,
+                skip_file=const.args.skip,
+                write_successful_file=const.args.write_successful,
+            )
+            list_dl.download_list()
+        operation = 'list'
+    elif const.args.playlist:
+        spotify_tools.write_playlist(
+            playlist_url=const.args.playlist, text_file=const.args.write_to
+        )
+        operation = 'playlist'
+    elif const.args.album:
+        spotify_tools.write_album(
+            album_url=const.args.album, text_file=const.args.write_to
+        )
+        operation = 'album'
+    elif const.args.all_albums:
+        spotify_tools.write_all_albums_from_artist(
+            artist_url=const.args.all_albums, text_file=const.args.write_to
+        )
+        operation = 'all_album'
+    elif const.args.username:
+        spotify_tools.write_user_playlist(
+            username=const.args.username, text_file=const.args.write_to
+        )
+        operation = 'username'
+
+    return operation
+
+def main(url, category_list):
+    const.args = handle.get_arguments([url, category_list, ''])
+
+    internals.filter_path(const.args.folder)
+    youtube_tools.set_api_key()
+
+    logzero.setup_default_logger(formatter=const._formatter, level=const.args.log_level)
+
+    try:
+        match_args()
+        # actually we don't necessarily need this, but yeah...
+        # explicit is better than implicit!
+        sys.exit(0)
+
+    except KeyboardInterrupt as e:
+        log.exception(e)
+        sys.exit(3)
+
+
+
 
 class LoadingGif(QSplashScreen):
     def __init__(self, movie, parent=None):
@@ -53,30 +141,40 @@ class MainWin(QObject, Ui_MainWindow):
         #self.comboBox.addItems(combo_data)
         self.pushButtonFolder.clicked.connect(self.folder_opener)
         self.progressBar.hide()
+        self.StartPushButton.clicked.connect(self.startDownload)
 
-    # os.system('explorer.exe "C:\users\%username%\Desktop"')
 
     def folder_opener(self):
-        self.mymusicfolder = 'C:\\Users\\%username%\\'
+
+        self.mymusicfolder = 'C:\\Users\\%username%\\Music'
         mydir = QFileDialog.getExistingDirectory(None, 'Select a folder:', self.mymusicfolder, QFileDialog.ShowDirsOnly)
+        self.plainTextDirectory.setPlainText(mydir)
 
-        self.plainTextEdit_2.plainTextDirectory(mydir)
-
-    def user_checker(self):
-        mac_address = bytes(get_mac_address(), 'utf8')
-        dk = pbkdf2_hmac('sha256', mac_address, b'salt', 100000)
-        key_bin = binascii.hexlify(dk)
-
-        return key_bin
+    def startDownload(self):
+        print("Start downloading")
+        self.url = self.text_from_plain_text()
+        self.category_list = self.parser_category(self.url)
+        main(self.url, self.category_list)
 
     def text_from_plain_text(self):
-        self.url = print(self.plainTextEdit.toText())
+        url = self.plainTextEdit.toPlainText()
+        print(url)
+        return url
 
-    def parser(self, url):
+    def parser_category(self, url):
+        # Todo: if a wrong url or line is inserted, parser fails
+        #  File "D:\Programmi\Python\Spotify-app\window_handler.py", line 152, in parser_category
+        #     junk, data = re.split(r'.com/', url)
+        # ValueError: not enough values to unpack (expected 2, got 1)
+
         junk, data = re.split(r'.com/', url)
-        category = re.split(r'/*', data)
+        print(junk, data)
+        category_list, junk = re.split(r'/', data)
+        print('Category:', category_list)
 
-        return category
+        return category_list
 
     def time_dep_program(self, time_system):
         print('Time system is:')
+
+
