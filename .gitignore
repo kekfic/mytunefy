@@ -5,6 +5,8 @@
 *.project
 *.pydevproject
 *.pro.user
+*.idea
+*.vs
 
 # ZIP
 *.zip
