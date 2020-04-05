@@ -9,11 +9,6 @@ import sys
 import os
 import functools
 
-# from spotdl import const
-# from spotdl import internals
-# from spotdl.lyrics.providers import LyricClasses
-# from spotdl.lyrics.exceptions import LyricsNotFound
-
 import const
 import internals
 from lyrics.providers import LyricClasses
@@ -181,7 +176,7 @@ def fetch_album(album):
 @must_be_authorized
 def fetch_albums_from_artist(artist_url, album_type=None):
     """
-    This funcction returns all the albums from a give artist_url using the US
+    This function returns all the albums from a give artist_url using the US
     market
     :param artist_url - spotify artist url
     :param album_type - the type of album to fetch (ex: single) the default is

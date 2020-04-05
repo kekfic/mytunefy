@@ -51,7 +51,7 @@ def input_link(links):
         except ValueError:
             log.warning("Choose a valid number!")
 
-
+# Todo check if this function works everytime
 def trim_song(tracks_file):
     """ Remove the first song from file. """
     with open(tracks_file, "r") as file_in:

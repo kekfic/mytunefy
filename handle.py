@@ -40,9 +40,7 @@ default_conf = {
         "spotify_client_secret": "0f02b7c483c04257984695007a4a8d5c",
     }
 }
-#"spotify_client_id": "4fe3fecfe5334023a1472516cc99d805",
-#"spotify_client_secret": "0f02b7c483c04257984695007a4a8d5c",
-
+#4fe3fecfe5334023a1472516cc99d805
 
 def log_leveller(log_level_str):
     loggin_levels = [logging.INFO, logging.WARNING, logging.ERROR, logging.DEBUG]
@@ -88,13 +86,12 @@ def override_config(config_file, parser, raw_args=None):
     parser.set_defaults(**config)
     return parser.parse_args(raw_args)
 
+def override_arg(raw_args):
+    print('overriding')
 
-def get_arguments(raw_args, to_group=True, to_merge=True):
+def get_arguments(raw_args=None, to_group=True, to_merge=True):
     # help = 'Load tracks from playlist URL into {}'.format()
-    url, category, other_args = raw_args
     parser = type("", (), {})()
-    parser.category = url
-    #parser.folder = os.path.abspath('D:\\Users\\%username%\\Music\\')
     parser.youtube_api_key = None
     parser.log_level = "INFO"
     parser.song = ''
@@ -124,24 +121,8 @@ def get_arguments(raw_args, to_group=True, to_merge=True):
     parser.avconv = False
     parser.no_remove_original = False
 
-
-    # parser.spotify_client_id = "45e"
-    # parser.spotify_client_secret = "45e"
     parser.spotify_client_id = "4fe3fecfe5334023a1472516cc99d805"
     parser.spotify_client_secret = "0f02b7c483c04257984695007a4a8d5c"
-
-    if category == 'playlist':
-        print('Playlist')
-        parser.playlist = url
-    elif category == 'track':
-        print('Track')
-        parser.song = url
-    elif category == 'album':
-        parser.album = url
-        print('album')
-    elif category == 'artist':
-        parser.artist = url
-        print('artist')
 
     return parser
 

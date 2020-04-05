@@ -7,8 +7,7 @@ from hashlib import pbkdf2_hmac
 import binascii
 
 # Todo: check why __version__ in not working
-#import __version__
-
+# import __version__
 
 
 from __init__ import personal_key
@@ -18,7 +17,9 @@ import time
 from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtGui import QMovie
 from window_handler import MainWin, LoadingGif
-#--
+
+
+# --
 
 
 def user_checker():
@@ -49,9 +50,9 @@ if __name__ == "__main__":
         while movie.state() == QMovie.Running and time.time() < start + 10:
             app.processEvents()
 
-        gui=MainWin()
+        gui = MainWin()
         gui.mainwindow.show()
-        #gui.mainwindow.showMaximized()
+        # gui.mainwindow.showMaximized()
 
         sys.exit(app.exec_())
     else:
