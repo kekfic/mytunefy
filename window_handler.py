@@ -39,67 +39,48 @@ def match_args():
     # Todo major changing here, I shall probably change everything,
     # I add operation variable, for now it is a patch
     operation = ''
+    text_file = ''
     if const.args.song:
         for track in const.args.song:
             print(track)
             track_dl = downloader.Downloader(raw_song=track)
             track_dl.download_single()
         operation = 'track'
-    elif const.args.list:
-        if const.args.write_m3u:
-            youtube_tools.generate_m3u(
-                track_file=const.args.list
-            )
-        else:
-            list_dl = downloader.ListDownloader(
-                tracks_file=const.args.list,
-                skip_file=const.args.skip,
-                write_successful_file=const.args.write_successful,
-            )
-            list_dl.download_list()
-        operation = 'list'
+    # elif const.args.list:
+    #     if const.args.write_m3u:
+    #         youtube_tools.generate_m3u(
+    #             track_file=const.args.list
+    #         )
+    #     else:
+    #         list_dl = downloader.ListDownloader(
+    #             tracks_file=const.args.list,
+    #             skip_file=const.args.skip,
+    #             write_successful_file=const.args.write_successful,
+    #         )
+    #         list_dl.download_list()
+    #     operation = 'list'
     elif const.args.playlist:
-        spotify_tools.write_playlist(
+        tracks, text_file = spotify_tools.write_playlist(
             playlist_url=const.args.playlist, text_file=const.args.write_to
         )
         operation = 'playlist'
     elif const.args.album:
-        spotify_tools.write_album(
+        tracks, text_file = spotify_tools.write_album(
             album_url=const.args.album, text_file=const.args.write_to
         )
         operation = 'album'
     elif const.args.all_albums:
-        spotify_tools.write_all_albums_from_artist(
+        text_file= spotify_tools.write_all_albums_from_artist(
             artist_url=const.args.all_albums, text_file=const.args.write_to
         )
         operation = 'all_album'
     elif const.args.username:
-        spotify_tools.write_user_playlist(
+        links_playlist, text_file = spotify_tools.write_user_playlist(
             username=const.args.username, text_file=const.args.write_to
         )
         operation = 'username'
 
-    return operation
-
-def main(url, category_list):
-    const.args = handle.get_arguments([url, category_list, ''])
-
-    internals.filter_path(const.args.folder)
-    youtube_tools.set_api_key()
-
-    logzero.setup_default_logger(formatter=const._formatter, level=const.args.log_level)
-
-    try:
-        match_args()
-        # actually we don't necessarily need this, but yeah...
-        # explicit is better than implicit!
-        sys.exit(0)
-
-    except KeyboardInterrupt as e:
-        log.exception(e)
-        sys.exit(3)
-
-
+    return operation, text_file
 
 
 class LoadingGif(QSplashScreen):
@@ -137,24 +118,29 @@ class MainWin(QObject, Ui_MainWindow):
         self.setupUi(self.mainwindow)
         QObject.__init__(self)
 
+        self.operation = ''
         #combo_data = ['', 'song', 'playlist', 'album', 'artist']
         #self.comboBox.addItems(combo_data)
         self.pushButtonFolder.clicked.connect(self.folder_opener)
         self.progressBar.hide()
         self.StartPushButton.clicked.connect(self.startDownload)
+        const.args.folder = internals.get_music_dir()
+        self.plainTextDirectory.setPlainText(const.args.folder)
 
 
     def folder_opener(self):
 
-        self.mymusicfolder = 'C:\\Users\\%username%\\Music'
-        mydir = QFileDialog.getExistingDirectory(None, 'Select a folder:', self.mymusicfolder, QFileDialog.ShowDirsOnly)
-        self.plainTextDirectory.setPlainText(mydir)
+        mydefaultfolder = 'C:\\Users\\%username%\\Music'
+        self.mydir = QFileDialog.getExistingDirectory(None, 'Select a folder:', mydefaultfolder, QFileDialog.ShowDirsOnly)
+        self.plainTextDirectory.setPlainText(self.mydir)
+        const.args.folder = self.mydir
 
     def startDownload(self):
-        print("Start downloading")
+        #print("Start downloading")
+        #Get url from plain text
         self.url = self.text_from_plain_text()
         self.category_list = self.parser_category(self.url)
-        main(self.url, self.category_list)
+        self.main(self.url, self.category_list)
 
     def text_from_plain_text(self):
         url = self.plainTextEdit.toPlainText()
@@ -177,4 +163,40 @@ class MainWin(QObject, Ui_MainWindow):
     def time_dep_program(self, time_system):
         print('Time system is:')
 
+    def list_downloader(self, list_name):
+        if self.operation is not 'list':
+            if const.args.write_m3u:
+                youtube_tools.generate_m3u(
+                    track_file=const.args.list
+                )
+            else:
+                #list_name = str(self.category_list) + '.txt'
+                list_dl = downloader.ListDownloader(
+                    tracks_file=self.text_file,
+                    skip_file=const.args.skip,
+                    write_successful_file=const.args.write_successful,
+                )
+                list_dl.download_list()
+                self.operation = 'list'
 
+    def main(self, url, category_list):
+        #Todo try new implementation
+        const.args = handle.get_arguments([url, category_list, ''])
+
+        internals.filter_path(const.args.folder)
+        youtube_tools.set_api_key()
+
+        logzero.setup_default_logger(formatter=const._formatter, level=const.args.log_level)
+
+        try:
+            self.operation, self.text_file = match_args()
+            # actually we don't necessarily need this, but yeah...
+            # explicit is better than implicit!
+            if self.operation is not 'list':
+                self.list_downloader(self.category_list)
+
+        # I don't need this type of exception, I'll remove another time
+        except KeyboardInterrupt as e:
+            self.operation = False
+            log.exception(e)
+            sys.exit(3)

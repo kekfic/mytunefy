@@ -229,6 +229,7 @@ def write_all_albums_from_artist(artist_url, text_file=None):
         log.info("Fetching album: " + album["name"])
         write_album(album_base_url + album["id"], text_file=text_file)
 
+    return text_file
 
 @must_be_authorized
 def write_album(album_url, text_file=None):
@@ -267,4 +268,4 @@ def write_tracks(tracks, text_file):
                 tracks = spotify.next(tracks)
             else:
                 break
-    return track_urls
+    return track_urls, text_file

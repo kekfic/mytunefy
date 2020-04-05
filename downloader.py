@@ -231,7 +231,7 @@ class ListDownloader:
                 self._write_successful(raw_song)
 
             log.debug("Removing downloaded song from tracks file")
-            internals.trim_song(self.tracks_file)
+            elminated_track = internals.trim_song(self.tracks_file)
 
         return downloaded_songs
 

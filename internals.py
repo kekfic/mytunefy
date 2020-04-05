@@ -5,7 +5,7 @@ import math
 import urllib.request
 
 
-from spotdl import const
+import const
 
 try:
     import winreg

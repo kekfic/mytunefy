@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 import os
 import sys
-import platform
-import pprint
-import logzero
-from logzero import logger as log
 
 from getmac import get_mac_address
 from hashlib import pbkdf2_hmac
@@ -12,12 +8,8 @@ import binascii
 
 # Todo: check why __version__ in not working
 #import __version__
-import const
-import handle
-import internals
-import spotify_tools
-import youtube_tools
-import downloader
+
+
 
 from __init__ import personal_key
 import time
@@ -38,7 +30,6 @@ def user_checker():
 
 
 if __name__ == "__main__":
-    #main()
     if getattr(sys, 'frozen', False):
         CurrentPath = sys._MEIPASS
         # If it's not use the path we're on now

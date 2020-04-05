@@ -7,8 +7,8 @@ import argparse
 import mimetypes
 import os
 
-import spotdl
-from spotdl import internals
+
+import internals
 
 _LOG_LEVELS_STR = ["INFO", "WARNING", "ERROR", "DEBUG"]
 
@@ -40,6 +40,8 @@ default_conf = {
         "spotify_client_secret": "0f02b7c483c04257984695007a4a8d5c",
     }
 }
+#"spotify_client_id": "4fe3fecfe5334023a1472516cc99d805",
+#"spotify_client_secret": "0f02b7c483c04257984695007a4a8d5c",
 
 
 def log_leveller(log_level_str):
@@ -90,11 +92,9 @@ def override_config(config_file, parser, raw_args=None):
 def get_arguments(raw_args, to_group=True, to_merge=True):
     # help = 'Load tracks from playlist URL into {}'.format()
     url, category, other_args = raw_args
-
     parser = type("", (), {})()
-
     parser.category = url
-    parser.folder = os.path.abspath('D:\\Users\\%username%\\Music\\')
+    #parser.folder = os.path.abspath('D:\\Users\\%username%\\Music\\')
     parser.youtube_api_key = None
     parser.log_level = "INFO"
     parser.song = ''
@@ -104,14 +104,29 @@ def get_arguments(raw_args, to_group=True, to_merge=True):
     parser.artist = ''
     parser.all_albums = ''
     parser.username = ''
-    parser.no_metadata = 'False'
-    parser.manual = 'False'
-    parser.input_ext = ".m4a",
-    parser.output_ext = ".mp3",
+    parser.no_metadata = False
+    parser.manual = False
+    parser.input_ext = ".m4a"
+    parser.output_ext = ".mp3"
+    parser.overwrite = "skip"
     parser.skip = None
-    parser.no_fallback_metadata = 'False'
+    parser.no_fallback_metadata = False
     parser.write_successful = None
     parser.write_to = None
+    parser.write_m3u = False
+    parser.search_format = "{artist} - {track_name} lyrics"
+    parser.no_spaces =  False
+    parser.file_format = '{artist} - {track_name}'
+    parser.download_only_metadata = False
+    parser.trim_silence = False
+    parser.dry_run = False
+    parser.music_videos_only = False
+    parser.avconv = False
+    parser.no_remove_original = False
+
+
+    # parser.spotify_client_id = "45e"
+    # parser.spotify_client_secret = "45e"
     parser.spotify_client_id = "4fe3fecfe5334023a1472516cc99d805"
     parser.spotify_client_secret = "0f02b7c483c04257984695007a4a8d5c"
 
