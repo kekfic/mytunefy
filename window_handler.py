@@ -30,45 +30,42 @@ import downloader
 from spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist
 from slugify import slugify
 
-def debug_sys_info():
-    log.debug("Python version: {}".format(sys.version))
-    log.debug("Platform: {}".format(platform.platform()))
-    log.debug(pprint.pformat(const.args.__dict__))
+from my_main_functions import main, url_parser
 
 
-def match_args():
-    # Todo major changing here, I shall probably change everything,
-    # I add operation variable, for now it is a patch
-    operation = ''
-    text_file = ''
-    if const.args.song:
-        for track in const.args.song:
-            track_dl = downloader.Downloader(raw_song=track)
-            track_dl.download_single()
-            # when only one track is downloaded, there is no need for listing
-        operation = 'list'
-    elif const.args.playlist:
-        tracks, text_file = spotify_tools.write_playlist(
-            playlist_url=const.args.playlist, text_file=const.args.write_to
-        )
-        operation = 'playlist'
-    elif const.args.album:
-        tracks, text_file = spotify_tools.write_album(
-            album_url=const.args.album, text_file=const.args.write_to
-        )
-        operation = 'album'
-    elif const.args.all_albums:
-        text_file = spotify_tools.write_all_albums_from_artist(
-            artist_url=const.args.all_albums, text_file=const.args.write_to
-        )
-        operation = 'all_album'
-    elif const.args.username:
-        links_playlist, text_file = spotify_tools.write_user_playlist(
-            username=const.args.username, text_file=const.args.write_to
-        )
-        operation = 'username'
-
-    return operation, text_file
+# def match_args():
+#     # Todo major changing here, I shall probably change everything,
+#     # I add operation variable, for now it is a patch
+#     operation = ''
+#     text_file = ''
+#     if const.args.song:
+#         for track in const.args.song:
+#             track_dl = downloader.Downloader(raw_song=track)
+#             track_dl.download_single()
+#             # when only one track is downloaded, there is no need for listing
+#         operation = 'list'
+#     elif const.args.playlist:
+#         tracks, text_file = spotify_tools.write_playlist(
+#             playlist_url=const.args.playlist, text_file=const.args.write_to
+#         )
+#         operation = 'playlist'
+#     elif const.args.album:
+#         tracks, text_file = spotify_tools.write_album(
+#             album_url=const.args.album, text_file=const.args.write_to
+#         )
+#         operation = 'album'
+#     elif const.args.all_albums:
+#         text_file = spotify_tools.write_all_albums_from_artist(
+#             artist_url=const.args.all_albums, text_file=const.args.write_to
+#         )
+#         operation = 'all_album'
+#     elif const.args.username:
+#         links_playlist, text_file = spotify_tools.write_user_playlist(
+#             username=const.args.username, text_file=const.args.write_to
+#         )
+#         operation = 'username'
+#
+#     return operation, text_file
 
 
 
@@ -115,12 +112,12 @@ class MainWin(QObject, Ui_MainWindow):
         const.args.folder = self.mydir
 
     def startDownload(self):
-        self.main()
+        main()
 
     def text_from_plain_text(self, url=None):
         if url is None:
             url = self.plainTextEditUrl.toPlainText()
-            self.category_list = self.url_parser(url)
+            self.category_list = url_parser(url)
             if self.category_list:
                 self.url = url
                 self.listWidgetHandler()
@@ -153,33 +150,33 @@ class MainWin(QObject, Ui_MainWindow):
             text_file = 'Not Found name'
         return text_file
 
-    def url_parser(self, url):
-        category_list = ''
-        substring = 'https://open.spotify.com/'
-        if substring in url:
-            try:
-                junk, data = re.split(r'.com/', url)
-                category_list, junk = re.split(r'/', data)
-
-            except ValueError as e:
-                print("Url Parser Error: {}".format(e))
-            except Exception as e:
-                print("General error in url splitting:", e)
-
-            if category_list == 'playlist':
-                const.args.playlist = url
-            elif category_list == 'track':
-                const.args.song = [url]
-            elif category_list == 'album':
-                const.args.album = url
-            elif category_list == 'artist':
-                const.args.artist = url
-            else:
-                category_list = False
-        else:
-            category_list = False
-
-        return category_list
+    # def url_parser(self, url):
+    #     category_list = ''
+    #     substring = 'https://open.spotify.com/'
+    #     if substring in url:
+    #         try:
+    #             junk, data = re.split(r'.com/', url)
+    #             category_list, junk = re.split(r'/', data)
+    #
+    #         except ValueError as e:
+    #             print("Url Parser Error: {}".format(e))
+    #         except Exception as e:
+    #             print("General error in url splitting:", e)
+    #
+    #         if category_list == 'playlist':
+    #             const.args.playlist = url
+    #         elif category_list == 'track':
+    #             const.args.song = [url]
+    #         elif category_list == 'album':
+    #             const.args.album = url
+    #         elif category_list == 'artist':
+    #             const.args.artist = url
+    #         else:
+    #             category_list = False
+    #     else:
+    #         category_list = False
+    #
+    #     return category_list
 
     def check_url(self, junk):
         if junk == 'https://open.spotify':
@@ -192,39 +189,39 @@ class MainWin(QObject, Ui_MainWindow):
     def time_dep_program(self, time_system):
         print('Time system is:')
 
-    def list_downloader(self):
-        if self.operation is not 'list':
-            if const.args.write_m3u:
-                youtube_tools.generate_m3u(
-                    track_file=const.args.list
-                )
-            else:
-                # list_name = str(self.category_list) + '.txt'
-                list_dl = downloader.ListDownloader(
-                    tracks_file=self.text_file,
-                    skip_file=const.args.skip,
-                    write_successful_file=const.args.write_successful,
-                )
-                list_dl.download_list()
-                self.operation = 'list'
+    # def list_downloader(self):
+    #     if self.operation is not 'list':
+    #         if const.args.write_m3u:
+    #             youtube_tools.generate_m3u(
+    #                 track_file=const.args.list
+    #             )
+    #         else:
+    #             # list_name = str(self.category_list) + '.txt'
+    #             list_dl = downloader.ListDownloader(
+    #                 tracks_file=self.text_file,
+    #                 skip_file=const.args.skip,
+    #                 write_successful_file=const.args.write_successful,
+    #             )
+    #             list_dl.download_list()
+    #             self.operation = 'list'
 
-    def main(self):
-        # Todo try new implementation
-        internals.filter_path(const.args.folder)
-        youtube_tools.set_api_key()
-        logzero.setup_default_logger(formatter=const._formatter, level=const.args.log_level)
-
-        try:
-            self.operation, self.text_file = match_args()
-
-            # actually we don't necessarily need this, but yeah...
-            # explicit is better than implicit!
-            if self.operation is not 'list':
-                self.list_downloader()
-
-        # I don't need this type of exception, I'll remove another time
-        except Exception as e:
-            print(e)
-            self.operation = False
-            log.exception(e)
-            sys.exit(3)
+    # def main(self):
+    #     # Todo try new implementation
+    #     internals.filter_path(const.args.folder)
+    #     youtube_tools.set_api_key()
+    #     logzero.setup_default_logger(formatter=const._formatter, level=const.args.log_level)
+    #
+    #     try:
+    #         self.operation, self.text_file = match_args()
+    #
+    #         # actually we don't necessarily need this, but yeah...
+    #         # explicit is better than implicit!
+    #         if self.operation is not 'list':
+    #             self.list_downloader()
+    #
+    #     # I don't need this type of exception, I'll remove another time
+    #     except Exception as e:
+    #         print(e)
+    #         self.operation = False
+    #         log.exception(e)
+    #         sys.exit(3)
