@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="spotify">
+    <file>../resources/icons/trash1.png</file>
     <file>../resources/icons/down_music_red.png</file>
     <file>../resources/icons/folder4.png</file>
     <file>../resources/icons/folder5.png</file>

@@ -2,15 +2,18 @@
 @author FF
 
 """
+import time
 
-from PySide2.QtGui import QPainter, QPixmap, QStandardItemModel, QStandardItem
+from PySide2 import QtWidgets
+
 from PySide2.QtWidgets import QMainWindow, QFileDialog, QSplashScreen, QWidget, QLabel, QPushButton, QHBoxLayout, \
-    QListWidgetItem
+    QListWidgetItem, QDialog, qApp
 
 from PySide2.QtCore import QObject
 
 from gui.gui_main import Ui_MainWindow
 import re
+import getpass
 
 import sys
 import platform
@@ -24,7 +27,8 @@ import internals
 import spotify_tools
 import youtube_tools
 import downloader
-
+from spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist
+from slugify import slugify
 
 def debug_sys_info():
     log.debug("Python version: {}".format(sys.version))
@@ -67,42 +71,6 @@ def match_args():
     return operation, text_file
 
 
-class CustomQWidget(QWidget):
-    def __init__(self, parent=None):
-        super(CustomQWidget, self).__init__(parent)
-
-        label = QLabel("I am a custom widget")
-
-        button = QPushButton("A useless button")
-
-        layout = QHBoxLayout()
-        layout.addWidget(label)
-        layout.addWidget(button)
-
-class LoadingGif(QSplashScreen):
-    def __init__(self, movie, parent=None):
-        movie.jumpToFrame(0)
-        pixmap = QPixmap(movie.frameRect().size())
-
-        QSplashScreen.__init__(self, pixmap)
-        self.movie = movie
-        self.movie.frameChanged.connect(self.repaint)
-
-    def showEvent(self, event):
-        self.movie.start()
-
-    def hideEvent(self, event):
-        self.movie.stop()
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        pixmap = self.movie.currentPixmap()
-        self.setMask(pixmap.mask())
-        painter.drawPixmap(0, 0, pixmap)
-
-    def sizeHint(self):
-        return self.movie.scaledSize()
-
 
 class MainWin(QObject, Ui_MainWindow):
     """ this main class is the main window and contain all button specification """
@@ -115,7 +83,7 @@ class MainWin(QObject, Ui_MainWindow):
 
         self.text_file = ''
         self.operation = ''
-
+        self.url_text = False
         self.pushButtonFolder.clicked.connect(self.folder_opener)
         self.progressBar.hide()
         self.StartPushButton.clicked.connect(self.startDownload)
@@ -126,17 +94,22 @@ class MainWin(QObject, Ui_MainWindow):
         self.plainTextDirectory.setPlainText(const.args.folder)
         self.plainTextEditUrl.textChanged.connect(self.text_from_plain_text)
 
-        item = QListWidgetItem(self.listWidgetUrls)
-        item_widget = CustomQWidget()
-        item.setSizeHint(item_widget.sizeHint())
-        self.listWidgetUrls.addItem(item)
-        self.listWidgetUrls.setItemWidget(item, item_widget)
+        # Todo self action Paste has not been implemented
+        """
+        self.actionPaste = QtWidgets.QAction(self.plainTextEditUrl)
+        self.actionPaste.setObjectName("actionPaste")
+        #self.actionPaste.setShortcut(_translate("ModifiedTableView", "Ctrl+V"))
+        self.actionPaste.triggered.connect(self.text_from_plain_text)
+        self.plainTextEditUrl.addAction(self.actionPaste)
+        self.copiedtext = qApp.clipboard().text()
+        """
+
+        self.listWidgetUrls.hide()
 
 
     def folder_opener(self):
-        mydefaultfolder = 'C:\\Users\\%username%\\Music'
-        self.mydir = QFileDialog.getExistingDirectory(None, 'Select a folder:', mydefaultfolder,
-                                                      QFileDialog.ShowDirsOnly)
+        mydefaultfolder = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
+        self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', mydefaultfolder, QFileDialog.ShowDirsOnly)
         self.plainTextDirectory.setPlainText(self.mydir)
         self.mydir.replace("/", "\\")
         const.args.folder = self.mydir
@@ -144,41 +117,68 @@ class MainWin(QObject, Ui_MainWindow):
     def startDownload(self):
         self.main()
 
+    def text_from_plain_text(self, url=None):
+        if url is None:
+            url = self.plainTextEditUrl.toPlainText()
+            self.category_list = self.url_parser(url)
+            if self.category_list:
+                self.url = url
+                self.listWidgetHandler()
+                self.plainTextEditUrl.clear()
+            else:
+                self.url = ''
+                print('Wrong url')
 
-    def text_from_plain_text(self):
-        self.url = self.plainTextEditUrl.toPlainText()
-        self.category_list = self.url_parser(self.url)
-        if self.category_list:
-            self.listWidgetUrls.addItem(self.url)
+    def listWidgetHandler(self):
+        text_playlist = self.get_name_for_list_widget(self.category_list)
+        self.listWidgetUrls.addItem(text_playlist)
+        number_item = self.listWidgetUrls.count()
+        self.listWidgetUrls.setMaximumHeight(number_item*self.listWidgetUrls.sizeHintForRow(0))
+        if self.listWidgetUrls.isHidden():
+            self.listWidgetUrls.show()
 
+    def get_name_for_list_widget(self, category_list):
+        if category_list == 'playlist':
+            playlist = fetch_playlist(self.url)
+            text_file = u"Playlist Name: {0}".format(slugify(playlist["name"], ok="-_()[]{}"))
+        elif category_list == 'track':
+            track = ''
+            text_file = 'Song1'
+        elif category_list == 'artist':
+            text_file = 'artist1'
+        elif category_list == 'album':
+            album = fetch_album(self.url)
+            text_file = 'album'
+        else:
+            text_file = 'Not Found name'
+        return text_file
 
     def url_parser(self, url):
-        # Todo: if a wrong url or line is inserted, parser fails
-        #  File "D:\Programmi\Python\Spotify-app\window_handler.py", line 152, in parser_category
-        #     junk, data = re.split(r'.com/', url)
-        # ValueError: not enough values to unpack (expected 2, got 1)
         category_list = ''
-
-        try:
-            junk, data = re.split(r'.com/', url)
-            if self.check_url(junk):
+        substring = 'https://open.spotify.com/'
+        if substring in url:
+            try:
+                junk, data = re.split(r'.com/', url)
                 category_list, junk = re.split(r'/', data)
-        except ValueError as e:
-            print("Parser url as {}:".format(e))
-        except Exception as e:
-            print("General error in url splitting:", e)
 
-        if category_list == 'playlist':
-            const.args.playlist = url
-        elif category_list == 'track':
-            const.args.song = [url]
-        elif category_list == 'album':
-            const.args.album = url
-        elif category_list == 'artist':
-            const.args.artist = url
+            except ValueError as e:
+                print("Url Parser Error: {}".format(e))
+            except Exception as e:
+                print("General error in url splitting:", e)
+
+            if category_list == 'playlist':
+                const.args.playlist = url
+            elif category_list == 'track':
+                const.args.song = [url]
+            elif category_list == 'album':
+                const.args.album = url
+            elif category_list == 'artist':
+                const.args.artist = url
+            else:
+                category_list = False
         else:
             category_list = False
-            
+
         return category_list
 
     def check_url(self, junk):

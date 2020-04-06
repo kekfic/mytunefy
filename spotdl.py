@@ -16,7 +16,8 @@ import time
 # My modification
 from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtGui import QMovie
-from window_handler import MainWin, LoadingGif
+from window_handler import MainWin
+from widget_class import LoadingGif
 
 
 # --
@@ -47,11 +48,12 @@ if __name__ == "__main__":
         splash.show()
         start = time.time()
 
-        while movie.state() == QMovie.Running and time.time() < start + 10:
+        while movie.state() == QMovie.Running and time.time() < start + 5:
             app.processEvents()
 
         gui = MainWin()
         gui.mainwindow.show()
+        splash.close()
         # gui.mainwindow.showMaximized()
 
         sys.exit(app.exec_())

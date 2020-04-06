@@ -149,6 +149,7 @@ def fetch_playlist(playlist):
         results = spotify.user_playlist(
             user=None, playlist_id=playlist_id, fields="tracks,next,name"
         )
+
     except spotipy.client.SpotifyException:
         log.error("Unable to find playlist")
         log.info("Make sure the playlist is set to publicly visible and then try again")
