@@ -30,7 +30,7 @@ def user_checker():
 
     return key_bin
 
-
+# Todo gif not running in .exe file
 if __name__ == "__main__":
     if getattr(sys, 'frozen', False):
         CurrentPath = sys._MEIPASS
@@ -46,6 +46,7 @@ if __name__ == "__main__":
         movie = QMovie("resources/gif/music1.gif")
         splash = LoadingGif(movie)
         splash.show()
+        #splash.showMessage("<h1><font color='white'>Welcome to MyTuneFy!</font></h1>")
         start = time.time()
 
         while movie.state() == QMovie.Running and time.time() < start + 5:

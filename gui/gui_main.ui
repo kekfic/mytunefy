@@ -537,7 +537,7 @@ color: rgb(255, 255, 255);</string>
        </font>
       </property>
       <property name="statusTip">
-       <string>Paste Url</string>
+       <string>Copiare link  Spotify qui</string>
       </property>
       <property name="autoFillBackground">
        <bool>true</bool>
@@ -730,7 +730,7 @@ color: rgb(255, 255, 255);</string>
        </font>
       </property>
       <property name="statusTip">
-       <string>Doble Click for removing item</string>
+       <string>Doppio click sulla voce selezionata per rimuoverla dalla lista</string>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(217, 217, 217);</string>

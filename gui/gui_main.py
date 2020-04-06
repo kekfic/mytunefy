@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main.ui',
 # licensing of '.\gui_main.ui' applies.
 #
-# Created: Mon Apr  6 18:26:42 2020
+# Created: Tue Apr  7 00:33:01 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -159,6 +159,9 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(229, 229, 229))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(75, 129, 173))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
         brush = QtGui.QBrush(QtGui.QColor(229, 229, 229))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
@@ -168,6 +171,9 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(229, 229, 229))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(75, 129, 173))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
         brush = QtGui.QBrush(QtGui.QColor(229, 229, 229))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
@@ -177,6 +183,9 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(229, 229, 229))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
         brush = QtGui.QBrush(QtGui.QColor(229, 229, 229))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
@@ -216,6 +225,9 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(217, 217, 217))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(0, 117, 0))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
         brush = QtGui.QBrush(QtGui.QColor(217, 217, 217))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
@@ -225,6 +237,9 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(217, 217, 217))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(0, 117, 0))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
         brush = QtGui.QBrush(QtGui.QColor(217, 217, 217))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
@@ -234,6 +249,9 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(217, 217, 217))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
+        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
         brush = QtGui.QBrush(QtGui.QColor(217, 217, 217))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
@@ -376,7 +394,10 @@ class Ui_MainWindow(object):
         self.plainTextDirectory.setWhatsThis(QtWidgets.QApplication.translate("MainWindow", "Download folder", None, -1))
         self.plainTextDirectory.setPlainText(QtWidgets.QApplication.translate("MainWindow", "C:\\Music", None, -1))
         self.label_URL.setText(QtWidgets.QApplication.translate("MainWindow", "URL", None, -1))
+        self.plainTextEditUrl.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Copiare link  Spotify qui", None, -1))
+        self.listWidgetUrls.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Doppio click sulla voce selezionata per rimuoverla dalla lista", None, -1))
         self.StartPushButton.setToolTip(QtWidgets.QApplication.translate("MainWindow", "download", None, -1))
+        self.StartPushButton.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Press for download", None, -1))
         self.label_bottomPhrase.setText(QtWidgets.QApplication.translate("MainWindow", "Where words fail, music speaks.", None, -1))
         self.menuMenu.setTitle(QtWidgets.QApplication.translate("MainWindow", "Menu", None, -1))
         self.menuHelp.setTitle(QtWidgets.QApplication.translate("MainWindow", "Help", None, -1))

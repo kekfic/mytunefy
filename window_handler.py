@@ -124,9 +124,11 @@ class MainWin(QObject, Ui_MainWindow):
                 main()
                 "Resetting the parser because it is unique"
                 reset_parser_url()
-        "Clearing the QWidgetList"
+        "Clearing the QWidgetList and other objects"
         self.listWidgetUrls.clear()
         self.progressBar.setValue(100)
+        self.all_categories.clear()
+        self.all_urls.clear()
 
     def text_from_plain_text(self, url=None):
         if url is None:
@@ -175,7 +177,7 @@ class MainWin(QObject, Ui_MainWindow):
     def progressBarHandler(self, numbitem, totalitem):
         if self.progressBar.isHidden():
             self.progressBar.show()
-        percentage = round(numbitem/(totalitem+1), 2)*100
+        percentage = round(numbitem/totalitem, 2)*100
         self.progressBar.setValue(percentage)
 
 

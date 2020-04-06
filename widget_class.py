@@ -11,6 +11,7 @@ class LoadingGif(QSplashScreen):
         pixmap = QPixmap(movie.frameRect().size())
 
         QSplashScreen.__init__(self, pixmap)
+
         self.movie = movie
         self.movie.frameChanged.connect(self.repaint)
 
