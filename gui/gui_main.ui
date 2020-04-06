@@ -536,6 +536,9 @@ color: rgb(255, 255, 255);</string>
         <bold>false</bold>
        </font>
       </property>
+      <property name="statusTip">
+       <string>Paste Url</string>
+      </property>
       <property name="autoFillBackground">
        <bool>true</bool>
       </property>
@@ -726,6 +729,9 @@ color: rgb(255, 255, 255);</string>
         <italic>true</italic>
        </font>
       </property>
+      <property name="statusTip">
+       <string>Doble Click for removing item</string>
+      </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(217, 217, 217);</string>
       </property>
@@ -774,6 +780,9 @@ color: rgb(255, 255, 255);</string>
       </property>
       <property name="toolTip">
        <string>download</string>
+      </property>
+      <property name="statusTip">
+       <string>Press for download</string>
       </property>
       <property name="layoutDirection">
        <enum>Qt::LeftToRight</enum>

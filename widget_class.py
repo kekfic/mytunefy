@@ -1,5 +1,5 @@
 from PySide2.QtGui import QPainter, QPixmap
-from PySide2.QtWidgets import QSplashScreen, QWidget
+from PySide2.QtWidgets import QSplashScreen, QWidget, QLabel, QPushButton, QHBoxLayout
 
 
 class LoadingGif(QSplashScreen):

@@ -10,6 +10,7 @@ from PySide2.QtWidgets import QMainWindow, QFileDialog, QSplashScreen, QWidget, 
     QListWidgetItem, QDialog, qApp
 
 from PySide2.QtCore import QObject
+from pyside2uic.properties import QtCore
 
 from gui.gui_main import Ui_MainWindow
 import re
@@ -30,43 +31,7 @@ import downloader
 from spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist
 from slugify import slugify
 
-from my_main_functions import main, url_parser
-
-
-# def match_args():
-#     # Todo major changing here, I shall probably change everything,
-#     # I add operation variable, for now it is a patch
-#     operation = ''
-#     text_file = ''
-#     if const.args.song:
-#         for track in const.args.song:
-#             track_dl = downloader.Downloader(raw_song=track)
-#             track_dl.download_single()
-#             # when only one track is downloaded, there is no need for listing
-#         operation = 'list'
-#     elif const.args.playlist:
-#         tracks, text_file = spotify_tools.write_playlist(
-#             playlist_url=const.args.playlist, text_file=const.args.write_to
-#         )
-#         operation = 'playlist'
-#     elif const.args.album:
-#         tracks, text_file = spotify_tools.write_album(
-#             album_url=const.args.album, text_file=const.args.write_to
-#         )
-#         operation = 'album'
-#     elif const.args.all_albums:
-#         text_file = spotify_tools.write_all_albums_from_artist(
-#             artist_url=const.args.all_albums, text_file=const.args.write_to
-#         )
-#         operation = 'all_album'
-#     elif const.args.username:
-#         links_playlist, text_file = spotify_tools.write_user_playlist(
-#             username=const.args.username, text_file=const.args.write_to
-#         )
-#         operation = 'username'
-#
-#     return operation, text_file
-
+from my_main_functions import main, url_parser, assign_parser_url, reset_parser_url
 
 
 class MainWin(QObject, Ui_MainWindow):
@@ -78,6 +43,8 @@ class MainWin(QObject, Ui_MainWindow):
         self.setupUi(self.mainwindow)
         QObject.__init__(self)
 
+        self.all_urls = []
+        self.all_categories = []
         self.text_file = ''
         self.operation = ''
         self.url_text = False
@@ -91,6 +58,9 @@ class MainWin(QObject, Ui_MainWindow):
         self.plainTextDirectory.setPlainText(const.args.folder)
         self.plainTextEditUrl.textChanged.connect(self.text_from_plain_text)
 
+        self.listWidgetUrls.hide()
+        self.listWidgetUrls.itemDoubleClicked.connect(self.remove_item)
+
         # Todo self action Paste has not been implemented
         """
         self.actionPaste = QtWidgets.QAction(self.plainTextEditUrl)
@@ -100,83 +70,115 @@ class MainWin(QObject, Ui_MainWindow):
         self.plainTextEditUrl.addAction(self.actionPaste)
         self.copiedtext = qApp.clipboard().text()
         """
+        """
+        self.rcMenu = QtWidgets.QMenu(self.mainwindow)
+        self.action_delete_row = self.rcMenu.addAction('Delete Row', self.delete_row)
+        #self.action_insert_row = self.rcMenu.addAction('Insert Row', self.insert_row)
+        self.mainwindow.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.mainwindow.customContextMenuRequested.connect(self.onRightClick)
+        #
 
-        self.listWidgetUrls.hide()
+    def onRightClick(self, QPos=None):
+        parent = self.sender()
+        pPos = parent.mapToGlobal(QtCore.QPoint(5, 20))
+        mPos = pPos + QPos
 
+        self.rcMenu.move(mPos)
+        self.rcMenu.show()
+
+    def delete_row(self):
+        self.listWidgetUrls.removeItemWidget(self,)
+        """
 
     def folder_opener(self):
+        "Selecting the download folder"
         mydefaultfolder = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
-        self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', mydefaultfolder, QFileDialog.ShowDirsOnly)
+        self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', mydefaultfolder,
+                                                      QFileDialog.ShowDirsOnly)
         self.plainTextDirectory.setPlainText(self.mydir)
         self.mydir.replace("/", "\\")
         const.args.folder = self.mydir
 
+    def remove_item(self):
+        "Remove item from QWidgetList if double clicked"
+        item = self.listWidgetUrls.currentRow()
+        self.listWidgetUrls.takeItem(item)
+
+        self.all_urls.pop(item)
+        self.all_categories.pop(item)
+
+
     def startDownload(self):
-        main()
+        #Todo I don't like it very much
+        "Start the function for downloading"
+        count = self.listWidgetUrls.count()
+        if count:
+            for i in range(count):
+
+                self.progressBarHandler(i, count)
+                url = self.all_urls[i]
+                category_list = self.all_categories[i]
+                "assign the current const.args.group"
+                assign_parser_url(category_list, url)
+                "Starting the main according url parsing"
+                main()
+                "Resetting the parser because it is unique"
+                reset_parser_url()
+        "Clearing the QWidgetList"
+        self.listWidgetUrls.clear()
+        self.progressBar.setValue(100)
 
     def text_from_plain_text(self, url=None):
         if url is None:
             url = self.plainTextEditUrl.toPlainText()
-            self.category_list = url_parser(url)
-            if self.category_list:
-                self.url = url
-                self.listWidgetHandler()
+            category_list = url_parser(url)
+            if category_list:
+                self.listWidgetHandler(url, category_list)
                 self.plainTextEditUrl.clear()
-            else:
-                self.url = ''
-                print('Wrong url')
 
-    def listWidgetHandler(self):
-        text_playlist = self.get_name_for_list_widget(self.category_list)
+    def listWidgetHandler(self, url, category_list):
+        text_playlist = self.get_name_for_list_widget(category_list, url)
         self.listWidgetUrls.addItem(text_playlist)
+        self.all_categories.append(category_list)
+        self.all_urls.append(url)
         number_item = self.listWidgetUrls.count()
-        self.listWidgetUrls.setMaximumHeight(number_item*self.listWidgetUrls.sizeHintForRow(0))
+        self.listWidgetUrls.setMaximumHeight(number_item * self.listWidgetUrls.sizeHintForRow(0))
         if self.listWidgetUrls.isHidden():
             self.listWidgetUrls.show()
+        if not self.progressBar.isHidden():
+            self.progressBar.hide()
 
-    def get_name_for_list_widget(self, category_list):
-        if category_list == 'playlist':
-            playlist = fetch_playlist(self.url)
-            text_file = u"Playlist Name: {0}".format(slugify(playlist["name"], ok="-_()[]{}"))
-        elif category_list == 'track':
-            track = ''
-            text_file = 'Song1'
-        elif category_list == 'artist':
-            text_file = 'artist1'
-        elif category_list == 'album':
-            album = fetch_album(self.url)
-            text_file = 'album'
-        else:
-            text_file = 'Not Found name'
+    def get_name_for_list_widget(self, category_list, url):
+        try:
+            if category_list == 'playlist':
+                playlist = fetch_playlist(url)
+                text_file = u"Playlist: {0}".format(slugify(playlist["name"], ok="-_()[]{}"))
+                text_file = text_file.upper() + ' of user: ' + playlist['tracks']['items'][0]['added_by']['id']
+            elif category_list == 'track':
+                track = spotify_tools.generate_metadata(url)
+                text_file = track['name'] + ' - ' + track['album']['artists'][0]['name']
+            elif category_list == 'artist':
+                artist = fetch_albums_from_artist(url)
+                text_file = u"Complete albums of " + artist[0]['artists'][0]['name']
+            elif category_list == 'album':
+                album = fetch_album(url)
+                text_file = u"{0}".format(slugify(album["name"], ok="-_()[]{}"))
+                text_file = text_file + ' of artist: ' + album['artists'][0]['name']
+            else:
+                text_file = 'Not Found name'
+        except Exception as e:
+            print("Name not found")
+            text_file = str(category_list) + url[31:-1]
+
         return text_file
 
-    # def url_parser(self, url):
-    #     category_list = ''
-    #     substring = 'https://open.spotify.com/'
-    #     if substring in url:
-    #         try:
-    #             junk, data = re.split(r'.com/', url)
-    #             category_list, junk = re.split(r'/', data)
-    #
-    #         except ValueError as e:
-    #             print("Url Parser Error: {}".format(e))
-    #         except Exception as e:
-    #             print("General error in url splitting:", e)
-    #
-    #         if category_list == 'playlist':
-    #             const.args.playlist = url
-    #         elif category_list == 'track':
-    #             const.args.song = [url]
-    #         elif category_list == 'album':
-    #             const.args.album = url
-    #         elif category_list == 'artist':
-    #             const.args.artist = url
-    #         else:
-    #             category_list = False
-    #     else:
-    #         category_list = False
-    #
-    #     return category_list
+    def progressBarHandler(self, numbitem, totalitem):
+        if self.progressBar.isHidden():
+            self.progressBar.show()
+        percentage = round(numbitem/(totalitem+1), 2)*100
+        self.progressBar.setValue(percentage)
+
+
 
     def check_url(self, junk):
         if junk == 'https://open.spotify':
@@ -188,40 +190,3 @@ class MainWin(QObject, Ui_MainWindow):
 
     def time_dep_program(self, time_system):
         print('Time system is:')
-
-    # def list_downloader(self):
-    #     if self.operation is not 'list':
-    #         if const.args.write_m3u:
-    #             youtube_tools.generate_m3u(
-    #                 track_file=const.args.list
-    #             )
-    #         else:
-    #             # list_name = str(self.category_list) + '.txt'
-    #             list_dl = downloader.ListDownloader(
-    #                 tracks_file=self.text_file,
-    #                 skip_file=const.args.skip,
-    #                 write_successful_file=const.args.write_successful,
-    #             )
-    #             list_dl.download_list()
-    #             self.operation = 'list'
-
-    # def main(self):
-    #     # Todo try new implementation
-    #     internals.filter_path(const.args.folder)
-    #     youtube_tools.set_api_key()
-    #     logzero.setup_default_logger(formatter=const._formatter, level=const.args.log_level)
-    #
-    #     try:
-    #         self.operation, self.text_file = match_args()
-    #
-    #         # actually we don't necessarily need this, but yeah...
-    #         # explicit is better than implicit!
-    #         if self.operation is not 'list':
-    #             self.list_downloader()
-    #
-    #     # I don't need this type of exception, I'll remove another time
-    #     except Exception as e:
-    #         print(e)
-    #         self.operation = False
-    #         log.exception(e)
-    #         sys.exit(3)

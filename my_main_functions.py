@@ -77,26 +77,32 @@ def url_parser(url):
         try:
             junk, data = re.split(r'.com/', url)
             category_list, junk = re.split(r'/', data)
-
         except ValueError as e:
             print("Url Parser Error: {}".format(e))
         except Exception as e:
             print("General error in url splitting:", e)
-
-        if category_list == 'playlist':
-            const.args.playlist = url
-        elif category_list == 'track':
-            const.args.song = [url]
-        elif category_list == 'album':
-            const.args.album = url
-        elif category_list == 'artist':
-            const.args.artist = url
-        else:
-            category_list = False
     else:
         category_list = False
 
     return category_list
+
+def assign_parser_url(category_list, url):
+
+    if category_list == 'playlist':
+        const.args.playlist = url
+    elif category_list == 'track':
+        const.args.song = [url]
+    elif category_list == 'album':
+        const.args.album = url
+    elif category_list == 'artist':
+        const.args.artist = url
+
+def reset_parser_url():
+    const.args.playlist = ''
+    const.args.song = ''
+    const.args.album = ''
+    const.args.artist = ''
+
 
 
 def main():
