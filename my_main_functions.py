@@ -10,7 +10,7 @@ import platform
 import pprint
 import logzero
 from logzero import logger as log
-
+import threading
 
 
 def debug_sys_info():
@@ -95,7 +95,7 @@ def assign_parser_url(category_list, url):
     elif category_list == 'album':
         const.args.album = url
     elif category_list == 'artist':
-        const.args.artist = url
+        const.args.all_albums = url
 
 def reset_parser_url():
     const.args.playlist = ''
@@ -113,11 +113,13 @@ def main():
 
     try:
         operation, text_file = match_args()
+        #mythread = threading.Thread(target=list_downloader, args=(operation, text_file))
 
-        # actually we don't necessarily need this, but yeah...
-        # explicit is better than implicit!
         if operation is not 'list':
+            #mythread.start()
             list_downloader(operation, text_file)
+        # else:
+        #     list_downloader(operation, text_file)
 
     # I don't need this type of exception, I'll remove another time
     except Exception as e:

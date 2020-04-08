@@ -10,9 +10,11 @@ import binascii
 # import __version__
 
 
-from __init__ import personal_key
+from __init__ import  myEndtime, user_list
 import time
 
+from lxml import html
+import requests
 # My modification
 from PySide2.QtWidgets import QMainWindow, QApplication
 from PySide2.QtGui import QMovie
@@ -21,14 +23,36 @@ from widget_class import LoadingGif
 
 
 # --
+def time_licence():
+    try:
+        page = requests.get('https://www.unixtimestamp.com/')
+        tree = html.fromstring(page.content)
+        timeliststring = tree.xpath('//h3[@class="text-danger"]/text()')
+        time_now = int(timeliststring[0])
+    except Exception as e:
+        print('Exception in time licence as: ', e)
+        time_now = time.time()
+    if time_now < myEndtime:
+        valid_licence = True
+    else:
+        valid_licence = False
 
+    return valid_licence
 
-def user_checker():
+def key_creator():
     mac_address = bytes(get_mac_address(), 'utf8')
     dk = pbkdf2_hmac('sha256', mac_address, b'salt', 100000)
     key_bin = binascii.hexlify(dk)
 
     return key_bin
+
+def valid_user():
+    valid = False
+    if key_creator() in user_list:
+        if time_licence():
+            valid = True
+
+    return valid
 
 # Todo gif not running in .exe file
 if __name__ == "__main__":
@@ -38,9 +62,8 @@ if __name__ == "__main__":
     else:
         CurrentPath = os.path.dirname(__file__)
 
-    if personal_key == user_checker():
+    if valid_user():
 
-        print('User allowed.')
         app = QApplication(sys.argv)
 
         movie = QMovie("resources/gif/music1.gif")

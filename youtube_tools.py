@@ -17,9 +17,8 @@ pafy.g.opener.addheaders.append(("Range", "bytes=0-"))
 # Implement unreleased methods on Pafy object
 # More info: https://github.com/mps-youtube/pafy/pull/211
 if pafy.__version__ <= "0.5.5":
-    #from spotdl import patcher
     import patcher
-    #my modification
+
     pafy_patcher = patcher.PatchPafy()
     pafy_patcher.patch_getbestthumb()
     pafy_patcher.patch_process_streams()

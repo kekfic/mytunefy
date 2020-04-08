@@ -2,33 +2,23 @@
 @author FF
 
 """
+import subprocess
 import time
+import sys
 
-from PySide2 import QtWidgets
 
-from PySide2.QtWidgets import QMainWindow, QFileDialog, QSplashScreen, QWidget, QLabel, QPushButton, QHBoxLayout, \
-    QListWidgetItem, QDialog, qApp
-
-from PySide2.QtCore import QObject
-from pyside2uic.properties import QtCore
+from PySide2.QtWidgets import QMainWindow, QFileDialog
+from PySide2.QtCore import QObject, SIGNAL
 
 from gui.gui_main import Ui_MainWindow
-import re
 import getpass
-
-import sys
-import platform
-import pprint
-import logzero
-from logzero import logger as log
 
 import const
 import handle
 import internals
-import spotify_tools
-import youtube_tools
-import downloader
-from spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist
+import threading
+
+from spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist, generate_metadata
 from slugify import slugify
 
 from my_main_functions import main, url_parser, assign_parser_url, reset_parser_url
@@ -48,9 +38,10 @@ class MainWin(QObject, Ui_MainWindow):
         self.text_file = ''
         self.operation = ''
         self.url_text = False
-        self.pushButtonFolder.clicked.connect(self.folder_opener)
+
         self.progressBar.hide()
-        self.StartPushButton.clicked.connect(self.startDownload)
+        self.pushButtonFolder.clicked.connect(self.folder_opener)
+        self.StartPushButton.clicked.connect(self.threading_launcher)
 
         const.args = handle.get_arguments()
         const.args.folder = internals.get_music_dir()
@@ -60,6 +51,15 @@ class MainWin(QObject, Ui_MainWindow):
 
         self.listWidgetUrls.hide()
         self.listWidgetUrls.itemDoubleClicked.connect(self.remove_item)
+
+        self.connect(self.action_m4a, SIGNAL("triggered()"), self.out_format)
+        self.connect(self.action_flac, SIGNAL("triggered()"), self.out_format)
+        self.connect(self.action_mp3, SIGNAL("triggered()"), self.out_format)
+
+
+
+#        self.connect(self.actionhelp, SIGNAL("triggered()"), self.openmanual)
+
 
         # Todo self action Paste has not been implemented
         """
@@ -107,26 +107,34 @@ class MainWin(QObject, Ui_MainWindow):
         self.all_urls.pop(item)
         self.all_categories.pop(item)
 
+    def threading_launcher(self):
+        # Todo: trying implement a better way of threading
+        count = self.listWidgetUrls.count()
+        self.mythread = threading.Thread(target=self.startDownload, args=(count,))
+        if count:
+            self.mythread.start()
+            self.progressBarHandler(count/2, count)
 
-    def startDownload(self):
+    def startDownload(self, count):
         #Todo I don't like it very much
         "Start the function for downloading"
-        count = self.listWidgetUrls.count()
-        if count:
-            for i in range(count):
+        #count = self.listWidgetUrls.count()
+        #if count:
+        for i in range(count):
+            #
+            url = self.all_urls[i]
+            category_list = self.all_categories[i]
+            "assign the current const.args.group"
+            assign_parser_url(category_list, url)
+            "Starting the main according url parsing"
+            #self.mythread
+            main()
 
-                self.progressBarHandler(i, count)
-                url = self.all_urls[i]
-                category_list = self.all_categories[i]
-                "assign the current const.args.group"
-                assign_parser_url(category_list, url)
-                "Starting the main according url parsing"
-                main()
-                "Resetting the parser because it is unique"
-                reset_parser_url()
+            "Resetting the parser because it is unique"
+            reset_parser_url()
         "Clearing the QWidgetList and other objects"
         self.listWidgetUrls.clear()
-        self.progressBar.setValue(100)
+        #self.progressBar.setValue(100)
         self.all_categories.clear()
         self.all_urls.clear()
 
@@ -154,22 +162,22 @@ class MainWin(QObject, Ui_MainWindow):
         try:
             if category_list == 'playlist':
                 playlist = fetch_playlist(url)
-                text_file = u"Playlist: {0}".format(slugify(playlist["name"], ok="-_()[]{}"))
-                text_file = text_file.upper() + ' of user: ' + playlist['tracks']['items'][0]['added_by']['id']
+                text_file = u"Playlist Name: {0}".format(slugify(playlist["name"], ok="-_()[]{}"))
+                text_file = 'User: ' + playlist['tracks']['items'][0]['added_by']['id'] + ' - ' + text_file
             elif category_list == 'track':
-                track = spotify_tools.generate_metadata(url)
-                text_file = track['name'] + ' - ' + track['album']['artists'][0]['name']
+                track = generate_metadata(url)
+                text_file = 'Song: '+ track['name'] + ' - ' + track['album']['artists'][0]['name']
             elif category_list == 'artist':
                 artist = fetch_albums_from_artist(url)
                 text_file = u"Complete albums of " + artist[0]['artists'][0]['name']
             elif category_list == 'album':
                 album = fetch_album(url)
                 text_file = u"{0}".format(slugify(album["name"], ok="-_()[]{}"))
-                text_file = text_file + ' of artist: ' + album['artists'][0]['name']
+                text_file = 'Album: ' + text_file + ' of : ' + album['artists'][0]['name']
             else:
                 text_file = 'Not Found name'
         except Exception as e:
-            print("Name not found")
+            print("{} name not found! Setting standard name.".format(category_list))
             text_file = str(category_list) + url[31:-1]
 
         return text_file
@@ -177,18 +185,29 @@ class MainWin(QObject, Ui_MainWindow):
     def progressBarHandler(self, numbitem, totalitem):
         if self.progressBar.isHidden():
             self.progressBar.show()
-        percentage = round(numbitem/totalitem, 2)*100
+        if totalitem == 1:
+            percentage = round(numbitem / (totalitem+0.5), 2) * 100
+        else:
+            percentage = round(numbitem/totalitem, 2)*100
+
         self.progressBar.setValue(percentage)
 
+    def out_format(self):
+
+        sender_object = self.sender().objectName()
+        if sender_object == 'action_mp3':
+            const.args.output_ext = '.mp3'
+            self.action_m4a.setChecked(False)
+            self.action_flac.setChecked(False)
+        elif sender_object == 'action_m4a':
+            const.args.output_ext = '.m4a'
+            self.action_mp3.setChecked(False)
+            self.action_flac.setChecked(False)
+        elif sender_object == 'action_flac':
+            const.args.output_ext = '.flac'
+            self.action_mp3.setChecked(False)
+            self.action_m4a.setChecked(False)
 
 
-    def check_url(self, junk):
-        if junk == 'https://open.spotify':
-            valid_url = True
-        else:
-            valid_url = False
-
-        return valid_url
-
-    def time_dep_program(self, time_system):
-        print('Time system is:')
+        # def openmanual(self):
+        #     subprocess.Popen([file], shell=True)
