@@ -5,9 +5,9 @@
 import subprocess
 import time
 import sys
+from queue import Queue
 
-
-from PySide2.QtWidgets import QMainWindow, QFileDialog
+from PySide2.QtWidgets import QMainWindow, QFileDialog, QMessageBox
 from PySide2.QtCore import QObject, SIGNAL
 
 from gui.gui_main import Ui_MainWindow
@@ -33,11 +33,15 @@ class MainWin(QObject, Ui_MainWindow):
         self.setupUi(self.mainwindow)
         QObject.__init__(self)
 
+        self.quewait = Queue()
+        self.quecreat = Queue()
+        self.mainThreadIsAlive = True
         self.all_urls = []
         self.all_categories = []
         self.text_file = ''
         self.operation = ''
         self.url_text = False
+        self.count = 0
 
         self.progressBar.hide()
         self.pushButtonFolder.clicked.connect(self.folder_opener)
@@ -55,6 +59,9 @@ class MainWin(QObject, Ui_MainWindow):
         self.connect(self.action_m4a, SIGNAL("triggered()"), self.out_format)
         self.connect(self.action_flac, SIGNAL("triggered()"), self.out_format)
         self.connect(self.action_mp3, SIGNAL("triggered()"), self.out_format)
+
+        self.mythread = threading.Thread(target=self.startDownload)
+        self.mythread.start()
 
 
 
@@ -90,6 +97,18 @@ class MainWin(QObject, Ui_MainWindow):
         self.listWidgetUrls.removeItemWidget(self,)
         """
 
+    def closeEvent(self, event):
+        result = QMessageBox.question(self,
+                                            "Confirm Exit...",
+                                            "Are you sure you want to exit ?",
+                                            QMessageBox.Yes | QMessageBox.No)
+        event.ignore()
+
+        if result == QMessageBox.Yes:
+            self.mainThreadIsAlive = False
+            #self.mythread.
+            event.accept()
+
     def folder_opener(self):
         "Selecting the download folder"
         mydefaultfolder = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
@@ -109,34 +128,35 @@ class MainWin(QObject, Ui_MainWindow):
 
     def threading_launcher(self):
         # Todo: trying implement a better way of threading
-        count = self.listWidgetUrls.count()
-        self.mythread = threading.Thread(target=self.startDownload, args=(count,))
-        if count:
-            self.mythread.start()
-            self.progressBarHandler(count/2, count)
+        self.count = self.listWidgetUrls.count()
+        if self.count:
+            self.quecreat.put([self.count, self.all_categories.copy(), self.all_urls.copy()])
+            "Clearing the QWidgetList and other objects"
+            self.listWidgetUrls.clear()
+            # self.progressBar.setValue(100)
+            self.all_categories.clear()
+            self.all_urls.clear()
 
-    def startDownload(self, count):
+    def startDownload(self):
         #Todo I don't like it very much
         "Start the function for downloading"
-        #count = self.listWidgetUrls.count()
-        #if count:
-        for i in range(count):
-            #
-            url = self.all_urls[i]
-            category_list = self.all_categories[i]
-            "assign the current const.args.group"
-            assign_parser_url(category_list, url)
-            "Starting the main according url parsing"
-            #self.mythread
-            main()
+        #if not self.quewait.empty:
+        while self.mainThreadIsAlive:
+            count, all_categories, all_urls = self.quecreat.get()
+            print('My count is', count)
+            print (all_categories)
+            print(all_urls)
+            for i in range(count):
+                #
+                url = all_urls[i]
+                category_list = all_categories[i]
+                "assign the current const.args.group"
+                assign_parser_url(category_list, url)
+                "Starting the main according url parsing"
+                main()
+                "Resetting the parser because it is unique"
+                reset_parser_url()
 
-            "Resetting the parser because it is unique"
-            reset_parser_url()
-        "Clearing the QWidgetList and other objects"
-        self.listWidgetUrls.clear()
-        #self.progressBar.setValue(100)
-        self.all_categories.clear()
-        self.all_urls.clear()
 
     def text_from_plain_text(self, url=None):
         if url is None:
