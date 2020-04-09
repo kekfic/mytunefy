@@ -1,13 +1,7 @@
 from logzero import logger as log
-import appdirs
-
 import logging
 import yaml
-import argparse
-import mimetypes
 import os
-
-
 import internals
 
 _LOG_LEVELS_STR = ["INFO", "WARNING", "ERROR", "DEBUG"]
@@ -40,7 +34,7 @@ default_conf = {
         "spotify_client_secret": "0f02b7c483c04257984695007a4a8d5c",
     }
 }
-#4fe3fecfe5334023a1472516cc99d805
+
 
 def log_leveller(log_level_str):
     loggin_levels = [logging.INFO, logging.WARNING, logging.ERROR, logging.DEBUG]

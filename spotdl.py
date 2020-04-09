@@ -6,11 +6,8 @@ from getmac import get_mac_address
 from hashlib import pbkdf2_hmac
 import binascii
 
-# Todo: check why __version__ in not working
-# import __version__
 
-
-from __init__ import  myEndtime, user_list
+from __init__ import myEndtime, user_list
 import time
 
 from lxml import html
@@ -77,6 +74,7 @@ if __name__ == "__main__":
 
         gui = MainWin()
         gui.mainwindow.show()
+        #gui.show()
         splash.close()
         # gui.mainwindow.showMaximized()
 

@@ -6,8 +6,7 @@ from titlecase import titlecase
 from logzero import logger as log
 import pprint
 import sys
-import os
-import functools
+
 
 import const
 import internals

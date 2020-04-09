@@ -3,8 +3,6 @@ import os
 import sys
 import math
 import urllib.request
-
-
 import const
 
 try:

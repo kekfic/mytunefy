@@ -2,13 +2,10 @@
 @author FF
 
 """
-import subprocess
-import time
-import sys
 from queue import Queue
 
 from PySide2.QtWidgets import QMainWindow, QFileDialog, QMessageBox
-from PySide2.QtCore import QObject, SIGNAL
+from PySide2.QtCore import QObject, Signal, SIGNAL
 
 from gui.gui_main import Ui_MainWindow
 import getpass
@@ -24,16 +21,46 @@ from slugify import slugify
 from my_main_functions import main, url_parser, assign_parser_url, reset_parser_url
 
 
+class MyClassThread(QObject, threading.Thread):
+
+    mySignal = Signal(object)
+
+    def __init__(self, target):
+        QObject.__init__(self)
+        threading.Thread.__init__(self)
+        self.daemon = True
+
+
+
+    def run(self):
+        pass
+
+
+class MyWindow(QMainWindow):
+    "Reimplementing main window for closeEvent option"
+
+    def closeEvent(self, event):
+        result = QMessageBox.question(self,
+                                      "Confirm Exit...",
+                                      "Are you sure you want to exit ?",
+                                      QMessageBox.Yes | QMessageBox.No)
+        event.ignore()
+
+        if result == QMessageBox.Yes:
+            event.accept()
+
+
 class MainWin(QObject, Ui_MainWindow):
     """ this main class is the main window and contain all button specification """
+    threadSignal = Signal(object)
 
     def __init__(self):
-        self.mainwindow = QMainWindow()
+        self.mainwindow = MyWindow()
         Ui_MainWindow.__init__(self)
         self.setupUi(self.mainwindow)
-        QObject.__init__(self)
 
-        self.quewait = Queue()
+        QObject.__init__(self)
+        #Todo; check all unused variables and functions
         self.quecreat = Queue()
         self.mainThreadIsAlive = True
         self.all_urls = []
@@ -42,7 +69,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.operation = ''
         self.url_text = False
         self.count = 0
-
+        self.startButtoncounter = 0
         self.progressBar.hide()
         self.pushButtonFolder.clicked.connect(self.folder_opener)
         self.StartPushButton.clicked.connect(self.threading_launcher)
@@ -60,54 +87,16 @@ class MainWin(QObject, Ui_MainWindow):
         self.connect(self.action_flac, SIGNAL("triggered()"), self.out_format)
         self.connect(self.action_mp3, SIGNAL("triggered()"), self.out_format)
 
-        self.mythread = threading.Thread(target=self.startDownload)
+        #self.mythread = MyClassThread(target=self.startDownload)
+        self.mythread = threading.Thread(target=self.startDownload, daemon=True)
         self.mythread.start()
 
+        #self.mythread.mySignal.connect(self.progressBarcomplete)
+        self.threadSignal.connect(self.progressBarcomplete)
+
+        # self.mainwindow.closeEvent(self.mainwindow.close)
 
 
-#        self.connect(self.actionhelp, SIGNAL("triggered()"), self.openmanual)
-
-
-        # Todo self action Paste has not been implemented
-        """
-        self.actionPaste = QtWidgets.QAction(self.plainTextEditUrl)
-        self.actionPaste.setObjectName("actionPaste")
-        #self.actionPaste.setShortcut(_translate("ModifiedTableView", "Ctrl+V"))
-        self.actionPaste.triggered.connect(self.text_from_plain_text)
-        self.plainTextEditUrl.addAction(self.actionPaste)
-        self.copiedtext = qApp.clipboard().text()
-        """
-        """
-        self.rcMenu = QtWidgets.QMenu(self.mainwindow)
-        self.action_delete_row = self.rcMenu.addAction('Delete Row', self.delete_row)
-        #self.action_insert_row = self.rcMenu.addAction('Insert Row', self.insert_row)
-        self.mainwindow.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.mainwindow.customContextMenuRequested.connect(self.onRightClick)
-        #
-
-    def onRightClick(self, QPos=None):
-        parent = self.sender()
-        pPos = parent.mapToGlobal(QtCore.QPoint(5, 20))
-        mPos = pPos + QPos
-
-        self.rcMenu.move(mPos)
-        self.rcMenu.show()
-
-    def delete_row(self):
-        self.listWidgetUrls.removeItemWidget(self,)
-        """
-
-    def closeEvent(self, event):
-        result = QMessageBox.question(self,
-                                            "Confirm Exit...",
-                                            "Are you sure you want to exit ?",
-                                            QMessageBox.Yes | QMessageBox.No)
-        event.ignore()
-
-        if result == QMessageBox.Yes:
-            self.mainThreadIsAlive = False
-            #self.mythread.
-            event.accept()
 
     def folder_opener(self):
         "Selecting the download folder"
@@ -130,22 +119,25 @@ class MainWin(QObject, Ui_MainWindow):
         # Todo: trying implement a better way of threading
         self.count = self.listWidgetUrls.count()
         if self.count:
+            self.startButtoncounter += 1
             self.quecreat.put([self.count, self.all_categories.copy(), self.all_urls.copy()])
             "Clearing the QWidgetList and other objects"
             self.listWidgetUrls.clear()
-            # self.progressBar.setValue(100)
             self.all_categories.clear()
             self.all_urls.clear()
+            self.progressBarHandler(self.count)
 
     def startDownload(self):
-        #Todo I don't like it very much
+        # Todo I don't like it very much
         "Start the function for downloading"
-        #if not self.quewait.empty:
-        while self.mainThreadIsAlive:
+        self.pbar_counter = 0
+        index = 0
+        while threading.main_thread().is_alive():
+            if index:
+                self.threadSignal.emit(index)
+
+                index = 0
             count, all_categories, all_urls = self.quecreat.get()
-            print('My count is', count)
-            print (all_categories)
-            print(all_urls)
             for i in range(count):
                 #
                 url = all_urls[i]
@@ -156,7 +148,8 @@ class MainWin(QObject, Ui_MainWindow):
                 main()
                 "Resetting the parser because it is unique"
                 reset_parser_url()
-
+            index += 1
+            self.pbar_counter += 1
 
     def text_from_plain_text(self, url=None):
         if url is None:
@@ -186,7 +179,7 @@ class MainWin(QObject, Ui_MainWindow):
                 text_file = 'User: ' + playlist['tracks']['items'][0]['added_by']['id'] + ' - ' + text_file
             elif category_list == 'track':
                 track = generate_metadata(url)
-                text_file = 'Song: '+ track['name'] + ' - ' + track['album']['artists'][0]['name']
+                text_file = 'Song: ' + track['name'] + ' - ' + track['album']['artists'][0]['name']
             elif category_list == 'artist':
                 artist = fetch_albums_from_artist(url)
                 text_file = u"Complete albums of " + artist[0]['artists'][0]['name']
@@ -202,13 +195,16 @@ class MainWin(QObject, Ui_MainWindow):
 
         return text_file
 
-    def progressBarHandler(self, numbitem, totalitem):
+    def progressBarcomplete(self, index):
+        self.progressBar.setValue(100)
+
+    def progressBarHandler(self, totalitem):
         if self.progressBar.isHidden():
             self.progressBar.show()
         if totalitem == 1:
-            percentage = round(numbitem / (totalitem+0.5), 2) * 100
+            percentage = round(1 / (totalitem + 0.5), 2) * 100
         else:
-            percentage = round(numbitem/totalitem, 2)*100
+            percentage = round(1 / totalitem, 2) * 100
 
         self.progressBar.setValue(percentage)
 
@@ -227,7 +223,6 @@ class MainWin(QObject, Ui_MainWindow):
             const.args.output_ext = '.flac'
             self.action_mp3.setChecked(False)
             self.action_m4a.setChecked(False)
-
 
         # def openmanual(self):
         #     subprocess.Popen([file], shell=True)
