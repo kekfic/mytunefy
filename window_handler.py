@@ -14,23 +14,23 @@ import const
 import handle
 import internals
 import threading
+import webbrowser
 
 from spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist, generate_metadata
 from slugify import slugify
 
 from my_main_functions import main, url_parser, assign_parser_url, reset_parser_url
-
+from login import db_pers_conn
 
 class MyClassThread(QObject, threading.Thread):
-
+    "Inheritance of thread class, unused"
     mySignal = Signal(object)
 
-    def __init__(self, target):
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs=None, *, daemon=None):
         QObject.__init__(self)
         threading.Thread.__init__(self)
         self.daemon = True
-
-
 
     def run(self):
         pass
@@ -62,14 +62,12 @@ class MainWin(QObject, Ui_MainWindow):
         QObject.__init__(self)
         #Todo; check all unused variables and functions
         self.quecreat = Queue()
-        self.mainThreadIsAlive = True
         self.all_urls = []
         self.all_categories = []
-        self.text_file = ''
-        self.operation = ''
         self.url_text = False
         self.count = 0
-        self.startButtoncounter = 0
+        self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
+
         self.progressBar.hide()
         self.pushButtonFolder.clicked.connect(self.folder_opener)
         self.StartPushButton.clicked.connect(self.threading_launcher)
@@ -87,21 +85,34 @@ class MainWin(QObject, Ui_MainWindow):
         self.connect(self.action_flac, SIGNAL("triggered()"), self.out_format)
         self.connect(self.action_mp3, SIGNAL("triggered()"), self.out_format)
 
-        #self.mythread = MyClassThread(target=self.startDownload)
+        self.connect(self.actionffmpeg, SIGNAL("triggered()"), self.encoding_sel)
+        self.connect(self.actionavconv, SIGNAL("triggered()"), self.encoding_sel)
+
+        self.connect(self.actionDry_Run, SIGNAL("triggered()"), self.advanced_option)
+        self.connect(self.actionMusic_Video_Only, SIGNAL("triggered()"), self.advanced_option)
+        self.connect(self.actionNo_Spaces, SIGNAL("triggered()"), self.advanced_option)
+        self.connect(self.actionTrim_Silence, SIGNAL("triggered()"), self.advanced_option)
+
+        self.connect(self.actionReadMe, SIGNAL("triggered()"), self.open_readme)
+        self.connect(self.actionhelp, SIGNAL("triggered()"), self.open_manual)
+
+        self.mythread = MyClassThread(target=self.startDownload)
         self.mythread = threading.Thread(target=self.startDownload, daemon=True)
         self.mythread.start()
 
-        #self.mythread.mySignal.connect(self.progressBarcomplete)
         self.threadSignal.connect(self.progressBarcomplete)
 
-        # self.mainwindow.closeEvent(self.mainwindow.close)
+        self.database = db_pers_conn()
+        if self.database:
+            #Get playlist and album downloaded data from
+            print('Data')
 
 
 
     def folder_opener(self):
         "Selecting the download folder"
-        mydefaultfolder = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
-        self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', mydefaultfolder,
+
+        self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', self.mydir,
                                                       QFileDialog.ShowDirsOnly)
         self.plainTextDirectory.setPlainText(self.mydir)
         self.mydir.replace("/", "\\")
@@ -119,7 +130,6 @@ class MainWin(QObject, Ui_MainWindow):
         # Todo: trying implement a better way of threading
         self.count = self.listWidgetUrls.count()
         if self.count:
-            self.startButtoncounter += 1
             self.quecreat.put([self.count, self.all_categories.copy(), self.all_urls.copy()])
             "Clearing the QWidgetList and other objects"
             self.listWidgetUrls.clear()
@@ -130,7 +140,6 @@ class MainWin(QObject, Ui_MainWindow):
     def startDownload(self):
         # Todo I don't like it very much
         "Start the function for downloading"
-        self.pbar_counter = 0
         index = 0
         while threading.main_thread().is_alive():
             if index:
@@ -149,7 +158,7 @@ class MainWin(QObject, Ui_MainWindow):
                 "Resetting the parser because it is unique"
                 reset_parser_url()
             index += 1
-            self.pbar_counter += 1
+
 
     def text_from_plain_text(self, url=None):
         if url is None:
@@ -208,6 +217,12 @@ class MainWin(QObject, Ui_MainWindow):
 
         self.progressBar.setValue(percentage)
 
+    def open_readme(self):
+        pass
+
+    def open_manual(self):
+        webbrowser.open('https://nextcloud-theficos.duckdns.org/s/BHwEPTxrfyFiyWp')
+
     def out_format(self):
 
         sender_object = self.sender().objectName()
@@ -224,5 +239,44 @@ class MainWin(QObject, Ui_MainWindow):
             self.action_mp3.setChecked(False)
             self.action_m4a.setChecked(False)
 
-        # def openmanual(self):
-        #     subprocess.Popen([file], shell=True)
+
+    def encoding_sel(self):
+
+        sender_object = self.sender().objectName()
+        if sender_object == 'actionffmpeg':
+            const.args.avconv = False
+            self.actionavconv.isChecked(False)
+        else:
+            const.args.avconv = True
+            self.actionffmpeg.isChecked(False)
+
+    def advanced_option(self):
+        sender_object = self.sender().objectName()
+        if sender_object == 'actionDry_run':
+            if self.actionDry_Run.isChecked():
+                self.actionDry_Run.isChecked(False)
+                const.args.dry_run = False
+            else:
+                self.actionDry_Run.isChecked(True)
+                const.args.dry_run = True
+        elif sender_object == "actionNo_Soaces":
+            if self.actionNo_Spaces.isChecked():
+                self.actionNo_Spaces.isChecked(False)
+                const.args.no_spaces = False
+            else:
+                self.actionNo_Spaces.isChecked(True)
+                const.args.no_spaces = True
+        elif sender_object == "actionMusic_Video_Only":
+            if self.actionMusic_Video_Only.isChecked():
+                self.actionMusic_Video_Only.isChecked(False)
+                const.args.music_videos_only = False
+            else:
+                self.actionMusic_Video_Only.isChecked(True)
+                const.args.music_videos_only = True
+        elif sender_object == "actionTrim_Silence":
+            if self.actionTrim_Silence.isChecked():
+                self.actionTrim_Silence.isChecked(False)
+                const.args.trim_silence = False
+            else:
+                self.actionTrim_Silence.isChecked(True)
+                const.args.trim_silence = True

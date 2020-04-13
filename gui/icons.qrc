@@ -1,6 +1,16 @@
 <RCC>
   <qresource prefix="spotify">
+    <file>../resources/icons/stream_icon.png</file>
+    <file>../resources/icons/cuffie2.png</file>
+    <file>../resources/icons/backtrack3.png</file>
+    <file>../resources/icons/next3.png</file>
+    <file>../resources/icons/repeat-track.png</file>
+    <file>../resources/icons/shuffle1.png</file>
+    <file>../resources/icons/pause.png</file>
+    <file>../resources/icons/pause-butt.png</file>
+    <file>../resources/icons/play-butt.png</file>
     <file>../resources/icons/menu.png</file>
+    <file>../resources/icons/play-red.png</file>
     <file>../resources/icons/menu2.jpg</file>
     <file>../resources/icons/help.png</file>
     <file>../resources/icons/info.png</file>

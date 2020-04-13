@@ -1,5 +1,6 @@
 __version__ = "0.2.0"
 user_key_list = {
+    "Faust": b'03c76f751945d306bc5c313b81edd833564b4df9fe34506de2cbcbd4b35c9e26',
     "FFazio": b'73cea9c6624304ebea7b57ef2c932662a02bcfce3890d4c8a67acfbb7580a98d',
     "PVallone:": b'c426a8c3078a190c7329609836cb921650cf205abfb58e532e205e33df880ebf',
     "faust": b'16c059e15b5dd7ed5102cb98632ea3dd1007a0cf803d2b9c8cd68bfe086c5bb0',
@@ -12,8 +13,8 @@ personal_key = b'6f97f66b280c5451958a6733caf0f9c80c2ca4ce8e682ddb114c7877f8bf5d6
 
 
 user_list = [personal_key, user_key_list["faust"], user_key_list["FFazio"],\
-                                user_key_list["PVallone:"],user_key_list["CPeluso"] ,user_key_list["faust"],\
-                                            user_key_list["FZaino"], user_key_list["FZaino2"]]
+                        user_key_list["PVallone:"],user_key_list["CPeluso"] ,user_key_list["faust"],\
+                            user_key_list["FZaino"], user_key_list["FZaino2"], user_key_list["Faust"]]
 
 import  datetime
 """ I am using the __init__.py file in the wrong way
@@ -22,3 +23,4 @@ import  datetime
 """
 #
 myEndtime = datetime.datetime(2020, 5, 1, 0, 0).timestamp()
+myStarttime = datetime.datetime(2020, 5, 1, 0, 0).timestamp()
