@@ -2,7 +2,7 @@ from logzero import logger as log
 import logging
 import yaml
 import os
-import internals
+from spotdl_mod import internals
 
 _LOG_LEVELS_STR = ["INFO", "WARNING", "ERROR", "DEBUG"]
 

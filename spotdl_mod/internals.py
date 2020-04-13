@@ -3,7 +3,7 @@ import os
 import sys
 import math
 import urllib.request
-import const
+from spotdl_mod import const
 
 try:
     import winreg

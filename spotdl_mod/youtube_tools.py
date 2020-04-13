@@ -6,10 +6,6 @@ from slugify import slugify
 from logzero import logger as log
 import os
 
-import spotify_tools
-import internals
-import const
-
 # Fix download speed throttle on short duration tracks
 # Read more on mps-youtube/pafy#199
 pafy.g.opener.addheaders.append(("Range", "bytes=0-"))
@@ -17,7 +13,7 @@ pafy.g.opener.addheaders.append(("Range", "bytes=0-"))
 # Implement unreleased methods on Pafy object
 # More info: https://github.com/mps-youtube/pafy/pull/211
 if pafy.__version__ <= "0.5.5":
-    import patcher
+    from spotdl_mod import patcher, const, spotify_tools, internals
 
     pafy_patcher = patcher.PatchPafy()
     pafy_patcher.patch_getbestthumb()

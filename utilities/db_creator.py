@@ -1,10 +1,9 @@
-from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String, MetaData, Table, Binary
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy import Column, String, MetaData, Table, Binary
 import os
 
 
-from creating_exe import key_creator
+from utilities.creating_exe import key_creator
 # Global Variables
 SQLITE = 'sqlite'
 USERS = 'users'

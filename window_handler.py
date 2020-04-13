@@ -10,13 +10,11 @@ from PySide2.QtCore import QObject, Signal, SIGNAL
 from gui.gui_main import Ui_MainWindow
 import getpass
 
-import const
-import handle
-import internals
+from spotdl_mod import const, handle, internals
 import threading
 import webbrowser
 
-from spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist, generate_metadata
+from spotdl_mod.spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist, generate_metadata
 from slugify import slugify
 
 from my_main_functions import main, url_parser, assign_parser_url, reset_parser_url

@@ -3,11 +3,7 @@ import urllib
 import os
 import time
 from logzero import logger as log
-import const
-import metadata
-import convert
-import internals
-import youtube_tools
+from spotdl_mod import const, youtube_tools, convert, metadata, internals
 
 SONGLIST = []
 

@@ -1,16 +1,10 @@
-import const
-import downloader
-import spotify_tools
+from spotdl_mod import const, youtube_tools, downloader, spotify_tools, internals
 import re
-import internals
-import youtube_tools
-import logzero
 import sys
 import platform
 import pprint
 import logzero
 from logzero import logger as log
-import threading
 
 
 def debug_sys_info():

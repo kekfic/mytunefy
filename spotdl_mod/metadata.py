@@ -6,7 +6,7 @@ from mutagen.flac import Picture, FLAC
 import urllib.request
 from logzero import logger as log
 
-from const import TAG_PRESET, M4A_TAG_PRESET
+from spotdl_mod.const import TAG_PRESET, M4A_TAG_PRESET
 #modification
 
 def compare(music_file, metadata):

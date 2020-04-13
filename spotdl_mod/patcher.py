@@ -1,7 +1,7 @@
 from pafy import backend_youtube_dl
 import pafy
 
-import internals
+from spotdl_mod import internals
 
 
 def _getbestthumb(self):

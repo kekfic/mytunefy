@@ -7,9 +7,7 @@ from logzero import logger as log
 import pprint
 import sys
 
-
-import const
-import internals
+from spotdl_mod import const, internals
 from lyrics.providers import LyricClasses
 from lyrics.exceptions import LyricsNotFound
 
