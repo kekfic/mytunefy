@@ -9,6 +9,8 @@ import convert
 import internals
 import youtube_tools
 
+SONGLIST = []
+
 class CheckExists:
     def __init__(self, music_file, meta_tags=None):
         self.meta_tags = meta_tags
@@ -97,6 +99,7 @@ class Downloader:
 
     def download_single(self):
         """ Logic behind downloading a song. """
+        global songlist
 
         if self._to_skip():
             return
@@ -108,6 +111,8 @@ class Downloader:
 
         # generate file name of the song to download
         songname = self.refine_songname(self.content.title)
+        #Todo test
+        SONGLIST.append(songname)
 
         if const.args.dry_run:
             return
@@ -201,8 +206,9 @@ class ListDownloader:
         return self._download_list()
 
     def _download_list(self):
+        global SONGLIST
         downloaded_songs = []
-
+        SONGLIST = []
         for number, raw_song in enumerate(self.tracks, 1):
             print("")
             try:
@@ -224,6 +230,7 @@ class ListDownloader:
             log.debug("Removing downloaded song from tracks file")
             elminated_track = internals.trim_song(self.tracks_file)
 
+        self.mysonglist = SONGLIST
         return downloaded_songs
 
     def _override_file(self):

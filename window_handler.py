@@ -20,7 +20,21 @@ from spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist,
 from slugify import slugify
 
 from my_main_functions import main, url_parser, assign_parser_url, reset_parser_url
-from login import db_pers_conn
+from login import db_song_conn
+
+"""
+My list of variables:
+
+        self.quecreat = Queue() - queue object for pushing data between threads
+        self.all_urls = [] - list of the urls to be downloaded
+        self.all_categories = [] - list of the type of argument (Playlist, Album, Song)
+        self.url_text = False - Probably unused
+        self.count = 0 - TO be modified
+        self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\' - default folder to be opened for user 
+
+"""
+
+
 
 class MyClassThread(QObject, threading.Thread):
     "Inheritance of thread class, unused"
@@ -68,19 +82,25 @@ class MainWin(QObject, Ui_MainWindow):
         self.count = 0
         self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
 
+        #hiding progress bar
         self.progressBar.hide()
+        #Two signal for folder and download button launch
         self.pushButtonFolder.clicked.connect(self.folder_opener)
         self.StartPushButton.clicked.connect(self.threading_launcher)
 
+        #setting the args global variable with default values
         const.args = handle.get_arguments()
         const.args.folder = internals.get_music_dir()
 
+        # Plain text, setting folder text and configuring signal
         self.plainTextDirectory.setPlainText(const.args.folder)
         self.plainTextEditUrl.textChanged.connect(self.text_from_plain_text)
 
+        # listWidget beahaviour
         self.listWidgetUrls.hide()
         self.listWidgetUrls.itemDoubleClicked.connect(self.remove_item)
 
+        #Menu signals
         self.connect(self.action_m4a, SIGNAL("triggered()"), self.out_format)
         self.connect(self.action_flac, SIGNAL("triggered()"), self.out_format)
         self.connect(self.action_mp3, SIGNAL("triggered()"), self.out_format)
@@ -96,16 +116,18 @@ class MainWin(QObject, Ui_MainWindow):
         self.connect(self.actionReadMe, SIGNAL("triggered()"), self.open_readme)
         self.connect(self.actionhelp, SIGNAL("triggered()"), self.open_manual)
 
+        #Setting thread tha take care of the download, this allow a responsive main window
         self.mythread = MyClassThread(target=self.startDownload)
         self.mythread = threading.Thread(target=self.startDownload, daemon=True)
         self.mythread.start()
 
         self.threadSignal.connect(self.progressBarcomplete)
 
-        self.database = db_pers_conn()
+        #database connection configuration, in progress
+        self.database = db_song_conn()
         if self.database:
             #Get playlist and album downloaded data from
-            print('Data')
+            pass
 
 
 
@@ -127,6 +149,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.all_categories.pop(item)
 
     def threading_launcher(self):
+        "When start button is pushed, check for correcteness nad start a thread for downloading"
         # Todo: trying implement a better way of threading
         self.count = self.listWidgetUrls.count()
         if self.count:
@@ -143,6 +166,7 @@ class MainWin(QObject, Ui_MainWindow):
         index = 0
         while threading.main_thread().is_alive():
             if index:
+                #if thread has ended the download, update the progressbar
                 self.threadSignal.emit(index)
 
                 index = 0
@@ -181,11 +205,12 @@ class MainWin(QObject, Ui_MainWindow):
             self.progressBar.hide()
 
     def get_name_for_list_widget(self, category_list, url):
+        "This function get the album/song/playlist/artist name from url"
         try:
             if category_list == 'playlist':
                 playlist = fetch_playlist(url)
-                text_file = u"Playlist Name: {0}".format(slugify(playlist["name"], ok="-_()[]{}"))
-                text_file = 'User: ' + playlist['tracks']['items'][0]['added_by']['id'] + ' - ' + text_file
+                name = u"Playlist Name: {0}".format(slugify(playlist["name"], ok="-_()[]{}"))
+                text_file = 'User: ' + playlist['tracks']['items'][0]['added_by']['id'] + ' - ' + name
             elif category_list == 'track':
                 track = generate_metadata(url)
                 text_file = 'Song: ' + track['name'] + ' - ' + track['album']['artists'][0]['name']
@@ -194,8 +219,8 @@ class MainWin(QObject, Ui_MainWindow):
                 text_file = u"Complete albums of " + artist[0]['artists'][0]['name']
             elif category_list == 'album':
                 album = fetch_album(url)
-                text_file = u"{0}".format(slugify(album["name"], ok="-_()[]{}"))
-                text_file = 'Album: ' + text_file + ' of : ' + album['artists'][0]['name']
+                name = u"{0}".format(slugify(album["name"], ok="-_()[]{}"))
+                text_file = 'Album: ' + name + ' of : ' + album['artists'][0]['name']
             else:
                 text_file = 'Not Found name'
         except Exception as e:
@@ -224,7 +249,7 @@ class MainWin(QObject, Ui_MainWindow):
         webbrowser.open('https://nextcloud-theficos.duckdns.org/s/BHwEPTxrfyFiyWp')
 
     def out_format(self):
-
+        "Function"
         sender_object = self.sender().objectName()
         if sender_object == 'action_mp3':
             const.args.output_ext = '.mp3'

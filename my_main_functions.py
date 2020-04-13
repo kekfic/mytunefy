@@ -67,6 +67,10 @@ def list_downloader(operation, text_file):
                 write_successful_file=const.args.write_successful,
             )
             list_dl.download_list()
+            with open('SS_'+text_file, 'w') as testfile:
+                for item in list_dl.mysonglist:
+                    testfile.write(item+'\n')
+
             operation = 'list'
 
 

@@ -4,11 +4,11 @@ from sqlalchemy.ext.declarative import declarative_base
 import os
 
 #Global Variables
-#Personal database
+#Song database
 SQLITE = 'sqlite'
 USER = 'new_user'
 SONGTot ='total_song'
-MY_DIR = os.getcwd() + '\\database\\mydb'
+MY_SONG_DB = os.getcwd() + '\\database\\song_db'
 #-----------------------------
 
 #user database
@@ -20,6 +20,7 @@ def get_user_database(dbtype = 'sqlite', dbname ='users_mtf'):
     DB_ENGINE = {
         SQLITE: 'sqlite:///' + USERFILE
     }
+    user_list = []
     engine_url = DB_ENGINE[dbtype].format(DB=dbname)
     db_engine = create_engine(engine_url)
     query = "SELECT * FROM {TBL_USR};".format(TBL_USR=USERNAME)
@@ -30,17 +31,18 @@ def get_user_database(dbtype = 'sqlite', dbname ='users_mtf'):
         except Exception as e:
             print(e)
             result = False
+    if res:
+        for row in res:
+            user_list.append(row[0])
 
-    return res
+    return res, user_list
 
 
 
-
-
-class MyDatabase:
+class MySongDatabase:
     # http://docs.sqlalchemy.org/en/latest/core/engines.html
     DB_ENGINE = {
-        SQLITE: 'sqlite:///'+MY_DIR
+        SQLITE: 'sqlite:///'+MY_SONG_DB
     }
 
     # Main DB Connection Ref Obj
@@ -117,26 +119,26 @@ class MyDatabase:
         # Delete Data by Id
         query = "DELETE FROM {} WHERE id=3".format(USERS)
         self.execute_query(query)
-        self.print_all_data(USERS)
+        self.print_all_data(USER)
         # Delete All Data
         '''
-        query = "DELETE FROM {}".format(USERS)
+        query = "DELETE FROM {}".format(USER)
         self.execute_query(query)
-        self.print_all_data(USERS)
+        self.print_all_data(USER)
         '''
 
     def sample_insert(self):
         # Insert Data
         query = "INSERT INTO {}(id, first_name, last_name) " \
-                "VALUES (3, 'Terrence','Jordan');".format(USERS)
+                "VALUES (3, 'Terrence','Jordan');".format(USER)
         self.execute_query(query)
-        self.print_all_data(USERS)
+        self.print_all_data(USER)
 
     def sample_update(self):
         # Update Data
         query = "UPDATE {} set first_name='XXXX' WHERE id={id}" \
-            .format(USERS, id=3)
+            .format(USER, id=3)
         self.execute_query(query)
-        self.print_all_data(USERS)
+        self.print_all_data(USER)
 
 

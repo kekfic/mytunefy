@@ -7,7 +7,7 @@ from PySide2.QtWidgets import QApplication
 from PySide2.QtGui import QMovie
 from window_handler import MainWin
 from widget_class import LoadingGif
-from login import valid_user, db_connection
+from login import valid_user
 
 
 if __name__ == "__main__":
@@ -31,7 +31,6 @@ if __name__ == "__main__":
         while movie.state() == QMovie.Running and time.time() < start + 5:
             app.processEvents()
 
-        dbconn = db_connection()
 
         gui = MainWin()
         gui.mainwindow.show()

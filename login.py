@@ -3,11 +3,12 @@ from hashlib import pbkdf2_hmac
 import binascii
 import db_handler
 
-from __init__ import myEndtime, user_list
+from __init__ import myEndtime
 import time
 
 from lxml import html
-import requests, os
+import requests
+import os
 
 
 def time_licence():
@@ -35,17 +36,18 @@ def key_creator():
 
 def valid_user():
     valid = False
+    res, user_list = db_handler.get_user_database()
     if key_creator() in user_list:
         if time_licence():
             valid = True
 
     return valid
 
-def db_pers_conn():
+def db_song_conn():
     #check if database exist
     try:
-        file_name = os.getcwd() + '\\database\\users_mtf.db'
-        mydbObj = db_handler.MyDatabase(dbtype='sqlite', dbname='pers_db')
+        file_name = os.getcwd() + '\\database\\song_db'
+        mydbObj = db_handler.MySongDatabase(dbtype='sqlite', dbname='song_db')
         if not os.path.isfile(file_name):
             mydbObj.create_db_tables()
     except Exception as e:

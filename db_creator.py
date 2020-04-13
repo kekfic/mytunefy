@@ -34,7 +34,7 @@ class MyUserDb:
     def create_db_tables(self):
         metadata = MetaData()
         users = Table(USERS, metadata,
-                      Column('the_key', String, primary_key=True, unique=True),
+                      Column('the_key', Binary, primary_key=True, unique=True),
                       Column('mac_address', String),
                       Column('user_name', String)
                       )
@@ -45,12 +45,12 @@ class MyUserDb:
             print("Error occurred during Table creation!")
             print(e)
 
-    def execute_query(self, query=''):
+    def execute_query(self, query='', variable=''):
         if query == '': return
         print(query)
         with self.db_engine.connect() as connection:
             try:
-                connection.execute(query)
+                connection.execute(query, variable)
             except Exception as e:
                 print('ERROR', e)
 
@@ -70,12 +70,10 @@ class MyUserDb:
 
     def insert_user(self, personal_key, mac_address='', user=''):
         # Insert Data
-        query = "INSERT INTO users (the_key, mac_address, user_name) " \
-                "VALUES (?, ?, ?);", (personal_key, mac_address, user)
-        self.execute_query(query)
+        query = "INSERT INTO users (the_key, mac_address, user_name) VALUES (?, ?, ?)"
+        variables = (personal_key, mac_address, user)
+        self.execute_query(query=query, variable=variables)
         self.print_all_data(USERS)
-
-      #  self.print_all_data(USERS)
 
 
 if __name__=='__main__':
@@ -91,4 +89,4 @@ if __name__=='__main__':
     key, mac_add = key_creator(mac_add)
 
     # if user_name is not 'exit':
-    mydb.insert_user(personal_key='key', mac_address='b', user='a')
+    mydb.insert_user(key, mac_address='', user='')
