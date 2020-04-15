@@ -14,11 +14,12 @@ from spotdl_mod import const, handle, internals
 import threading
 import webbrowser
 
-from spotdl_mod.spotify_tools import fetch_playlist, fetch_album, fetch_albums_from_artist, generate_metadata
-from slugify import slugify
 
-from my_main_functions import main, url_parser, assign_parser_url, reset_parser_url
+from my_main_functions import main, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
+from database_mytunefy import database_handler
 from login import db_song_conn
+
+from resources import resources as rs
 
 """
 My list of variables:
@@ -49,12 +50,12 @@ class MyClassThread(QObject, threading.Thread):
 
 
 class MyWindow(QMainWindow):
-    "Reimplementing main window for closeEvent option"
+    """Reimplementing main window for closeEvent option"""
 
     def closeEvent(self, event):
         result = QMessageBox.question(self,
-                                      "Confirm Exit...",
-                                      "Are you sure you want to exit ?",
+                                      "Confirm Uscita MyTuneFy...",
+                                      "Confermi di voler uscire ?",
                                       QMessageBox.Yes | QMessageBox.No)
         event.ignore()
 
@@ -80,25 +81,25 @@ class MainWin(QObject, Ui_MainWindow):
         self.count = 0
         self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
 
-        #hiding progress bar
+        'hiding progress bar'
         self.progressBar.hide()
-        #Two signal for folder and download button launch
+        'Two signal for folder and download button launch'
         self.pushButtonFolder.clicked.connect(self.folder_opener)
         self.StartPushButton.clicked.connect(self.threading_launcher)
 
-        #setting the args global variable with default values
+        'setting the args global variable with default values'
         const.args = handle.get_arguments()
         const.args.folder = internals.get_music_dir()
 
-        # Plain text, setting folder text and configuring signal
+        'Plain text, setting folder text and configuring signal'
         self.plainTextDirectory.setPlainText(const.args.folder)
         self.plainTextEditUrl.textChanged.connect(self.text_from_plain_text)
 
-        # listWidget beahaviour
+        'listWidget beahaviour'
         self.listWidgetUrls.hide()
         self.listWidgetUrls.itemDoubleClicked.connect(self.remove_item)
 
-        #Menu signals
+        'Menu signals'
         self.connect(self.action_m4a, SIGNAL("triggered()"), self.out_format)
         self.connect(self.action_flac, SIGNAL("triggered()"), self.out_format)
         self.connect(self.action_mp3, SIGNAL("triggered()"), self.out_format)
@@ -114,24 +115,21 @@ class MainWin(QObject, Ui_MainWindow):
         self.connect(self.actionReadMe, SIGNAL("triggered()"), self.open_readme)
         self.connect(self.actionhelp, SIGNAL("triggered()"), self.open_manual)
 
-        #Setting thread tha take care of the download, this allow a responsive main window
-        self.mythread = MyClassThread(target=self.startDownload)
+        'Setting thread tha take care of the download, this allow a responsive main window'
+        #self.mythread = MyClassThread(target=self.startDownload)
         self.mythread = threading.Thread(target=self.startDownload, daemon=True)
         self.mythread.start()
 
-        self.threadSignal.connect(self.progressBarcomplete)
+        self.threadSignal.connect(self.progress_Bar_complete)
 
-        #database connection configuration, in progress
+        'database connection configuration, in progress'
         self.database = db_song_conn()
         if self.database:
-            #Get playlist and album downloaded data from
-            pass
-
-
+            self.db_thread = threading.Thread(target=database_handler, daemon=True, args=(self.database,))
+            self.db_thread.start()
 
     def folder_opener(self):
-        "Selecting the download folder"
-
+        """Selecting the download folder"""
         self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', self.mydir,
                                                       QFileDialog.ShowDirsOnly)
         self.plainTextDirectory.setPlainText(self.mydir)
@@ -139,7 +137,8 @@ class MainWin(QObject, Ui_MainWindow):
         const.args.folder = self.mydir
 
     def remove_item(self):
-        "Remove item from QWidgetList if double clicked"
+        """Remove item from QWidgetList if double clicked"""
+
         item = self.listWidgetUrls.currentRow()
         self.listWidgetUrls.takeItem(item)
 
@@ -147,7 +146,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.all_categories.pop(item)
 
     def threading_launcher(self):
-        "When start button is pushed, check for correcteness nad start a thread for downloading"
+        """When start button is pushed, check for correcteness nad start a thread for downloading"""
         # Todo: trying implement a better way of threading
         self.count = self.listWidgetUrls.count()
         if self.count:
@@ -159,22 +158,26 @@ class MainWin(QObject, Ui_MainWindow):
             self.progressBarHandler(self.count)
 
     def startDownload(self):
-        # Todo I don't like it very much
         "Start the function for downloading"
         index = 0
         while threading.main_thread().is_alive():
             if index:
+                #todo : you must change this criteria
                 #if thread has ended the download, update the progressbar
                 self.threadSignal.emit(index)
+                rs.songPusher.put(['end'])
 
                 index = 0
             count, all_categories, all_urls = self.quecreat.get()
             for i in range(count):
-                #
+                if i >0:
+                    rs.songPusher.put(['end'])
                 url = all_urls[i]
                 category_list = all_categories[i]
                 "assign the current const.args.group"
                 assign_parser_url(category_list, url)
+                'pushing category to database thread'
+                rs.songPusher.put(['mylist', category_list, url])
                 "Starting the main according url parsing"
                 main()
                 "Resetting the parser because it is unique"
@@ -191,7 +194,9 @@ class MainWin(QObject, Ui_MainWindow):
                 self.plainTextEditUrl.clear()
 
     def listWidgetHandler(self, url, category_list):
-        text_playlist = self.get_name_for_list_widget(category_list, url)
+        "Get from urls and adding to list widget"
+
+        text_playlist, junk = get_name_for_list_widget(category_list, url)
         self.listWidgetUrls.addItem(text_playlist)
         self.all_categories.append(category_list)
         self.all_urls.append(url)
@@ -202,32 +207,7 @@ class MainWin(QObject, Ui_MainWindow):
         if not self.progressBar.isHidden():
             self.progressBar.hide()
 
-    def get_name_for_list_widget(self, category_list, url):
-        "This function get the album/song/playlist/artist name from url"
-        try:
-            if category_list == 'playlist':
-                playlist = fetch_playlist(url)
-                name = u"Playlist Name: {0}".format(slugify(playlist["name"], ok="-_()[]{}"))
-                text_file = 'User: ' + playlist['tracks']['items'][0]['added_by']['id'] + ' - ' + name
-            elif category_list == 'track':
-                track = generate_metadata(url)
-                text_file = 'Song: ' + track['name'] + ' - ' + track['album']['artists'][0]['name']
-            elif category_list == 'artist':
-                artist = fetch_albums_from_artist(url)
-                text_file = u"Complete albums of " + artist[0]['artists'][0]['name']
-            elif category_list == 'album':
-                album = fetch_album(url)
-                name = u"{0}".format(slugify(album["name"], ok="-_()[]{}"))
-                text_file = 'Album: ' + name + ' of : ' + album['artists'][0]['name']
-            else:
-                text_file = 'Not Found name'
-        except Exception as e:
-            print("{} name not found! Setting standard name.".format(category_list))
-            text_file = str(category_list) + url[31:-1]
-
-        return text_file
-
-    def progressBarcomplete(self, index):
+    def progress_Bar_complete(self, index):
         self.progressBar.setValue(100)
 
     def progressBarHandler(self, totalitem):

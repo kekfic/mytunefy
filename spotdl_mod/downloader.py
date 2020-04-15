@@ -4,6 +4,7 @@ import os
 import time
 from logzero import logger as log
 from spotdl_mod import const, youtube_tools, convert, metadata, internals
+from resources import resources as rs
 
 SONGLIST = []
 
@@ -95,7 +96,6 @@ class Downloader:
 
     def download_single(self):
         """ Logic behind downloading a song. """
-        global songlist
 
         if self._to_skip():
             return
@@ -107,6 +107,7 @@ class Downloader:
 
         # generate file name of the song to download
         songname = self.refine_songname(self.content.title)
+
         #Todo test
         SONGLIST.append(songname)
 
@@ -134,6 +135,9 @@ class Downloader:
                     trim_silence=const.args.trim_silence,
                     delete_original=not const.args.no_remove_original,
                 )
+                # pushing the songame and path for streaming/downloadin/database
+                rs.songPusher.put(['song', songpath, self.raw_song])
+
             except FileNotFoundError:
                 encoder = "avconv" if const.args.avconv else "ffmpeg"
                 log.warning("Could not find {0}, skip encoding".format(encoder))

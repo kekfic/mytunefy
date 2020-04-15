@@ -5,6 +5,7 @@ import platform
 import pprint
 import logzero
 from logzero import logger as log
+from slugify import slugify
 
 
 def debug_sys_info():
@@ -61,9 +62,9 @@ def list_downloader(operation, text_file):
                 write_successful_file=const.args.write_successful,
             )
             list_dl.download_list()
-            with open('SS_'+text_file, 'w') as testfile:
-                for item in list_dl.mysonglist:
-                    testfile.write(item+'\n')
+            # with open('txt/'+'SS_'+text_file, 'w') as testfile:
+            #     for item in list_dl.mysonglist:
+            #         testfile.write(item+'\n')
 
             operation = 'list'
 
@@ -84,6 +85,54 @@ def url_parser(url):
 
     return category_list
 
+def get_song_data(url):
+    song_name = ''
+    artist_name = ''
+    album_name = ''
+
+    try:
+        track = spotify_tools.generate_metadata(url)
+        song_name = track['name']
+        artist_name = track['album']['artists'][0]['name']
+        album_name = track['album']['name']
+    except Exception as e:
+        print('Error as :', e)
+
+    return [song_name, artist_name, album_name]
+
+
+
+def get_name_for_list_widget(category_list, url ):
+    "This function get the album/song/playlist/artist name from url"
+    try:
+        if category_list == 'playlist':
+            playlist = spotify_tools.fetch_playlist(url)
+            name = u"{0}".format(slugify(playlist["name"], ok="-_()[]{}"))
+            text_file = 'User: ' + playlist['tracks']['items'][0]['added_by']['id'] + ' - ' + "Playlist Name: " + name
+        elif category_list == 'track':
+            track = spotify_tools.generate_metadata(url)
+            name = track['name']
+            artist_name = track['album']['artists'][0]['name']
+            text_file = 'Song: ' + name + ' - ' + artist_name
+        elif category_list == 'artist':
+            artist = spotify_tools.fetch_albums_from_artist(url)
+            name = artist[0]['artists'][0]['name']
+            text_file = u"Complete albums of " + artist[0]['artists'][0]['name']
+        elif category_list == 'album':
+            album = spotify_tools.fetch_album(url)
+            name = u"{0}".format(slugify(album["name"], ok="-_()[]{}"))
+            text_file = 'Album: ' + name + ' of : ' + album['artists'][0]['name']
+        else:
+            text_file = 'Not Found name'
+            name = ''
+    except Exception as e:
+        print("{} name not found! Setting standard name.".format(category_list))
+        text_file = str(category_list) + url[31:-1]
+        name = ' '
+
+    return text_file, name
+
+
 def assign_parser_url(category_list, url):
 
     if category_list == 'playlist':
@@ -102,7 +151,6 @@ def reset_parser_url():
     const.args.artist = ''
 
 
-
 def main():
     # Todo try new implementation
     internals.filter_path(const.args.folder)
@@ -111,13 +159,8 @@ def main():
 
     try:
         operation, text_file = match_args()
-        #mythread = threading.Thread(target=list_downloader, args=(operation, text_file))
-
         if operation is not 'list':
-            #mythread.start()
             list_downloader(operation, text_file)
-        # else:
-        #     list_downloader(operation, text_file)
 
     # I don't need this type of exception, I'll remove another time
     except Exception as e:

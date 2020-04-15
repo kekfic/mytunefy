@@ -13,6 +13,7 @@ from lyrics.exceptions import LyricsNotFound
 
 spotify = None
 
+#NOTE: File moved to txt/folder
 
 def generate_token():
     """ Generate the token. """
@@ -160,7 +161,7 @@ def write_playlist(playlist_url, text_file=None):
     playlist = fetch_playlist(playlist_url)
     tracks = playlist["tracks"]
     if not text_file:
-        text_file = u"{0}.txt".format(slugify(playlist["name"], ok="-_()[]{}"))
+        text_file = u"txt/{0}.txt".format(slugify(playlist["name"], ok="-_()[]{}"))
     return write_tracks(tracks, text_file)
 
 
@@ -215,7 +216,7 @@ def write_all_albums_from_artist(artist_url, text_file=None):
     # if no file if given, the default save file is in the current working
     # directory with the name of the artist
     if text_file is None:
-        text_file = albums[0]["artists"][0]["name"] + ".txt"
+        text_file = "txt/" + albums[0]["artists"][0]["name"] + ".txt"
 
     for album in albums:
         # logging album name
@@ -229,7 +230,7 @@ def write_album(album_url, text_file=None):
     album = fetch_album(album_url)
     tracks = spotify.album_tracks(album["id"])
     if not text_file:
-        text_file = u"{0}.txt".format(slugify(album["name"], ok="-_()[]{}"))
+        text_file = u"txt/+{0}.txt".format(slugify(album["name"], ok="-_()[]{}"))
     return write_tracks(tracks, text_file)
 
 
