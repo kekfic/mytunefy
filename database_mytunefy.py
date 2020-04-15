@@ -3,7 +3,7 @@ from sqlalchemy import Column, String, MetaData, Table
 from my_main_functions import get_name_for_list_widget, get_song_data
 import os
 from resources import resources as rs
-from random import randint, choice
+from random import  choice
 import string
 # Global Variables
 # Song database
@@ -16,6 +16,8 @@ MY_SONG_DB = os.getcwd() + '\\database\\song_db'
 # user database
 USERFILE = os.getcwd() + '\\database\\users_mtf'
 USERNAME = 'users'
+
+#def check_my_dir():
 
 
 #
@@ -64,6 +66,14 @@ def refine_string(string_to_refine):
     mystring = mystring.replace(':', ' ')
     mystring = mystring.replace('  ', ' ')
     mystring = mystring.replace('.', ' ')
+    mystring = mystring.replace('á', 'a')
+    mystring = mystring.replace('à', 'a')
+    mystring = mystring.replace('í', 'i')
+    mystring = mystring.replace('ó', 'o')
+    #mystring = mystring.replace('ñ', 'n')
+    mystring = mystring.replace('ú', 'u')
+    mystring = mystring.replace('é', 'e')
+    mystring = mystring.replace('è', 'e')
 
     return mystring
 
@@ -171,7 +181,6 @@ class MySongDatabase:
         if dbtype in self.DB_ENGINE.keys():
             engine_url = self.DB_ENGINE[dbtype].format(DB=dbname)
             self.db_engine = create_engine(engine_url)
-            print(self.db_engine)
         else:
             print("DBType is not found in DB_ENGINE")
 
@@ -199,14 +208,14 @@ class MySongDatabase:
                          )
         try:
             metadata.create_all(self.db_engine)
-            print("Tables created")
+            #print("Tables created")
         except Exception as e:
             print("Error occurred during Table creation!")
             print(e)
 
     def execute_select_query(self, query='', variable=()):
         if query == '': return
-        print(query)
+        #print(query)
         with self.db_engine.connect() as connection:
             try:
                 result = connection.execute(query, variable)
@@ -218,7 +227,7 @@ class MySongDatabase:
 
     def execute_general_query(self, query=''):
         if query == '': return
-        print(query)
+        #print(query)
         with self.db_engine.connect() as connection:
             try:
                 connection.execute(query)
@@ -227,7 +236,7 @@ class MySongDatabase:
 
     def execute_query(self, query='', variable=()):
         if query == '': return
-        print(query)
+        #print(query)
         with self.db_engine.connect() as connection:
             try:
                 connection.execute(query, variable)
@@ -258,7 +267,7 @@ class MySongDatabase:
 
     def query_song_table(self, song='', playlist='', album='', category=''):
         query = "SELECT * FROM {TBL_USR} WHERE {CAT} = ?;".format(TBL_USR=SONGTot, CAT=category)
-        print(query)
+        #print(query)
 
         return query
 
@@ -283,6 +292,10 @@ class MySongDatabase:
 
         variable = (songname, playlist, album, artist, folder, url)
         self.execute_query(query, variable)
+
+    def delete_song_table(self, songname):
+        query = "DELETE FROM {TABL_USR} (song) VALUES (?)".format(TABL_USR=SONGTot)
+        variable = (songname, )
 
     # def sample_delete(self):
     #     # Delete Data by Id

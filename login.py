@@ -3,7 +3,7 @@ from hashlib import pbkdf2_hmac
 import binascii
 import database_mytunefy
 import base64
-from __init__ import myEndtime
+from resources.resources import myEndtime
 import time
 
 from lxml import html
@@ -18,7 +18,10 @@ def time_licence():
         tree = html.fromstring(page.content)
         timeliststring = tree.xpath('//h3[@class="text-danger"]/text()')
         time_now = int(timeliststring[0])
-        if not os.path.isfile('txt/timestart.txt'):
+        if 'txt' not in os.listdir():
+            os.makedirs('txt', exist_ok=True)
+
+        if not os.path.isfile('txt/timestart'):
             with open('txt/timestart', 'wb') as file:
                 encodedtime = base64.b64encode(bytes(str(time.time()), 'utf-8'))
                 file.write(encodedtime)
@@ -34,10 +37,11 @@ def time_licence():
         except Exception as e:
             print('ERROR - Second attempt to time licence failed. Error as:', e)
             time.sleep(2)
-            with open('txt/timestart.txt', 'r') as file:
+            with open('txt/timestart', 'r') as file:
                 newtime = file.read()
                 dectime = base64.b64decode(newtime)
-                time_now = dectime.decode('utf-8')
+                time_str = (dectime.decode('utf-8'))
+                time_now = int(time_str.split('.')[0])
 
     if time_now < myEndtime:
         valid_licence = True
@@ -55,10 +59,14 @@ def key_creator():
 
 def valid_user():
     valid = False
-    res, user_list = database_mytunefy.get_user_database()
-    if key_creator() in user_list:
-        if time_licence():
-            valid = True
+    try:
+        res, user_list = database_mytunefy.get_user_database()
+        if key_creator() in user_list:
+            if time_licence():
+                valid = True
+
+    except Exception as e:
+        print('Database error as:', e)
 
     return valid
 

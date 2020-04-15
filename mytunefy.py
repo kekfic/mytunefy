@@ -41,3 +41,4 @@ if __name__ == "__main__":
         sys.exit(app.exec_())
     else:
         print('User not allowed')
+        time.sleep(5)
