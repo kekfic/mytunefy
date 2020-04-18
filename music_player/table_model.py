@@ -20,8 +20,6 @@ class MyTableModel(QAbstractTableModel):
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
             return None
-        # elif role != Qt.DisplayRole:
-        #     return None
         column = index.column()
         if role == Qt.DisplayRole:
             if column == 0:
@@ -32,14 +30,17 @@ class MyTableModel(QAbstractTableModel):
                 return self.mylist[index.row()][0]
             elif column == 3:
                 return self.mylist[index.row()][2]
-        # elif role == Qt.BackgroundColorRole:
-        #     return QColor(Qt.Red)
+
+        # elif role == Qt.BackgroundRole:
+        #      return QBrush(Qt.black)
+
         elif role == Qt.FontRole:
             font = QFont()
             font.setFamily('Comic Sans MS')
             font.setPointSize(9)
-            #font.setBold(True)
+
             return font
+
         else:
             return None
 

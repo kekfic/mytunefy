@@ -123,15 +123,6 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         pygame.mixer.music.unpause()
 
 
-# Defining MusicPlayer Class
-
-# enum Columns:
-# {
-#     COL_NAME,
-#     COL_TIME,
-#     COL_STATUS
-# }
-
 
 
 if __name__ == '__main__':

@@ -1,45 +1,56 @@
-from PySide2 import QtGui, QtCore
-from PySide2.QtCore import Signal, QEvent
-from PySide2.QtGui import QPixmap
-from PySide2.QtWidgets import QStyledItemDelegate, QStyle, QStyleOptionButton, QApplication, QStyleOption
+import operator
 
+import PySide2
+from PySide2 import QtGui, QtCore
+from PySide2.QtCore import Signal, QEvent, Qt, QModelIndex
+from PySide2.QtGui import QPixmap, QPen, QBrush
+from PySide2.QtWidgets import QStyledItemDelegate, QStyle, QStyleOptionButton, QApplication, QStyleOption, QWidget, \
+    QStyleOptionViewItem, qApp
+
+
+from gui.push_button import MyPushButton
 
 class ButtonDelegate(QStyledItemDelegate):
     buttonClicked = Signal(int, int)
 
     def __init__(self, parent = None):
         super(ButtonDelegate, self).__init__(parent)
+        #MyPushButton.__init__(self)
         self._pressed = None
 
+    def createEditor(self, parent, option, index):
+        combo = QtGui.QPushButton(parent)
+
+        # self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), self, QtCore.SLOT("currentIndexChanged()"))
+        #combo.clicked.connect(self.currentIndexChanged)
+        return combo
+
+        # def createEditor(self, parent: QWidget , option:QStyleOptionViewItem, index:QModelIndex) -> QWidget:
+    #     self.setAutoFillBackground(True)
+
+        #self.initStyleOption(QStyle.CE_ComboBoxLabel)
+       # option:QStyleOption.palette
+        pass
+
     def paint(self, painter, option, index):
-    # if index.column()==0:
+
         painter.save()
-
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/play1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/play_lgrey.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        #opt = QStyleOptionButton()
         opt = QStyleOptionButton()
-        #opt.text = index.data().toString()
-
-        brush = painter.brush().setColor(QtGui.QColor(0, 0, 0))
-        opt.rect = option.rect
-       # opt.flat = True
-        #opt.text = 'Play'
-        opt.icon = icon
-        #opt.ButtonFeature = opt.Flat
-        #opt.styleObject = opt.
-        opt.iconSize = QtCore.QSize(20, 20)
+        #setBackgroundRole()
         palette = QtGui.QPalette()
-        #brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
-        # palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        #brush.setStyle(QtCore.Qt.SolidPattern)
-        # palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        # palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-
-        #painter.fillRect(option.rect, brush)
-
-
-       # opt.initFrom(palette)
+        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+       # palette.setBrush(QtGui.QPalette.active, QtGui.QPalette.Button, brush)
+        palette.setColor(QtGui.QPalette.Background, Qt.black)
+        #opt.backgroundColor = palette.color(palette.background)
+        opt.icon = icon
         opt.palette = palette
+        opt.iconSize = QtCore.QSize(30, 30)
+        opt.rect = option.rect
+
 
         if self._pressed and self._pressed == (index.row(), index.column()):
             opt.state = QStyle.State_Enabled | QStyle.State_Sunken

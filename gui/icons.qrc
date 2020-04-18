@@ -1,5 +1,11 @@
 <RCC>
   <qresource prefix="spotify">
+    <file>../resources/icons/play_white.png</file>
+    <file>../resources/icons/pause_mod_darker.png</file>
+    <file>../resources/icons/play_grey.png</file>
+    <file>../resources/icons/play_lgrey.png</file>
+    <file>../resources/icons/pause_mod2.png</file>
+    <file>../resources/icons/pause_mod.png</file>
     <file>../resources/icons/stream_icon.png</file>
     <file>../resources/icons/cuffie2.png</file>
     <file>../resources/icons/backtrack3.png</file>
