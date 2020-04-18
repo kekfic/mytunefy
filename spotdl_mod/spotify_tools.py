@@ -230,7 +230,7 @@ def write_album(album_url, text_file=None):
     album = fetch_album(album_url)
     tracks = spotify.album_tracks(album["id"])
     if not text_file:
-        text_file = u"txt/+{0}.txt".format(slugify(album["name"], ok="-_()[]{}"))
+        text_file = u"txt/{0}.txt".format(slugify(album["name"], ok="-_()[]{}"))
     return write_tracks(tracks, text_file)
 
 
