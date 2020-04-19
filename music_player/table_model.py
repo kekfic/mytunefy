@@ -15,7 +15,7 @@ class MyTableModel(QAbstractTableModel):
         return len(self.mylist)
 
     def columnCount(self, index=QModelIndex()):
-        return 4
+        return 3
 
     def data(self, index, role=Qt.DisplayRole):
         if not index.isValid():
@@ -23,13 +23,11 @@ class MyTableModel(QAbstractTableModel):
         column = index.column()
         if role == Qt.DisplayRole:
             if column == 0:
-                return
-            elif column == 1:
                 return self.mylist[index.row()][1]
-            elif column == 2:
+            elif column == 1:
                 return self.mylist[index.row()][0]
-            elif column == 3:
-                return self.mylist[index.row()][2]
+            elif column == 2:
+                return ''
 
         # elif role == Qt.BackgroundRole:
         #      return QBrush(Qt.black)

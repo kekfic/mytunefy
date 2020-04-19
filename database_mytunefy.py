@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import create_engine
 from sqlalchemy import Column, String, MetaData, Table
 from my_main_functions import get_name_for_list_widget, get_song_data
 import os

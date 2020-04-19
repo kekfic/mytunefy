@@ -46,8 +46,11 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         os.chdir("D:\\Musica\\")
         # Fetching Songs
         raw_song_tracks = os.listdir()
+        self.raw_songs = raw_song_tracks.copy()
+
         songtracks= []
-        header = ['', 'Title', 'Artist', 'Format']
+        header = ['', 'Title', 'Artist', ' ']
+        i = 0
         for item in raw_song_tracks:
             if '.mp3' in item:
                 try:
@@ -56,19 +59,30 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
                     songtracks.append(labels)
                 except Exception as e:
                     print('Song: {} - not consider cause {}'.format(item, e))
+                    self.raw_songs.pop(i)
+            else:
+                self.raw_songs.pop(i)
+            i += 1
+
+
+        print(len(songtracks))
+        print(len(self.raw_songs))
+
 
         self.table_model = table_model.MyTableModel (self.main_window_player, songtracks, header)
         self.tableView.setModel(self.table_model)
-        self.tableView.resizeColumnsToContents()
+        #self.tableView.resizeColumnsToContents()
+        self.tableView.setColumnWidth(0, 250)
+        self.tableView.setColumnWidth(1, 200)
+
         self.tableView.setShowGrid(FALSE)
         self.tableView.verticalHeader().hide()
-        #self.tableView.horizontalHeader().hide()
-        #self.table_model.headerData(Qt.Horizontal, Qt.BackgroundColorRole)
-        #self.tableView.horizontalHeader().setStyleSheet("background-color:black")
-   #     self.tableView.setStyleSheet('color:white;')
-       # self.tableView.setStyleSheet("color:white;")
-        #self.tableView.set
-        self.tableView.setItemDelegateForColumn(0, mydelegate.ButtonDelegate())
+        self.tableView.horizontalHeader().hide()
+       # self.tableView.mouseDoubleClickEvent()
+        #self.connect(self.PlayPauseButton, Signal('triggered()'), self.parsing_song)
+        #self.PlayPauseButton.con
+
+        self.tableView.setItemDelegateForColumn(2, mydelegate.ButtonDelegate())
 
         # hh = QHeaderView(Qt.Horizontal, self.tableView)
         # hh.setStyleSheet("QHeaderView::section { background-color:black};")
@@ -94,13 +108,13 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         return [listsong[0], artist, listsong[2]]
 
 
-    def playsong(self):
+    def playsong(self, songname):
         # Displaying Selected Song title
-        self.track.set(self.playlist.get(ACTIVE))
+        #self.track.set(self.playlist.get(ACTIVE))
         # Displaying Status
         self.status.set("-Playing")
         # Loading Selected Song
-        pygame.mixer.music.load(self.playlist.get(ACTIVE))
+        pygame.mixer.music.load()
         # Playing Selected Song
         pygame.mixer.music.play()
 

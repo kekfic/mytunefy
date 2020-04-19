@@ -18,45 +18,40 @@ class ButtonDelegate(QStyledItemDelegate):
         #MyPushButton.__init__(self)
         self._pressed = None
 
-    def createEditor(self, parent, option, index):
-        combo = QtGui.QPushButton(parent)
-
-        # self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), self, QtCore.SLOT("currentIndexChanged()"))
-        #combo.clicked.connect(self.currentIndexChanged)
-        return combo
-
-        # def createEditor(self, parent: QWidget , option:QStyleOptionViewItem, index:QModelIndex) -> QWidget:
-    #     self.setAutoFillBackground(True)
-
-        #self.initStyleOption(QStyle.CE_ComboBoxLabel)
-       # option:QStyleOption.palette
-        pass
+    # def createEditor(self, parent, option, index):
+    #     combo = QtGui.QPushButton(parent)
+    #
+    #     # self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), self, QtCore.SLOT("currentIndexChanged()"))
+    #     #combo.clicked.connect(self.currentIndexChanged)
+    #     return combo
+    #    pass
 
     def paint(self, painter, option, index):
 
         painter.save()
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/play_lgrey.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/backtrack3.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         #opt = QStyleOptionButton()
         opt = QStyleOptionButton()
         #setBackgroundRole()
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-       # palette.setBrush(QtGui.QPalette.active, QtGui.QPalette.Button, brush)
-        palette.setColor(QtGui.QPalette.Background, Qt.black)
-        #opt.backgroundColor = palette.color(palette.background)
+        brush.setStyle(QtCore.Qt.SolidPattern)#
         opt.icon = icon
-        opt.palette = palette
+
+        #opt.palette.setBrush(QtGui.QPalette.Button, QBrush(QtGui.QColor(Qt.green)))
         opt.iconSize = QtCore.QSize(30, 30)
         opt.rect = option.rect
 
 
         if self._pressed and self._pressed == (index.row(), index.column()):
             opt.state = QStyle.State_Enabled | QStyle.State_Sunken
+            opt.icon = icon2
         else:
             opt.state = QStyle.State_Enabled | QStyle.State_Raised
-        QApplication.style().drawControl(QStyle.CE_PushButton, opt, painter)
+        QApplication.style().drawControl(QStyle.CE_PushButtonLabel, opt, painter)
         painter.restore()
 
     def editorEvent(self, event, model, option, index):

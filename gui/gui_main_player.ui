@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>976</width>
-    <height>865</height>
+    <width>999</width>
+    <height>911</height>
    </rect>
   </property>
   <property name="palette">
@@ -355,19 +355,6 @@ border-radius: 5px;</string>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_12">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <widget class="QComboBox" name="comboBoxCategory">
            <property name="minimumSize">
             <size>
@@ -377,7 +364,7 @@ border-radius: 5px;</string>
            </property>
            <property name="maximumSize">
             <size>
-             <width>250</width>
+             <width>200</width>
              <height>35</height>
             </size>
            </property>
@@ -914,9 +901,15 @@ QPushButton:default {
           </property>
           <item>
            <widget class="QListWidget" name="listWidget">
+            <property name="minimumSize">
+             <size>
+              <width>220</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>500</width>
+              <width>300</width>
               <height>16777215</height>
              </size>
             </property>
@@ -959,6 +952,12 @@ background-color: rgb(30, 30, 30);
       </item>
       <item>
        <widget class="QFrame" name="frame_songs">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -1411,6 +1410,19 @@ QPushButton:hover{
             </widget>
            </item>
            <item>
+            <spacer name="horizontalSpacer_15">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QToolButton" name="toolButtonPlaylist">
              <property name="minimumSize">
               <size>
@@ -1423,15 +1435,31 @@ QPushButton:hover{
              </property>
             </widget>
            </item>
+           <item>
+            <spacer name="horizontalSpacer_16">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <property name="leftMargin">
+            <number>15</number>
+           </property>
            <item>
             <widget class="QLabel" name="title_label">
              <property name="minimumSize">
               <size>
-               <width>350</width>
+               <width>360</width>
                <height>0</height>
               </size>
              </property>
@@ -1562,7 +1590,7 @@ QPushButton:hover{
               <string>TITOLO</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -1570,7 +1598,7 @@ QPushButton:hover{
             <widget class="QLabel" name="artist_label">
              <property name="minimumSize">
               <size>
-               <width>300</width>
+               <width>180</width>
                <height>0</height>
               </size>
              </property>
@@ -1704,9 +1732,22 @@ QPushButton:hover{
               <string>ARTISTA</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_13">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>
@@ -1716,7 +1757,7 @@ QPushButton:hover{
             <number>10</number>
            </property>
            <property name="leftMargin">
-            <number>5</number>
+            <number>10</number>
            </property>
            <property name="topMargin">
             <number>5</number>
@@ -1742,6 +1783,9 @@ QPushButton:hover{
 }
 QHeaderView::section { background-color:black}</string>
              </property>
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
+             </property>
              <property name="showGrid">
               <bool>false</bool>
              </property>
@@ -1751,6 +1795,77 @@ QHeaderView::section { background-color:black}</string>
             </widget>
            </item>
           </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_optional">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>10</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>350</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progressBar">
+           <property name="value">
+            <number>24</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDateEdit" name="dateEdit"/>
+         </item>
+         <item>
+          <widget class="QCalendarWidget" name="calendarWidget">
+           <property name="maximumSize">
+            <size>
+             <width>300</width>
+             <height>350</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -2564,7 +2679,7 @@ background-image: url(:/spotify/resources/icons/play-red.png);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>976</width>
+     <width>999</width>
      <height>26</height>
     </rect>
    </property>
