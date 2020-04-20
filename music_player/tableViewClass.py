@@ -7,6 +7,8 @@ from PySide2.QtWidgets import QTableView
 
 
 class MyTableModel(QAbstractTableModel):
+    """This class is the model that the QTable view use"""
+
     def __init__(self, parent, mylist, header, *args):
         QAbstractTableModel.__init__(self, parent, *args)
         self.mylist = mylist
@@ -82,6 +84,7 @@ class MyTableModel(QAbstractTableModel):
 
 
 class MyTableView(QTableView):
+    """ Reimplementation of the table View so that I can control all the feature"""
 
     def __init__(self, parent=None, tracks=[]):
         super().__init__(parent)
@@ -112,18 +115,36 @@ class MyTableView(QTableView):
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
 
-def tableViewConf(parent, tableView, tracks=[]):
+    def mouseMoveEvent(self, event, index):
 
-    header = ['', '', 'Title', 'Artist', 'Album', 'Date', '', '']
+       """Reimplementing the movse move event"""
+       self.setMouseTracking(True)
+       self.setSelectionBehavior()#SelectRows to be set
+       mHoverRow = index.row()
+       mHoverColumn = index.column()
 
-    table_model = MyTableModel(parent, tracks, header)
-    tableView.setModel(table_model)
-    tableView.resizeColumnsToContents()
-    tableView.setColumnWidth(2, 280)
-    tableView.setColumnWidth(3, 230)
-    tableView.setSelectionBehavior(QTableView.SelectRows)
-    tableView.setShowGrid(False)
-    tableView.verticalHeader().hide()
-    tableView.horizontalHeader().hide()
-    #tableView.setAlternatingRowColors(True)
+       # if (self.selectionBehavior() == SelectRows and oldHoverRow != mHoverRow):
+       #     for (int i in range columnCount()):
+       #
+       #         update(model()->index(mHoverRow, i))
+       #
+       #  if (selectionBehavior() == SelectColumns & & oldHoverColumn != mHoverColumn) {
+       #  for (int i = 0; i < model()->rowCount(); ++i) {
+       #  update(model()->index(i, mHoverColumn));
+       #  update(model()->index(i, oldHoverColumn))
 
+# def tableViewConf(parent, tableView, tracks=[]):
+#
+#     header = ['', '', 'Title', 'Artist', 'Album', 'Date', '', '']
+#
+#     table_model = MyTableModel(parent, tracks, header)
+#     tableView.setModel(table_model)
+#     tableView.resizeColumnsToContents()
+#     tableView.setColumnWidth(2, 280)
+#     tableView.setColumnWidth(3, 230)
+#     tableView.setSelectionBehavior(QTableView.SelectRows)
+#     tableView.setShowGrid(False)
+#     tableView.verticalHeader().hide()
+#     tableView.horizontalHeader().hide()
+#     #tableView.setAlternatingRowColors(True)
+#
