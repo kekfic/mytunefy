@@ -2,57 +2,62 @@ import operator
 
 import PySide2
 from PySide2 import QtGui, QtCore
-from PySide2.QtCore import Signal, QEvent, Qt, QModelIndex
-from PySide2.QtGui import QPixmap, QPen, QBrush
+from PySide2.QtCore import Signal, QEvent, Qt, QModelIndex, QSize
+from PySide2.QtGui import QPixmap, QPen, QBrush, QHoverEvent
 from PySide2.QtWidgets import QStyledItemDelegate, QStyle, QStyleOptionButton, QApplication, QStyleOption, QWidget, \
-    QStyleOptionViewItem, qApp
+    QStyleOptionViewItem, qApp, QPushButton
 
-
-from gui.push_button import MyPushButton
 
 class ButtonDelegate(QStyledItemDelegate):
     buttonClicked = Signal(int, int)
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(ButtonDelegate, self).__init__(parent)
-        #MyPushButton.__init__(self)
+        # MyPushButton.__init__(self)
         self._pressed = None
+        self._hover = None
 
-    # def createEditor(self, parent, option, index):
-    #     combo = QtGui.QPushButton(parent)
-    #
-    #     # self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), self, QtCore.SLOT("currentIndexChanged()"))
-    #     #combo.clicked.connect(self.currentIndexChanged)
-    #     return combo
-    #    pass
+    def createEditor(self, parent, option, index):
+        if index.column() == 0:
+            pushButton = QPushButton(parent)
+            pushButton.hide()
+            #pushButton.setIcon(QtGui.QPixmap(":/spotify/resources/icons/play_lgrey.png"), QtGui.QIcon.Normal,
+                             #  QtGui.QIcon.Off)
+            return pushButton
+        else:
+            return QStyledItemDelegate.createEditor(self, parent, option, index)
 
     def paint(self, painter, option, index):
 
-        painter.save()
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/play_lgrey.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/backtrack3.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        #opt = QStyleOptionButton()
-        opt = QStyleOptionButton()
-        #setBackgroundRole()
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)#
-        opt.icon = icon
+        if index.column() == 0:
+            painter.save()
+            icon = QtGui.QIcon()
+            icon.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/play_lgrey.png"), QtGui.QIcon.Normal,
+                           QtGui.QIcon.Off)
+            palette = QApplication.palette()
+            opt = QStyleOptionButton()
+            opt.icon = icon
+            opt.iconSize = QtCore.QSize(30, 30)
+            opt.rect = option.rect
 
-        #opt.palette.setBrush(QtGui.QPalette.Button, QBrush(QtGui.QColor(Qt.green)))
-        opt.iconSize = QtCore.QSize(30, 30)
-        opt.rect = option.rect
+            color = palette.highlight().color() \
+                if option.state & QStyle.State_Selected \
+                else QtGui.QColor(index.model().data(index, Qt.BackgroundColorRole))
 
 
-        if self._pressed and self._pressed == (index.row(), index.column()):
-            opt.state = QStyle.State_Enabled | QStyle.State_Sunken
-            opt.icon = icon2
+            if self._pressed and self._pressed == (index.row(), index.column()):
+                opt.state = QStyle.State_Enabled | QStyle.State_Sunken
+                opt.icon = icon
+
+            elif self._hover and self._hover == (index.row(), index.column()):
+                print('oh man')
+                opt.icon = icon
+            else:
+                opt.state = QStyle.State_Enabled | QStyle.State_Raised
+            QApplication.style().drawControl(QStyle.CE_PushButtonLabel, opt, painter)
+            painter.restore()
         else:
-            opt.state = QStyle.State_Enabled | QStyle.State_Raised
-        QApplication.style().drawControl(QStyle.CE_PushButtonLabel, opt, painter)
-        painter.restore()
+            QStyledItemDelegate.paint(self, painter, option, index)
 
     def editorEvent(self, event, model, option, index):
         if event.type() == QEvent.MouseButtonPress:
@@ -73,6 +78,14 @@ class ButtonDelegate(QStyledItemDelegate):
                 index.model().dataChanged.emit(oldIndex, oldIndex)
             self._pressed = None
             return True
+
         else:
             # for all other cases, default action will be fine
             return super(ButtonDelegate, self).editorEvent(event, model, option, index)
+
+    def mouseMoveEvent(event):
+        pass
+
+    def sizeHint(self, option, index):
+
+        return QStyledItemDelegate.sizeHint(self, option, index)

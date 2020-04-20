@@ -1,17 +1,17 @@
 # Importing Required Modules & libraries
 import operator
+from getpass import getpass
 from tkinter import *
 import pygame
 import os
 
 
 from PySide2.QtCore import QObject, Signal, QAbstractTableModel, SIGNAL, Qt, QModelIndex
-from PySide2.QtGui import QStandardItemModel, QStandardItem, QFont, QBrush
 from PySide2.QtWidgets import QMainWindow, QMessageBox, QApplication, \
-    QHeaderView
+    QHeaderView, QTableView
 from music_player import mydelegate
 from gui.gui_main_player import Ui_PlayerMainWindow
-from music_player import table_model
+from music_player import tableViewClass
 
 class MyReimplementedWindow(QMainWindow):
     """Reimplementing main window for closeEvent option"""
@@ -43,13 +43,18 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         # Initiating Pygame Mixer
         pygame.mixer.init()
 
-        os.chdir("D:\\Musica\\")
+        try:
+            os.chdir("D:\\Musica\\")
+        except Exception as e:
+            print(e)
+            self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
+
         # Fetching Songs
         raw_song_tracks = os.listdir()
         self.raw_songs = raw_song_tracks.copy()
 
         songtracks= []
-        header = ['', 'Title', 'Artist', ' ']
+
         i = 0
         for item in raw_song_tracks:
             if '.mp3' in item:
@@ -64,34 +69,16 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
                 self.raw_songs.pop(i)
             i += 1
 
+        self.tableView = tableViewClass.MyTableView(self.frame_songs, tracks=songtracks)
+        self.verticalLayout_QTableView.addWidget(self.tableView)
+       # tableViewClass.tableViewConf(self.main_window_player, self.tableView, tracks=songtracks)
+        "Unsetting for now the delegate, I am not ready for using it"
+        self.tableView.setItemDelegate(mydelegate.ButtonDelegate(self))
 
-        print(len(songtracks))
-        print(len(self.raw_songs))
 
-
-        self.table_model = table_model.MyTableModel (self.main_window_player, songtracks, header)
-        self.tableView.setModel(self.table_model)
-        #self.tableView.resizeColumnsToContents()
-        self.tableView.setColumnWidth(0, 250)
-        self.tableView.setColumnWidth(1, 200)
-
-        self.tableView.setShowGrid(FALSE)
-        self.tableView.verticalHeader().hide()
-        self.tableView.horizontalHeader().hide()
-       # self.tableView.mouseDoubleClickEvent()
-        #self.connect(self.PlayPauseButton, Signal('triggered()'), self.parsing_song)
         #self.PlayPauseButton.con
 
-        self.tableView.setItemDelegateForColumn(2, mydelegate.ButtonDelegate())
-
-        # hh = QHeaderView(Qt.Horizontal, self.tableView)
-        # hh.setStyleSheet("QHeaderView::section { background-color:black};")
-       #  font = QFont('Arial', 18)
-        #hh.setBackgroundRole(Q)
-       #  hh.(font)
-
-        #hh.setForegroundRole(QPalette.ColorRole)
-
+        self.connect(self.PlayPauseButton, SIGNAL('triggered()'), self.playsong)
 
         # Inserting Songs into Playlist
         # for track in songtracks:

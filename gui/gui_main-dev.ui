@@ -308,30 +308,6 @@
           <number>10</number>
          </property>
          <item>
-          <widget class="QLabel" name="label_DownloadFolder">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>25</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::NoFrame</enum>
-           </property>
-           <property name="text">
-            <string>Cartella di Download</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
           <spacer name="verticalSpacer_7">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -357,7 +333,7 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>204</width>
              <height>60</height>
             </size>
            </property>
@@ -367,15 +343,37 @@
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(253, 253, 253);
-color: rgb(255, 255, 255);</string>
+            <string notr="true">QPushButton {
+  
+	border: 2px solid #8f8f91;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #000000, stop: 1 #535353);
+	color: rgba(200, 200, 200, 200);
+	image-position:left;
+	
+	image: url(:/spotify/resources/icons/folder.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: navy; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	image-position: left;
+	
+	image: url(:/spotify/resources/icons/folder.png);
+	}
+</string>
            </property>
            <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="icons.qrc">
-             <normaloff>:/spotify/resources/icons/folder.png</normaloff>:/spotify/resources/icons/folder.png</iconset>
+            <string>Cartella Download</string>
            </property>
            <property name="iconSize">
             <size>
@@ -449,35 +447,101 @@ color: rgb(255, 255, 255);</string>
         </layout>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="2">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QTextBrowser" name="textBrowser">
-           <property name="maximumSize">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="minimumSize">
             <size>
-             <width>120</width>
-             <height>45</height>
+             <width>202</width>
+             <height>60</height>
             </size>
            </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="pushButton_2">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+  
+	color: rgba(200, 200, 200, 200);
+	image-position:left;
+	
+	
+	image: url(:/spotify/resources/icons/playlist-azul-green.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	image-position: left;
+	
+	image: url(:/spotify/resources/icons/playlist-azul-light.png);
+	}
+</string>
+           </property>
            <property name="text">
-            <string>Lista Playlist Caricate</string>
+            <string>Lista Playlist scaricate</string>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QToolButton" name="toolButton">
+         <item>
+          <widget class="QPushButton" name="pushButton_3">
+           <property name="minimumSize">
+            <size>
+             <width>204</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+  
+	border: 2px solid #8f8f91;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #000000, stop: 1 #535353);
+	color: rgba(200, 200, 200, 200);
+	image-position:left;
+	
+	
+	image: url(:/spotify/resources/icons/playlist-dark-green.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: navy; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	image-position: left;
+	
+	}
+</string>
+           </property>
            <property name="text">
-            <string>...</string>
+            <string>Lista Playlist Streaming</string>
            </property>
           </widget>
          </item>
@@ -840,7 +904,10 @@ color: rgb(255, 255, 255);</string>
        <string>Doppio click sulla voce selezionata per rimuoverla dalla lista</string>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(217, 217, 217);</string>
+       <string notr="true">QListWidget{
+background-color: rgb(217, 217, 217);
+}
+</string>
       </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
@@ -859,7 +926,7 @@ color: rgb(255, 255, 255);</string>
        <widget class="QPushButton" name="StartPushButton">
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>200</width>
           <height>100</height>
          </size>
         </property>
@@ -884,15 +951,35 @@ color: rgb(255, 255, 255);</string>
          <enum>Qt::LeftToRight</enum>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgb(76, 76, 76);
-color: rgb(255, 255, 255);</string>
+         <string notr="true">QPushButton {
+  
+    border-radius: 20px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #000000, stop: 1 #535353);
+	color: rgba(200, 200, 200, 200);
+	
+	image: url(:/spotify/resources/icons/down_music_dark_grey.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	
+	image: url(:/spotify/resources/icons/down_music_light_grey.png);
+	}
+</string>
         </property>
         <property name="text">
          <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="icons.qrc">
-          <normaloff>:/spotify/resources/icons/down_music_red.png</normaloff>:/spotify/resources/icons/down_music_red.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -912,18 +999,44 @@ color: rgb(255, 255, 255);</string>
        <widget class="QPushButton" name="pushButton">
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>200</width>
           <height>100</height>
          </size>
         </property>
         <property name="statusTip">
          <string>Premere per accedere al Player</string>
         </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+  
+    border-radius: 20px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #000000, stop: 1 #535353);
+	color: rgba(200, 200, 200, 200);
+	image: url(:/spotify/resources/icons/stream_grey.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	image: url(:/spotify/resources/icons/stream_light-grey.png);
+	}
+</string>
+        </property>
         <property name="text">
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="icons.qrc">
+         <iconset>
           <normaloff>:/spotify/resources/icons/stream_icon.png</normaloff>:/spotify/resources/icons/stream_icon.png</iconset>
         </property>
         <property name="iconSize">
