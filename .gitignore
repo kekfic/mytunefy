@@ -25,3 +25,6 @@
 *.pyc
 
 .settings
+
+#Folder
+exe/
