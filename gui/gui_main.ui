@@ -1,0 +1,1559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>743</width>
+    <height>810</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1920</width>
+    <height>1080</height>
+   </size>
+  </property>
+  <property name="palette">
+   <palette>
+    <active>
+     <colorrole role="WindowText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="BrightText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>254</red>
+        <green>254</green>
+        <blue>254</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>154</red>
+        <green>154</green>
+        <blue>154</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>248</red>
+        <green>248</green>
+        <blue>248</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>2</red>
+        <green>2</green>
+        <blue>2</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>218</red>
+        <green>218</green>
+        <blue>218</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </active>
+    <inactive>
+     <colorrole role="WindowText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="BrightText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>254</red>
+        <green>254</green>
+        <blue>254</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>154</red>
+        <green>154</green>
+        <blue>154</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>248</red>
+        <green>248</green>
+        <blue>248</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>2</red>
+        <green>2</green>
+        <blue>2</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>218</red>
+        <green>218</green>
+        <blue>218</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </inactive>
+    <disabled>
+     <colorrole role="WindowText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>120</red>
+        <green>120</green>
+        <blue>120</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Text">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>120</red>
+        <green>120</green>
+        <blue>120</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="BrightText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>254</red>
+        <green>254</green>
+        <blue>254</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="ButtonText">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>120</red>
+        <green>120</green>
+        <blue>120</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>2</red>
+        <green>2</green>
+        <blue>2</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>2</red>
+        <green>2</green>
+        <blue>2</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>218</red>
+        <green>218</green>
+        <blue>218</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="NoRole">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </disabled>
+   </palette>
+  </property>
+  <property name="font">
+   <font>
+    <family>Gill Sans MT</family>
+    <pointsize>9</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>MyTuneFy</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="icons.qrc">
+    <normaloff>:/spotify/resources/icons/cuffie.png</normaloff>:/spotify/resources/icons/cuffie.png</iconset>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QFrame" name="frame_Folder">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Panel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>5</number>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="leftMargin">
+          <number>10</number>
+         </property>
+         <property name="topMargin">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <spacer name="verticalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButtonFolder">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>204</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+  
+	border: 2px solid #8f8f91;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #000000, stop: 1 #535353);
+	color: rgba(200, 200, 200, 200);
+	image-position:left;
+	
+	image: url(:/spotify/resources/icons/folder.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: navy; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	image-position: left;
+	
+	image: url(:/spotify/resources/icons/folder.png);
+	}
+</string>
+           </property>
+           <property name="text">
+            <string>Cartella Download</string>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>60</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>10</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPlainTextEdit" name="plainTextDirectory">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>200</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="whatsThis">
+            <string>Download folder</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="plainText">
+            <string>C:\Music</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="minimumSize">
+            <size>
+             <width>202</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+  
+	color: rgba(200, 200, 200, 200);
+	image-position:left;
+	
+	
+	image: url(:/spotify/resources/icons/playlist-azul-green.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	image-position: left;
+	
+	image: url(:/spotify/resources/icons/playlist-azul-light.png);
+	}
+</string>
+           </property>
+           <property name="text">
+            <string>Lista Playlist scaricate</string>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_3">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>202</width>
+             <height>60</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+  
+	color: rgba(200, 200, 200, 200);
+	image-position:left;
+	
+	image: url(:/spotify/resources/icons/playlist-dark-green.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	image-position: left;
+	
+	}
+</string>
+           </property>
+           <property name="text">
+            <string>Lista Playlist Streaming</string>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>15</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_URL">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>45</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+        <italic>true</italic>
+       </font>
+      </property>
+      <property name="text">
+       <string>URL</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="plainTextEditUrl">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>40</height>
+       </size>
+      </property>
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>229</red>
+            <green>229</green>
+            <blue>229</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
+      </property>
+      <property name="font">
+       <font>
+        <family>Gill Sans MT</family>
+        <pointsize>9</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="statusTip">
+       <string>Copiare link  Spotify qui</string>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(229, 229, 229);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>2</number>
+      </property>
+      <property name="documentTitle">
+       <string/>
+      </property>
+      <property name="plainText">
+       <string/>
+      </property>
+      <property name="overwriteMode">
+       <bool>false</bool>
+      </property>
+      <property name="backgroundVisible">
+       <bool>false</bool>
+      </property>
+      <property name="centerOnScroll">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QListWidget" name="listWidgetUrls">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>350</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>0</red>
+            <green>149</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>0</red>
+            <green>149</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="Button">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>120</red>
+            <green>120</green>
+            <blue>120</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>217</red>
+            <green>217</green>
+            <blue>217</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
+      </property>
+      <property name="font">
+       <font>
+        <family>Gill Sans MT</family>
+        <pointsize>13</pointsize>
+        <italic>true</italic>
+       </font>
+      </property>
+      <property name="statusTip">
+       <string>Doppio click sulla voce selezionata per rimuoverla dalla lista</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListWidget{
+	background-color: rgb(217, 217, 217);
+	font-family: &quot;Gill Sans MT&quot;;
+}
+</string>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="textElideMode">
+       <enum>Qt::ElideRight</enum>
+      </property>
+      <property name="resizeMode">
+       <enum>QListView::Adjust</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="StartPushButton">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1500</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>download</string>
+        </property>
+        <property name="statusTip">
+         <string>Press for download</string>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+  
+    border-radius: 20px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #000000, stop: 1 #535353);
+	color: rgba(200, 200, 200, 200);
+	
+	image: url(:/spotify/resources/icons/down_music_dark_grey.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	
+	image: url(:/spotify/resources/icons/down_music_light_grey.png);
+	}
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>80</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="autoRepeat">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButtonStream">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Premere per accedere al Player</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+  
+    border-radius: 20px;
+	color: rgba(200, 200, 200, 200);
+	image: url(:/spotify/resources/icons/stream_grey.png);
+    min-width: 200px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:hover{
+	color: white;
+	image: url(:/spotify/resources/icons/stream_light-grey.png);
+	}
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/spotify/resources/icons/stream_icon.png</normaloff>:/spotify/resources/icons/stream_icon.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>80</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_4">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="progressBar">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"> border-radius: 5px;</string>
+      </property>
+      <property name="value">
+       <number>0</number>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_8">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinAndMaxSize</enum>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_bottomPhrase">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Forte</family>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Where words fail, music speaks.</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_IconPlay">
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/spotify/resources/icons/play1.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_IconHead">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="icons.qrc">:/spotify/resources/icons/music4.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>743</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(213, 213, 213);</string>
+   </property>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <property name="icon">
+     <iconset resource="icons.qrc">
+      <normaloff>:/spotify/resources/icons/menu.png</normaloff>:/spotify/resources/icons/menu.png</iconset>
+    </property>
+    <widget class="QMenu" name="menuFormat">
+     <property name="statusTip">
+      <string>Songs output format</string>
+     </property>
+     <property name="title">
+      <string>Out Format</string>
+     </property>
+     <addaction name="action_mp3"/>
+     <addaction name="action_m4a"/>
+     <addaction name="action_flac"/>
+    </widget>
+    <widget class="QMenu" name="menuOverride_Policy">
+     <property name="title">
+      <string>Override Policy</string>
+     </property>
+     <addaction name="actionSkip"/>
+     <addaction name="actionPrompt"/>
+     <addaction name="actionForce"/>
+    </widget>
+    <widget class="QMenu" name="menuAdvanced">
+     <property name="title">
+      <string>Advanced</string>
+     </property>
+     <addaction name="actionTrim_Silence"/>
+     <addaction name="actionDry_Run"/>
+     <addaction name="actionNo_Spaces"/>
+     <addaction name="actionMusic_Video_Only"/>
+     <addaction name="actionSkip_2"/>
+     <addaction name="actionyml_Config"/>
+    </widget>
+    <widget class="QMenu" name="menuIn_Format">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>In Format</string>
+     </property>
+     <addaction name="action_mp4"/>
+     <addaction name="action_wbm"/>
+    </widget>
+    <widget class="QMenu" name="menuEncoding">
+     <property name="title">
+      <string>Encoding</string>
+     </property>
+     <addaction name="actionffmpeg"/>
+     <addaction name="actionavconv"/>
+    </widget>
+    <addaction name="menuAdvanced"/>
+    <addaction name="separator"/>
+    <addaction name="menuFormat"/>
+    <addaction name="separator"/>
+    <addaction name="menuOverride_Policy"/>
+    <addaction name="separator"/>
+    <addaction name="menuEncoding"/>
+    <addaction name="separator"/>
+    <addaction name="menuIn_Format"/>
+    <addaction name="actionFile_Format"/>
+    <addaction name="actionSearch_Format"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <property name="icon">
+     <iconset resource="icons.qrc">
+      <normaloff>:/spotify/resources/icons/info.png</normaloff>:/spotify/resources/icons/info.png</iconset>
+    </property>
+    <addaction name="actionhelp"/>
+    <addaction name="actionReadMe"/>
+   </widget>
+   <widget class="QMenu" name="menuLanguage">
+    <property name="minimumSize">
+     <size>
+      <width>170</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="title">
+     <string>Language</string>
+    </property>
+    <property name="icon">
+     <iconset resource="icons.qrc">
+      <normaloff>:/spotify/resources/icons/language.png</normaloff>:/spotify/resources/icons/language.png</iconset>
+    </property>
+    <addaction name="actionL"/>
+    <addaction name="actionEng"/>
+   </widget>
+   <widget class="QMenu" name="menuAppearence">
+    <property name="title">
+     <string>Appearence</string>
+    </property>
+    <property name="icon">
+     <iconset resource="icons.qrc">
+      <normaloff>:/spotify/resources/icons/theme2.png</normaloff>:/spotify/resources/icons/theme2.png</iconset>
+    </property>
+    <addaction name="actionDark_Theme"/>
+    <addaction name="actionLight_Theme"/>
+   </widget>
+   <addaction name="menuMenu"/>
+   <addaction name="menuAppearence"/>
+   <addaction name="menuHelp"/>
+   <addaction name="menuLanguage"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionhelp">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/spotify/resources/icons/manual.png</normaloff>:/spotify/resources/icons/manual.png</iconset>
+   </property>
+   <property name="text">
+    <string>Manual</string>
+   </property>
+  </action>
+  <action name="actionReadMe">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/spotify/resources/icons/info.png</normaloff>:/spotify/resources/icons/info.png</iconset>
+   </property>
+   <property name="text">
+    <string>ReadMe</string>
+   </property>
+  </action>
+  <action name="actionL">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/spotify/resources/icons/ita.png</normaloff>:/spotify/resources/icons/ita.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ita</string>
+   </property>
+  </action>
+  <action name="actionEng">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/spotify/resources/icons/eng.png</normaloff>:/spotify/resources/icons/eng.png</iconset>
+   </property>
+   <property name="text">
+    <string>Eng</string>
+   </property>
+  </action>
+  <action name="action_mp3">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>.mp3</string>
+   </property>
+  </action>
+  <action name="action_m4a">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>.m4a</string>
+   </property>
+  </action>
+  <action name="action_flac">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>.flac</string>
+   </property>
+  </action>
+  <action name="actionSkip">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Skip</string>
+   </property>
+  </action>
+  <action name="actionPrompt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Prompt</string>
+   </property>
+  </action>
+  <action name="actionForce">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Force</string>
+   </property>
+  </action>
+  <action name="actionFile_Format">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>File Format</string>
+   </property>
+  </action>
+  <action name="actionSearch_Format">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Search Format</string>
+   </property>
+  </action>
+  <action name="actionTrim_Silence">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Trim Silence</string>
+   </property>
+   <property name="statusTip">
+    <string>remove silence from the start of the audio</string>
+   </property>
+  </action>
+  <action name="actionDry_Run">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dry Run</string>
+   </property>
+  </action>
+  <action name="actionNo_Spaces">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>No Spaces</string>
+   </property>
+  </action>
+  <action name="actionMusic_Video_Only">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Music Video Only</string>
+   </property>
+  </action>
+  <action name="actionSkip_2">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Skip</string>
+   </property>
+  </action>
+  <action name="action_mp4">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>.m4a</string>
+   </property>
+  </action>
+  <action name="action_wbm">
+   <property name="text">
+    <string>.wbm</string>
+   </property>
+  </action>
+  <action name="actionDark_Theme">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Dark Theme</string>
+   </property>
+  </action>
+  <action name="actionLight_Theme">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Light Theme</string>
+   </property>
+  </action>
+  <action name="actionffmpeg">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>ffmpeg</string>
+   </property>
+  </action>
+  <action name="actionavconv">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>avconv</string>
+   </property>
+  </action>
+  <action name="actionyml_Config">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>yml Config</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>
