@@ -9,7 +9,7 @@ from PySide2.QtGui import QMovie
 from main_classes.window_handler import MainWin
 from main_classes.widget_class import LoadingGif
 from resources.login import valid_user
-from main_classes.music_player_main import MainWinPlayer
+
 
 if __name__ == "__main__":
     if getattr(sys, 'frozen', False):
