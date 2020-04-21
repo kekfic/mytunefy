@@ -117,6 +117,9 @@ class Downloader:
         song_existence = CheckExists(songname, self.meta_tags)
         if not song_existence.already_exists(self.raw_song):
             return self._download_single(songname)
+        else:
+            songpath = os.path.join(const.args.folder, os.path.dirname(songname))
+            rs.songPusher.put(['song', songpath, self.raw_song])
 
     def _download_single(self, songname):
         # deal with file formats containing slashes to non-existent directories

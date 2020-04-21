@@ -193,7 +193,6 @@ def download_song(file_name, content):
                 ydl.cache.remove()
 
         link.download(filepath=filepath)
-
         return True
     else:
         log.debug("No audio streams available")
