@@ -7,6 +7,8 @@
 *.pro.user
 *.idea
 *.vs
+.settings
+
 
 # ZIP
 *.zip
@@ -24,7 +26,7 @@
 #Python cache
 *.pyc
 
-.settings
 
 #Folder
 exe/
+txt/
