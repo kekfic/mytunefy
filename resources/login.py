@@ -51,7 +51,7 @@ def time_licence():
     return valid_licence
 
 def key_creator():
-    """This function create the hash-like mac to check with db"""
+    """This function create the hash-like mac to check with db and for song id purpose"""
 
     mac_address = bytes(get_mac_address(), 'utf8')
     dk = pbkdf2_hmac('sha256', mac_address, b'salt', 100000)

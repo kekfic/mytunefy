@@ -1,10 +1,17 @@
+from hashlib import pbkdf2_hmac
+from binascii import hexlify
+
 from sqlalchemy import create_engine
-from sqlalchemy import Column, String, MetaData, Table
+from sqlalchemy import Column, String, MetaData, Table, Binary
+from sqlalchemy.exc import IntegrityError
+
 from main_classes.my_main_functions import get_name_for_list_widget, get_song_data
-import os
+from logzero import logger as log
 from resources import resources as rs
-from random import  choice
+
+from random import choice
 import string
+
 # Global Variables
 
 # -----------------------------
@@ -40,6 +47,7 @@ def get_user_database(dbtype='sqlite', dbname='users_mtf'):
 
     return res, user_list
 
+
 # def get_put_db_thread_parser(data):
 #
 #     id = data[0]
@@ -54,9 +62,16 @@ def get_user_database(dbtype='sqlite', dbname='users_mtf'):
 #
 #     elif id == 'end':
 #         pass
+def song_id_creator(variable):
+    """This function create the hash-like mac to check with db and for song id purpose"""
+    variable_b = bytes(variable, 'utf8')
+    dk = pbkdf2_hmac('sha256', variable_b, b'salt', 100000)
+    key_bin = hexlify(dk)
+
+    return key_bin
+
 
 def refine_string(string_to_refine):
-
     mystring = string_to_refine.lower()
     mystring = mystring.replace('-', ' ')
     mystring = mystring.replace('_', ' ')
@@ -67,7 +82,7 @@ def refine_string(string_to_refine):
     mystring = mystring.replace('à', 'a')
     mystring = mystring.replace('í', 'i')
     mystring = mystring.replace('ó', 'o')
-    #mystring = mystring.replace('ñ', 'n')
+    # mystring = mystring.replace('ñ', 'n')
     mystring = mystring.replace('ú', 'u')
     mystring = mystring.replace('é', 'e')
     mystring = mystring.replace('è', 'e')
@@ -76,10 +91,13 @@ def refine_string(string_to_refine):
 
 
 def randomword(length):
-   letters = string.ascii_lowercase
-   return ''.join(choice(letters) for i in range(length))
+    letters = string.ascii_lowercase
+    return ''.join(choice(letters) for i in range(length))
+
 
 """ Function of the downloader """
+
+
 def database_handler(mydatabase):
     # Todo: Complete all the cases - Update, delete, rename. As well the function is quite large
     """This function is within a thread and write/read from music user database
@@ -120,7 +138,6 @@ def database_handler(mydatabase):
         elif dbparser[0] == 'end':
             'the string end indicate that download cicle has ended'
             if category == 'track':
-                print('Only one song')
                 song_name, artist, album = get_song_data(song_url_list[0])
                 mydatabase.insert_song_table(songname=song_name, playlist=None, album=album,
                                              artist=artist, folder=song_path_list[0],
@@ -150,11 +167,19 @@ def database_handler(mydatabase):
                                                  playlist=playlist, album=album,
                                                  artist=artist, folder=song_path_list[i],
                                                  url=song_url_list[i])
+                    try:
+                        if playlist:
+                            log.info('Inserting in song db. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album,
+                                                                                            artist))
+                        else:
+                            log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
+                    except Exception as e:
+                        print(e)
 
             'clear list variable'
             song_path_list.clear()
             song_url_list.clear()
-        elif dbparser[0]=='exit_thread':
+        elif dbparser[0] == 'exit_thread':
             running = False
 
 
@@ -167,6 +192,7 @@ def player_get_all_user_data():
         return result
     else:
         return None
+
 
 def get_songs_for_type(category):
     pass
@@ -183,7 +209,6 @@ class MySongDatabase:
     SQLITE = 'sqlite'
     USER = 'db_user'
     SONGTot = 'total_song'
-
 
     MY_SONG_DB = rs.MY_WORKING_DIR + '\\db_data\\song_db'
 
@@ -218,8 +243,9 @@ class MySongDatabase:
                       Column('url', String)
                       )
         songdata = Table(self.SONGTot, metadata,
-                         Column('song', String, primary_key=True),
-                         Column('playlist', String ),
+                         Column('id', Binary, primary_key=True),
+                         Column('song', String),
+                         Column('playlist', String),
                          Column('album', String),
                          Column('artist', String),
                          Column('folder', String),
@@ -227,14 +253,14 @@ class MySongDatabase:
                          )
         try:
             metadata.create_all(self.db_engine)
-            #print("Tables created")
+            # print("Tables created")
         except Exception as e:
             print("Error occurred during Table creation!")
             print(e)
 
     def execute_select_query(self, query='', variable=()):
         if query == '': return
-        #print(query)
+        # print(query)
         with self.db_engine.connect() as connection:
             try:
                 result = connection.execute(query, variable)
@@ -248,7 +274,7 @@ class MySongDatabase:
         if query == '': return
 
         result = ''
-        #print(query)
+        # print(query)
         with self.db_engine.connect() as connection:
             try:
                 res = connection.execute(query)
@@ -259,12 +285,14 @@ class MySongDatabase:
 
     def execute_query(self, query='', variable=()):
         if query == '': return
-        #print(query)
         with self.db_engine.connect() as connection:
             try:
                 connection.execute(query, variable)
+            except IntegrityError as e:
+                log.warning("Song: {} of Artist: {} is already present."
+                            .format(variable[1], variable[2]))
             except Exception as e:
-                print('ERROR', e)
+                print('General Error as:', e)
 
     def print_all_data(self, table='', query=''):
         query = query if query != '' else "SELECT * FROM '{}';".format(table)
@@ -295,7 +323,7 @@ class MySongDatabase:
 
     def query_song_table(self, song='', playlist='', album='', category=''):
         query = "SELECT * FROM {TBL_USR} WHERE {CAT} = ?;".format(TBL_USR=self.SONGTot, CAT=category)
-        #print(query)
+        # print(query)
 
         return query
 
@@ -315,15 +343,16 @@ class MySongDatabase:
         self.execute_query(query, variable)
 
     def insert_song_table(self, songname='', playlist='', album='', artist='', folder='', url=''):
-        query = "INSERT INTO {TABL_USR}(song, playlist, album, artist, folder , url) " \
-                "VALUES (?, ?, ? , ?, ?, ? );".format(TABL_USR=self.SONGTot)
+        query = "INSERT INTO {TABL_USR}(id, song, playlist, album, artist, folder , url) " \
+                "VALUES (?, ?, ?, ? , ?, ?, ? );".format(TABL_USR=self.SONGTot)
 
-        variable = (songname, playlist, album, artist, folder, url)
+        id = song_id_creator(songname + artist)
+        variable = (id, songname, playlist, album, artist, folder, url)
         self.execute_query(query, variable)
 
     def delete_song_table(self, songname):
         query = "DELETE FROM {TABL_USR} (song) VALUES (?)".format(TABL_USR=self.SONGTot)
-        variable = (songname, )
+        variable = (songname,)
 
     # def sample_delete(self):
     #     # Delete Data by Id
