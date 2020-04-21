@@ -14,7 +14,6 @@
     <file>../resources/icons/shuffle-green-grey.png</file>
     <file>../resources/icons/shuffle-light-grey.png</file>
     <file>../resources/icons/next-darker-grey.png</file>
-    <file>../resources/icons/repeat-track.png</file>
     <file>../resources/icons/repeat-track-azul-2grey.png</file>
     <file>../resources/icons/repeat-track-dark-grey.png</file>
     <file>../resources/icons/repeat-track-green.png</file>
@@ -24,7 +23,6 @@
     <file>../resources/icons/play_white.png</file>
     <file>../resources/icons/play_grey.png</file>
     <file>../resources/icons/play_lgrey.png</file>
-    <file>../resources/icons/pause-butt.png</file>
     <file>../resources/icons/cuffie.png</file>
     <file>../resources/icons/cuffie3.png</file>
     <file>../resources/icons/setting1.png</file>
@@ -38,8 +36,6 @@
     <file>../resources/icons/theme.png</file>
     <file>../resources/icons/theme2.png</file>
     <file>../resources/gif/music1.gif</file>
-    <file>../resources/gif/music8.gif</file>
-    <file>../resources/gif/music9.gif</file>
     <file>../resources/icons/down_music_red.png</file>
     <file>../resources/icons/eng.png</file>
     <file>../resources/icons/folder.png</file>
