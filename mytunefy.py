@@ -38,11 +38,6 @@ if __name__ == "__main__":
         #  -------------------working on player
         guiDown = MainWin()
         guiDown.mainwindow.show()
-
-        "Player"
-        # guiPlayer = MainWinPlayer()
-        # guiPlayer.main_window_player.show()
-        # gui.show()
         splash.close()
         # gui.mainwindow.showMaximized()
         sys.exit(app.exec_())

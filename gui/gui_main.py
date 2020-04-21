@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main.ui',
 # licensing of '.\gui_main.ui' applies.
 #
-# Created: Tue Apr 21 20:00:32 2020
+# Created: Tue Apr 21 20:42:57 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(743, 810)
+        MainWindow.resize(749, 775)
         MainWindow.setMaximumSize(QtCore.QSize(1920, 1080))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -137,7 +137,8 @@ class Ui_MainWindow(object):
 "    color: rgba(200, 200, 200, 200);\n"
 "    image-position:left;\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/folder.png);\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/folder.png);\n"
 "    min-width: 200px;\n"
 "}\n"
 "\n"
@@ -154,7 +155,7 @@ class Ui_MainWindow(object):
 "    color: white;\n"
 "    image-position: left;\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/folder.png);\n"
+"    \n"
 "    }\n"
 "")
         self.pushButtonFolder.setIconSize(QtCore.QSize(60, 60))
@@ -194,7 +195,7 @@ class Ui_MainWindow(object):
 "    image-position:left;\n"
 "    \n"
 "    \n"
-"    image: url(:/spotify/resources/icons/playlist-azul-green.png);\n"
+"    image: url(:/mytunefy/resources/icons/playlist-dark-green.png);\n"
 "    min-width: 200px;\n"
 "}\n"
 "\n"
@@ -211,7 +212,8 @@ class Ui_MainWindow(object):
 "    color: white;\n"
 "    image-position: left;\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/playlist-azul-light.png);\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/playlist-light-green.png);\n"
 "    }\n"
 "")
         self.pushButton_2.setFlat(True)
@@ -228,7 +230,8 @@ class Ui_MainWindow(object):
 "    color: rgba(200, 200, 200, 200);\n"
 "    image-position:left;\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/playlist-dark-green.png);\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/playlist-azul-green.png);\n"
 "    min-width: 200px;\n"
 "}\n"
 "\n"
@@ -244,6 +247,7 @@ class Ui_MainWindow(object):
 "QPushButton:hover{\n"
 "    color: white;\n"
 "    image-position: left;\n"
+"    \n"
 "    \n"
 "    }\n"
 "")
@@ -397,7 +401,8 @@ class Ui_MainWindow(object):
 "                                      stop: 0 #000000, stop: 1 #535353);\n"
 "    color: rgba(200, 200, 200, 200);\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/down_music_dark_grey.png);\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/down_music_dark_grey.png);\n"
 "    min-width: 200px;\n"
 "}\n"
 "\n"
@@ -412,8 +417,7 @@ class Ui_MainWindow(object):
 "\n"
 "QPushButton:hover{\n"
 "    color: white;\n"
-"    \n"
-"    image: url(:/spotify/resources/icons/down_music_light_grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/down_music_light_grey.png);\n"
 "    }\n"
 "")
         self.StartPushButton.setText("")
@@ -429,7 +433,8 @@ class Ui_MainWindow(object):
 "  \n"
 "    border-radius: 20px;\n"
 "    color: rgba(200, 200, 200, 200);\n"
-"    image: url(:/spotify/resources/icons/stream_grey.png);\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/stream_grey.png);\n"
 "    min-width: 200px;\n"
 "}\n"
 "\n"
@@ -444,7 +449,8 @@ class Ui_MainWindow(object):
 "\n"
 "QPushButton:hover{\n"
 "    color: white;\n"
-"    image: url(:/spotify/resources/icons/stream_light-grey.png);\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/stream_light-grey.png);\n"
 "    }\n"
 "")
         self.pushButtonStream.setText("")
@@ -508,7 +514,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 743, 29))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 749, 29))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -522,7 +528,7 @@ class Ui_MainWindow(object):
         self.menubar.setObjectName("menubar")
         self.menuMenu = QtWidgets.QMenu(self.menubar)
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/menu.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/menu.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.menuMenu.setIcon(icon2)
         self.menuMenu.setObjectName("menuMenu")
         self.menuFormat = QtWidgets.QMenu(self.menuMenu)
@@ -537,42 +543,38 @@ class Ui_MainWindow(object):
         self.menuEncoding = QtWidgets.QMenu(self.menuMenu)
         self.menuEncoding.setObjectName("menuEncoding")
         self.menuHelp = QtWidgets.QMenu(self.menubar)
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menuHelp.setIcon(icon3)
         self.menuHelp.setObjectName("menuHelp")
         self.menuLanguage = QtWidgets.QMenu(self.menubar)
         self.menuLanguage.setMinimumSize(QtCore.QSize(170, 0))
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/language.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menuLanguage.setIcon(icon4)
         self.menuLanguage.setObjectName("menuLanguage")
         self.menuAppearence = QtWidgets.QMenu(self.menubar)
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/theme2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menuAppearence.setIcon(icon5)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/theme2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuAppearence.setIcon(icon3)
         self.menuAppearence.setObjectName("menuAppearence")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.actionhelp = QtWidgets.QAction(MainWindow)
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/manual.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionhelp.setIcon(icon6)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/manual.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionhelp.setIcon(icon4)
         self.actionhelp.setObjectName("actionhelp")
         self.actionReadMe = QtWidgets.QAction(MainWindow)
-        self.actionReadMe.setIcon(icon3)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionReadMe.setIcon(icon5)
         self.actionReadMe.setObjectName("actionReadMe")
         self.actionL = QtWidgets.QAction(MainWindow)
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/ita.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionL.setIcon(icon7)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/ita.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionL.setIcon(icon6)
         self.actionL.setObjectName("actionL")
         self.actionEng = QtWidgets.QAction(MainWindow)
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/eng.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionEng.setIcon(icon8)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/eng.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionEng.setIcon(icon7)
         self.actionEng.setObjectName("actionEng")
         self.action_mp3 = QtWidgets.QAction(MainWindow)
         self.action_mp3.setCheckable(True)

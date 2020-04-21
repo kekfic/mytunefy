@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>743</width>
-    <height>810</height>
+    <width>749</width>
+    <height>775</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -253,7 +253,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="icons.qrc">
-    <normaloff>:/spotify/resources/icons/cuffie.png</normaloff>:/spotify/resources/icons/cuffie.png</iconset>
+    <normaloff>:/mytunefy/resources/icons/cuffie.ico</normaloff>:/mytunefy/resources/icons/cuffie.ico</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -351,7 +351,8 @@
 	color: rgba(200, 200, 200, 200);
 	image-position:left;
 	
-	image: url(:/spotify/resources/icons/folder.png);
+	
+	image: url(:/mytunefy/resources/icons/folder.png);
     min-width: 200px;
 }
 
@@ -368,7 +369,7 @@ QPushButton:hover{
 	color: white;
 	image-position: left;
 	
-	image: url(:/spotify/resources/icons/folder.png);
+	
 	}
 </string>
            </property>
@@ -468,7 +469,7 @@ QPushButton:hover{
 	image-position:left;
 	
 	
-	image: url(:/spotify/resources/icons/playlist-azul-green.png);
+	image: url(:/mytunefy/resources/icons/playlist-dark-green.png);
     min-width: 200px;
 }
 
@@ -485,7 +486,8 @@ QPushButton:hover{
 	color: white;
 	image-position: left;
 	
-	image: url(:/spotify/resources/icons/playlist-azul-light.png);
+	
+	image: url(:/mytunefy/resources/icons/playlist-light-green.png);
 	}
 </string>
            </property>
@@ -519,7 +521,8 @@ QPushButton:hover{
 	color: rgba(200, 200, 200, 200);
 	image-position:left;
 	
-	image: url(:/spotify/resources/icons/playlist-dark-green.png);
+	
+	image: url(:/mytunefy/resources/icons/playlist-azul-green.png);
     min-width: 200px;
 }
 
@@ -535,6 +538,7 @@ QPushButton:flat {
 QPushButton:hover{
 	color: white;
 	image-position: left;
+	
 	
 	}
 </string>
@@ -961,7 +965,8 @@ QPushButton:hover{
                                       stop: 0 #000000, stop: 1 #535353);
 	color: rgba(200, 200, 200, 200);
 	
-	image: url(:/spotify/resources/icons/down_music_dark_grey.png);
+	
+	image: url(:/mytunefy/resources/icons/down_music_dark_grey.png);
     min-width: 200px;
 }
 
@@ -976,8 +981,7 @@ QPushButton:flat {
 
 QPushButton:hover{
 	color: white;
-	
-	image: url(:/spotify/resources/icons/down_music_light_grey.png);
+	image: url(:/mytunefy/resources/icons/down_music_light_grey.png);
 	}
 </string>
         </property>
@@ -1017,7 +1021,8 @@ QPushButton:hover{
   
     border-radius: 20px;
 	color: rgba(200, 200, 200, 200);
-	image: url(:/spotify/resources/icons/stream_grey.png);
+	
+	image: url(:/mytunefy/resources/icons/stream_grey.png);
     min-width: 200px;
 }
 
@@ -1032,7 +1037,8 @@ QPushButton:flat {
 
 QPushButton:hover{
 	color: white;
-	image: url(:/spotify/resources/icons/stream_light-grey.png);
+	
+	image: url(:/mytunefy/resources/icons/stream_light-grey.png);
 	}
 </string>
         </property>
@@ -1160,7 +1166,7 @@ QPushButton:hover{
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="icons.qrc">:/spotify/resources/icons/play1.png</pixmap>
+         <pixmap resource="icons.qrc">:/mytunefy/resources/icons/play1.png</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
@@ -1185,7 +1191,7 @@ QPushButton:hover{
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="icons.qrc">:/spotify/resources/icons/music4.png</pixmap>
+         <pixmap resource="icons.qrc">:/mytunefy/resources/icons/music4.png</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
@@ -1201,7 +1207,7 @@ QPushButton:hover{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>743</width>
+     <width>749</width>
      <height>29</height>
     </rect>
    </property>
@@ -1228,7 +1234,7 @@ QPushButton:hover{
     </property>
     <property name="icon">
      <iconset resource="icons.qrc">
-      <normaloff>:/spotify/resources/icons/menu.png</normaloff>:/spotify/resources/icons/menu.png</iconset>
+      <normaloff>:/mytunefy/resources/icons/menu.png</normaloff>:/mytunefy/resources/icons/menu.png</iconset>
     </property>
     <widget class="QMenu" name="menuFormat">
      <property name="statusTip">
@@ -1295,7 +1301,7 @@ QPushButton:hover{
     </property>
     <property name="icon">
      <iconset resource="icons.qrc">
-      <normaloff>:/spotify/resources/icons/info.png</normaloff>:/spotify/resources/icons/info.png</iconset>
+      <normaloff>:/mytunefy/resources/icons/interrogativo1.png</normaloff>:/mytunefy/resources/icons/interrogativo1.png</iconset>
     </property>
     <addaction name="actionhelp"/>
     <addaction name="actionReadMe"/>
@@ -1312,7 +1318,7 @@ QPushButton:hover{
     </property>
     <property name="icon">
      <iconset resource="icons.qrc">
-      <normaloff>:/spotify/resources/icons/language.png</normaloff>:/spotify/resources/icons/language.png</iconset>
+      <normaloff>:/mytunefy/resources/icons/language.png</normaloff>:/mytunefy/resources/icons/language.png</iconset>
     </property>
     <addaction name="actionL"/>
     <addaction name="actionEng"/>
@@ -1323,7 +1329,7 @@ QPushButton:hover{
     </property>
     <property name="icon">
      <iconset resource="icons.qrc">
-      <normaloff>:/spotify/resources/icons/theme2.png</normaloff>:/spotify/resources/icons/theme2.png</iconset>
+      <normaloff>:/mytunefy/resources/icons/theme2.png</normaloff>:/mytunefy/resources/icons/theme2.png</iconset>
     </property>
     <addaction name="actionDark_Theme"/>
     <addaction name="actionLight_Theme"/>
@@ -1337,7 +1343,7 @@ QPushButton:hover{
   <action name="actionhelp">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/spotify/resources/icons/manual.png</normaloff>:/spotify/resources/icons/manual.png</iconset>
+     <normaloff>:/mytunefy/resources/icons/manual.png</normaloff>:/mytunefy/resources/icons/manual.png</iconset>
    </property>
    <property name="text">
     <string>Manual</string>
@@ -1346,7 +1352,7 @@ QPushButton:hover{
   <action name="actionReadMe">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/spotify/resources/icons/info.png</normaloff>:/spotify/resources/icons/info.png</iconset>
+     <normaloff>:/mytunefy/resources/icons/info.png</normaloff>:/mytunefy/resources/icons/info.png</iconset>
    </property>
    <property name="text">
     <string>ReadMe</string>
@@ -1355,7 +1361,7 @@ QPushButton:hover{
   <action name="actionL">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/spotify/resources/icons/ita.png</normaloff>:/spotify/resources/icons/ita.png</iconset>
+     <normaloff>:/mytunefy/resources/icons/ita.png</normaloff>:/mytunefy/resources/icons/ita.png</iconset>
    </property>
    <property name="text">
     <string>Ita</string>
@@ -1364,7 +1370,7 @@ QPushButton:hover{
   <action name="actionEng">
    <property name="icon">
     <iconset resource="icons.qrc">
-     <normaloff>:/spotify/resources/icons/eng.png</normaloff>:/spotify/resources/icons/eng.png</iconset>
+     <normaloff>:/mytunefy/resources/icons/eng.png</normaloff>:/mytunefy/resources/icons/eng.png</iconset>
    </property>
    <property name="text">
     <string>Eng</string>

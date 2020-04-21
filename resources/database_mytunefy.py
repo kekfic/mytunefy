@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy import Column, String, MetaData, Table
 from main_classes.my_main_functions import get_name_for_list_widget, get_song_data
-import os
+from logzero import logger as log
 from resources import resources as rs
 from random import  choice
 import string
@@ -120,7 +120,6 @@ def database_handler(mydatabase):
         elif dbparser[0] == 'end':
             'the string end indicate that download cicle has ended'
             if category == 'track':
-                print('Only one song')
                 song_name, artist, album = get_song_data(song_url_list[0])
                 mydatabase.insert_song_table(songname=song_name, playlist=None, album=album,
                                              artist=artist, folder=song_path_list[0],
@@ -150,6 +149,14 @@ def database_handler(mydatabase):
                                                  playlist=playlist, album=album,
                                                  artist=artist, folder=song_path_list[i],
                                                  url=song_url_list[i])
+                    try:
+                        if playlist:
+                            log.info("Inserting in song db. As {0}, {1}, {2}, {3}").format(song_name, playlist, album, artist)
+                        else:
+                            log.info("Inserting in song db. As {0}, {1}, {2}").format(song_name, album, artist)
+                    except Exception as e:
+                        print(song_name, playlist, album, artist)
+
 
             'clear list variable'
             song_path_list.clear()
