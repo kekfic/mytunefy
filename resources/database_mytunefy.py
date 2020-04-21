@@ -193,6 +193,24 @@ def player_get_all_user_data():
     else:
         return None
 
+def parsing_user_db_data(fetchall_result):
+    playlist = []
+    album = []
+    artist = []
+    if fetchall_result:
+        for row in fetchall_result:
+            if row[0]:
+                playlist.append([row[0], row[3]])
+            elif row[1]:
+                album.append([row[1], row[3]])
+            elif row[2]:
+                artist.append([row[2], row[3]])
+
+    return playlist, album, artist
+
+
+
+
 
 def get_songs_for_type(category):
     pass
@@ -229,11 +247,7 @@ class MySongDatabase:
             print("DBType is not found in DB_ENGINE")
 
     def create_db_tables(self):
-        """Todo: This type of db configuration is creating some trouble.
-            The pimary_key requires not null argument, but there should be such possibility
-            As wll is not clear how to save data.
-            Probably I should study a better configuration.
-            This is important
+        """ Database creatiion
         """
         metadata = MetaData()
         users = Table(self.USER, metadata,
@@ -294,19 +308,6 @@ class MySongDatabase:
             except Exception as e:
                 print('General Error as:', e)
 
-    def print_all_data(self, table='', query=''):
-        query = query if query != '' else "SELECT * FROM '{}';".format(table)
-        print(query)
-        with self.db_engine.connect() as connection:
-            try:
-                result = connection.execute(query)
-            except Exception as e:
-                print(e)
-            else:
-                for row in result:
-                    print(row)  # print(row[0], row[1], row[2])
-                result.close()
-        print("\n")
 
     def query_user_general(self):
         query = "SELECT * FROM {TBL_USR};".format(TBL_USR=self.USER)
@@ -354,6 +355,20 @@ class MySongDatabase:
         query = "DELETE FROM {TABL_USR} (song) VALUES (?)".format(TABL_USR=self.SONGTot)
         variable = (songname,)
 
+
+    def print_all_data(self, table='', query=''):
+        query = query if query != '' else "SELECT * FROM '{}';".format(table)
+        print(query)
+        with self.db_engine.connect() as connection:
+            try:
+                result = connection.execute(query)
+            except Exception as e:
+                print(e)
+            else:
+                for row in result:
+                    print(row)  # print(row[0], row[1], row[2])
+                result.close()
+        print("\n")
     # def sample_delete(self):
     #     # Delete Data by Id
     #     query = "DELETE FROM {} WHERE id=3".format(USER)
