@@ -1,0 +1,27 @@
+       """
+        self.actionPaste = QtWidgets.QAction(self.plainTextEditUrl)
+        self.actionPaste.setObjectName("actionPaste")
+        #self.actionPaste.setShortcut(_translate("ModifiedTableView", "Ctrl+V"))
+        self.actionPaste.triggered.connect(self.text_from_plain_text)
+        self.plainTextEditUrl.addAction(self.actionPaste)
+        self.copiedtext = qApp.clipboard().text()
+        """
+        """
+        self.rcMenu = QtWidgets.QMenu(self.mainwindow)
+        self.action_delete_row = self.rcMenu.addAction('Delete Row', self.delete_row)
+        #self.action_insert_row = self.rcMenu.addAction('Insert Row', self.insert_row)
+        self.mainwindow.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.mainwindow.customContextMenuRequested.connect(self.onRightClick)
+        #
+
+    def onRightClick(self, QPos=None):
+        parent = self.sender()
+        pPos = parent.mapToGlobal(QtCore.QPoint(5, 20))
+        mPos = pPos + QPos
+
+        self.rcMenu.move(mPos)
+        self.rcMenu.show()
+
+    def delete_row(self):
+        self.listWidgetUrls.removeItemWidget(self,)
+        """

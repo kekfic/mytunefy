@@ -1,0 +1,37 @@
+# -*- mode: python ; coding: utf-8 -*-
+
+block_cipher = None
+
+
+a = Analysis(['mytunefy.py'],
+             pathex=['D:\\Programmi\\Python\\MyTuneFy'],
+             binaries=[],
+             datas=[('exe/ffmpeg.exe', 'exe'), ('exe/ffplay.exe', 'exe'), ('exe/ffprobe.exe', 'exe'), ('resources/gif/music1.gif', 'gif')],
+             hiddenimports=[],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+exe = EXE(pyz,
+          a.scripts,
+          [],
+          exclude_binaries=True,
+          name='mytunefy',
+          debug=False,
+          bootloader_ignore_signals=False,
+          strip=False,
+          upx=True,
+          console=True , icon='resources\\icons\\cuffie.ico')
+coll = COLLECT(exe,
+               a.binaries,
+               a.zipfiles,
+               a.datas,
+               strip=False,
+               upx=True,
+               upx_exclude=[],
+               name='mytunefy')
