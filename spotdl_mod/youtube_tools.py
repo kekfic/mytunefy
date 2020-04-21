@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib
 import pafy
-import youtube_dl
+
 from slugify import slugify
 from logzero import logger as log
 import os
@@ -184,16 +184,7 @@ def download_song(file_name, content):
         log.debug("Downloading from URL: " + link.url)
         filepath = os.path.join(const.args.folder, file_name)
         log.debug("Saving to: " + filepath)
-      
-        try:
-            link.download(filepath=filepath)
-        except Exception as e:
-            log.debug("Youtube cache error")
-            with youtube_dl.YoutubeDL(pafy.g.def_ydl_opts) as ydl:
-                ydl.cache.remove()
-
         link.download(filepath=filepath)
-        
         return True
     else:
         log.debug("No audio streams available")

@@ -3,12 +3,13 @@ import os
 import sys
 import time
 
-from PySide2.QtWidgets import QApplication
+from resources.resources import set_current_directory
+from PySide2.QtWidgets import QApplication, QMessageBox, QDialog
 from PySide2.QtGui import QMovie
-from window_handler import MainWin
-from widget_class import LoadingGif
-from login import valid_user
-
+from main_classes.window_handler import MainWin
+from main_classes.widget_class import LoadingGif
+from resources.login import valid_user
+from main_classes.music_player_main import MainWinPlayer
 
 if __name__ == "__main__":
     if getattr(sys, 'frozen', False):
@@ -17,28 +18,40 @@ if __name__ == "__main__":
     else:
         CurrentPath = os.path.dirname(__file__)
 
+    "Setting the directory, I could do it as well with CurrentPath"
+    set_current_directory()
+
+    app = QApplication(sys.argv)
+
+    movie = QMovie("resources/gif/music1.gif")
+    splash = LoadingGif(movie)
+    splash.show()
+    # splash.showMessage("<h1><font color='white'>Welcome to MyTuneFy!</font></h1>")
+    start = time.time()
+
+    while movie.state() == QMovie.Running and time.time() < start + 5:
+        app.processEvents()
+
     if valid_user():
 
-        app = QApplication(sys.argv)
+        "downloader"
+        #  -------------------working on player
+        guiDown = MainWin()
+        guiDown.mainwindow.show()
 
-
-        movie = QMovie("resources/gif/music1.gif")
-        splash = LoadingGif(movie)
-        splash.show()
-        #splash.showMessage("<h1><font color='white'>Welcome to MyTuneFy!</font></h1>")
-        start = time.time()
-
-        while movie.state() == QMovie.Running and time.time() < start + 5:
-            app.processEvents()
-
-
-        gui = MainWin()
-        gui.mainwindow.show()
-        #gui.show()
+        "Player"
+        # guiPlayer = MainWinPlayer()
+        # guiPlayer.main_window_player.show()
+        # gui.show()
         splash.close()
         # gui.mainwindow.showMaximized()
-
         sys.exit(app.exec_())
+
     else:
+        # Todo: add type of error (Db not found, no user, time licence, other).
+        # Todo: add some system to have logs when executable crash (a log file)
+        splash.close()
+        mydialog = QDialog()
+        result = QMessageBox.information(mydialog, "Invalid USER", 'Invalid User - Please contact administrator.')
         print('User not allowed')
-        time.sleep(5)
+        sys.exit(3)

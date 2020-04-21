@@ -542,4 +542,4 @@ class Ui_MainWindow(object):
         self.actionffmpeg.setText(QtWidgets.QApplication.translate("MainWindow", "ffmpeg", None, -1))
         self.actionavconv.setText(QtWidgets.QApplication.translate("MainWindow", "avconv", None, -1))
 
-from .import icon_rc
+from .import icons_rc

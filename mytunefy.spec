@@ -4,9 +4,9 @@ block_cipher = None
 
 
 a = Analysis(['mytunefy.py'],
-             pathex=['D:\\Programmi\\Python\\MyTuneFy'],
+             pathex=['D:\\Programmi\\Python\\MusicApp\\GitLab\\mytunefy'],
              binaries=[],
-             datas=[('exe/ffmpeg.exe', 'exe'), ('exe/ffplay.exe', 'exe'), ('exe/ffprobe.exe', 'exe'), ('resources/gif/music1.gif', 'gif')],
+             datas=[('exe_files/ffmpeg.exe', 'exe'), ('exe_files/ffplay.exe', 'exe'), ('exe_files/ffprobe.exe', 'exe'), ('resources/gif/music1.gif', 'gif')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],

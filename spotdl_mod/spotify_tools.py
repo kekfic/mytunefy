@@ -8,8 +8,8 @@ import pprint
 import sys
 
 from spotdl_mod import const, internals
-from lyrics.providers import LyricClasses
-from lyrics.exceptions import LyricsNotFound
+from spotdl_mod.lyrics.providers import LyricClasses
+from spotdl_mod.lyrics.exceptions import LyricsNotFound
 
 spotify = None
 
