@@ -115,13 +115,13 @@ class MyTableView(QTableView):
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
 
-    def mouseMoveEvent(self, event, index):
-
-       """Reimplementing the movse move event"""
-       self.setMouseTracking(True)
-       self.setSelectionBehavior()#SelectRows to be set
-       mHoverRow = index.row()
-       mHoverColumn = index.column()
+    # def mouseMoveEvent(self, event, index):
+    #
+    #    """Reimplementing the movse move event"""
+    #    self.setMouseTracking(True)
+    #    self.setSelectionBehavior()#SelectRows to be set
+    #    mHoverRow = index.row()
+    #    mHoverColumn = index.column()
 
        # if (self.selectionBehavior() == SelectRows and oldHoverRow != mHoverRow):
        #     for (int i in range columnCount()):
