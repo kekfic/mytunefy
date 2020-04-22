@@ -1,6 +1,12 @@
 <RCC>
   <qresource prefix="mytunefy">
+    <file>../resources/icons/musicaicon.png</file>
+    <file>../resources/icons/youtu_folder.png</file>
+    <file>../resources/icons/download.png</file>
+    <file>../resources/icons/video.png</file>
     <file>../resources/icons/backtrack2.png</file>
+    <file>../resources/icons/youtube.png</file>
+    <file>../resources/icons/youtube2.png</file>
     <file>../resources/icons/backtrack4.png</file>
     <file>../resources/icons/backtrack5.png</file>
     <file>../resources/icons/cuffie.ico</file>
@@ -8,7 +14,6 @@
     <file>../resources/icons/cuffie3.png</file>
     <file>../resources/icons/down_music_dark_grey.png</file>
     <file>../resources/icons/down_music_light_grey.png</file>
-    <file>../resources/icons/down_music_red.png</file>
     <file>../resources/icons/eng.png</file>
     <file>../resources/icons/folder.png</file>
     <file>../resources/icons/info.png</file>
@@ -20,13 +25,11 @@
     <file>../resources/icons/menu.png</file>
     <file>../resources/icons/menu2.jpg</file>
     <file>../resources/icons/music4.png</file>
-    <file>../resources/icons/next3.png</file>
     <file>../resources/icons/next-darker-grey.png</file>
     <file>../resources/icons/next-light-grey.png</file>
     <file>../resources/icons/path7478.png</file>
     <file>../resources/icons/pause_mod2.png</file>
     <file>../resources/icons/pause2.png</file>
-    <file>../resources/icons/pause-butt.png</file>
     <file>../resources/icons/play_grey.png</file>
     <file>../resources/icons/play_lgrey.png</file>
     <file>../resources/icons/play_vec_azul.png</file>
@@ -34,7 +37,6 @@
     <file>../resources/icons/play_vectorized.png</file>
     <file>../resources/icons/play_white.png</file>
     <file>../resources/icons/play1.png</file>
-    <file>../resources/icons/play-butt.png</file>
     <file>../resources/icons/playlist-azul-green.png</file>
     <file>../resources/icons/playlist-azul-light.png</file>
     <file>../resources/icons/playlist-dark-green.png</file>
@@ -42,7 +44,6 @@
     <file>../resources/icons/playlisticon.png</file>
     <file>../resources/icons/playlist-light-green.png</file>
     <file>../resources/icons/playlist-light-grey.png</file>
-    <file>../resources/icons/play-red.png</file>
     <file>../resources/icons/repeat-track-azul-2grey.png</file>
     <file>../resources/icons/repeat-track-dark-grey.png</file>
     <file>../resources/icons/repeat-track-green.png</file>
@@ -55,7 +56,6 @@
     <file>../resources/icons/shuffle-darker-grey.png</file>
     <file>../resources/icons/shuffle-green-grey.png</file>
     <file>../resources/icons/shuffle-light-grey.png</file>
-    <file>../resources/icons/spotify-com.png</file>
     <file>../resources/icons/stream_grey.png</file>
     <file>../resources/icons/stream_icon.png</file>
     <file>../resources/icons/stream_light-grey.png</file>

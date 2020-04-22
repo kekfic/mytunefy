@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main.ui',
 # licensing of '.\gui_main.ui' applies.
 #
-# Created: Tue Apr 21 20:42:57 2020
+# Created: Wed Apr 22 18:06:16 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -94,7 +94,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         MainWindow.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/cuffie.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/cuffie.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setAutoFillBackground(False)
         MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
@@ -183,19 +183,22 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.plainTextDirectory)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
         self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setContentsMargins(15, -1, -1, -1)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.pushButton_2 = QtWidgets.QPushButton(self.frame_Folder)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(202, 60))
+        self.pushButtonYoutube = QtWidgets.QPushButton(self.frame_Folder)
+        self.pushButtonYoutube.setMinimumSize(QtCore.QSize(202, 60))
         font = QtGui.QFont()
-        font.setPointSize(10)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setStyleSheet("QPushButton {\n"
+        font.setFamily("Gill Sans MT")
+        font.setPointSize(11)
+        self.pushButtonYoutube.setFont(font)
+        self.pushButtonYoutube.setStyleSheet("QPushButton {\n"
 "  \n"
 "    color: rgba(200, 200, 200, 200);\n"
 "    image-position:left;\n"
 "    \n"
 "    \n"
-"    image: url(:/mytunefy/resources/icons/playlist-dark-green.png);\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/youtube.png);\n"
 "    min-width: 200px;\n"
 "}\n"
 "\n"
@@ -213,12 +216,12 @@ class Ui_MainWindow(object):
 "    image-position: left;\n"
 "    \n"
 "    \n"
-"    image: url(:/mytunefy/resources/icons/playlist-light-green.png);\n"
+"    image: url(:/mytunefy/resources/icons/youtube2.png);\n"
 "    }\n"
 "")
-        self.pushButton_2.setFlat(True)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.verticalLayout.addWidget(self.pushButton_2)
+        self.pushButtonYoutube.setFlat(True)
+        self.pushButtonYoutube.setObjectName("pushButtonYoutube")
+        self.verticalLayout.addWidget(self.pushButtonYoutube)
         self.pushButton_3 = QtWidgets.QPushButton(self.frame_Folder)
         self.pushButton_3.setEnabled(False)
         self.pushButton_3.setMinimumSize(QtCore.QSize(202, 60))
@@ -495,7 +498,7 @@ class Ui_MainWindow(object):
         self.label_IconPlay = QtWidgets.QLabel(self.centralwidget)
         self.label_IconPlay.setMaximumSize(QtCore.QSize(30, 30))
         self.label_IconPlay.setText("")
-        self.label_IconPlay.setPixmap(QtGui.QPixmap(":/spotify/resources/icons/play1.png"))
+        self.label_IconPlay.setPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/play1.png"))
         self.label_IconPlay.setScaledContents(True)
         self.label_IconPlay.setObjectName("label_IconPlay")
         self.horizontalLayout.addWidget(self.label_IconPlay)
@@ -507,7 +510,7 @@ class Ui_MainWindow(object):
         self.label_IconHead.setSizePolicy(sizePolicy)
         self.label_IconHead.setMaximumSize(QtCore.QSize(30, 30))
         self.label_IconHead.setText("")
-        self.label_IconHead.setPixmap(QtGui.QPixmap(":/spotify/resources/icons/music4.png"))
+        self.label_IconHead.setPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/music4.png"))
         self.label_IconHead.setScaledContents(True)
         self.label_IconHead.setObjectName("label_IconHead")
         self.horizontalLayout.addWidget(self.label_IconHead)
@@ -543,38 +546,44 @@ class Ui_MainWindow(object):
         self.menuEncoding = QtWidgets.QMenu(self.menuMenu)
         self.menuEncoding.setObjectName("menuEncoding")
         self.menuHelp = QtWidgets.QMenu(self.menubar)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/interrogativo1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuHelp.setIcon(icon3)
         self.menuHelp.setObjectName("menuHelp")
         self.menuLanguage = QtWidgets.QMenu(self.menubar)
         self.menuLanguage.setMinimumSize(QtCore.QSize(170, 0))
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/language.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuLanguage.setIcon(icon4)
         self.menuLanguage.setObjectName("menuLanguage")
         self.menuAppearence = QtWidgets.QMenu(self.menubar)
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/theme2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menuAppearence.setIcon(icon3)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/theme2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuAppearence.setIcon(icon5)
         self.menuAppearence.setObjectName("menuAppearence")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.actionhelp = QtWidgets.QAction(MainWindow)
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/manual.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionhelp.setIcon(icon4)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/manual.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionhelp.setIcon(icon6)
         self.actionhelp.setObjectName("actionhelp")
         self.actionReadMe = QtWidgets.QAction(MainWindow)
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionReadMe.setIcon(icon5)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionReadMe.setIcon(icon7)
         self.actionReadMe.setObjectName("actionReadMe")
         self.actionL = QtWidgets.QAction(MainWindow)
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/ita.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionL.setIcon(icon6)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/ita.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionL.setIcon(icon8)
         self.actionL.setObjectName("actionL")
         self.actionEng = QtWidgets.QAction(MainWindow)
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/eng.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionEng.setIcon(icon7)
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/eng.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionEng.setIcon(icon9)
         self.actionEng.setObjectName("actionEng")
         self.action_mp3 = QtWidgets.QAction(MainWindow)
         self.action_mp3.setCheckable(True)
@@ -688,8 +697,8 @@ class Ui_MainWindow(object):
         self.pushButtonFolder.setText(QtWidgets.QApplication.translate("MainWindow", "Cartella Download", None, -1))
         self.plainTextDirectory.setWhatsThis(QtWidgets.QApplication.translate("MainWindow", "Download folder", None, -1))
         self.plainTextDirectory.setPlainText(QtWidgets.QApplication.translate("MainWindow", "C:\\Music", None, -1))
-        self.pushButton_2.setText(QtWidgets.QApplication.translate("MainWindow", "Lista Playlist scaricate", None, -1))
-        self.pushButton_3.setText(QtWidgets.QApplication.translate("MainWindow", "Lista Playlist Streaming", None, -1))
+        self.pushButtonYoutube.setText(QtWidgets.QApplication.translate("MainWindow", "Youtube", None, -1))
+        self.pushButton_3.setText(QtWidgets.QApplication.translate("MainWindow", "Lista Playlist", None, -1))
         self.label_URL.setText(QtWidgets.QApplication.translate("MainWindow", "URL", None, -1))
         self.plainTextEditUrl.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Copiare link  Spotify qui", None, -1))
         self.listWidgetUrls.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Doppio click sulla voce selezionata per rimuoverla dalla lista", None, -1))

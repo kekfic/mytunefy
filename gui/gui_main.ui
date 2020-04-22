@@ -449,8 +449,11 @@ QPushButton:hover{
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="leftMargin">
+          <number>15</number>
+         </property>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="pushButtonYoutube">
            <property name="minimumSize">
             <size>
              <width>202</width>
@@ -459,7 +462,8 @@ QPushButton:hover{
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <family>Gill Sans MT</family>
+             <pointsize>11</pointsize>
             </font>
            </property>
            <property name="styleSheet">
@@ -469,7 +473,8 @@ QPushButton:hover{
 	image-position:left;
 	
 	
-	image: url(:/mytunefy/resources/icons/playlist-dark-green.png);
+	
+	image: url(:/mytunefy/resources/icons/youtube.png);
     min-width: 200px;
 }
 
@@ -487,12 +492,12 @@ QPushButton:hover{
 	image-position: left;
 	
 	
-	image: url(:/mytunefy/resources/icons/playlist-light-green.png);
+	image: url(:/mytunefy/resources/icons/youtube2.png);
 	}
 </string>
            </property>
            <property name="text">
-            <string>Lista Playlist scaricate</string>
+            <string>Youtube</string>
            </property>
            <property name="flat">
             <bool>true</bool>
@@ -544,7 +549,7 @@ QPushButton:hover{
 </string>
            </property>
            <property name="text">
-            <string>Lista Playlist Streaming</string>
+            <string>Lista Playlist</string>
            </property>
            <property name="flat">
             <bool>true</bool>
