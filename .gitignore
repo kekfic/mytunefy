@@ -30,5 +30,4 @@ exe_files/
 txt/
 dist/
 build/
-resources/gif/
-resources/icons/
+mybuilder/
