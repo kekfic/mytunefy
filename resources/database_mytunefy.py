@@ -215,7 +215,8 @@ def parsing_user_db_data(fetchall_result):
 
     return playlist, album, artist
 
-
+def player_get_all_songs():
+    pass
 
 
 

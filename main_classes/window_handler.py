@@ -288,6 +288,6 @@ class MainWin(QObject, Ui_MainWindow):
                 const.args.trim_silence = True
 
     def youtube_button(self):
-        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal)
+        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal, self.mydir)
         if temp.dialog.exec_():
             pass

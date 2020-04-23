@@ -55,7 +55,7 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
         "Audio - m4a": "m4a"
     }
 
-    def __init__(self, dialog, mysignal):
+    def __init__(self, dialog, mysignal, folder):
         Ui_DialogYoutubeDL.__init__(self)
         #super().__init__(self)
         self.setupUi(dialog)
@@ -68,7 +68,7 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
         self.queYoutube = Queue()
         self.listWidget.hide()
         self.frame_download.hide()
-        self.folder = os.getcwd()
+        self.folder = folder
 
         self.lineEdit.setText(self.folder)
         self.pushButtonDownload.clicked.connect(self.threading_launcher)
