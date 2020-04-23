@@ -12,7 +12,7 @@ from PySide2.QtWidgets import QMainWindow, QMessageBox, QApplication, \
 from list_class.mydelegate import ButtonDelegate
 from gui.gui_main_player import Ui_PlayerMainWindow
 from list_class.tableViewClass import MyTableView
-from resources.database_mytunefy import player_get_all_songs
+#from resources.database_mytunefy import player_get_all_songs
 
 class MyReimplementedWindow(QMainWindow):
     """Reimplementing main window for closeEvent option"""

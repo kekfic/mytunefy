@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from queue import Queue
 
 from PySide2.QtCore import SIGNAL, Signal, QObject
@@ -11,20 +10,12 @@ from spotdl_mod.youtube_tools import mySimpleYoutubeDownloader
 from random import randint
 from logzero import logger as log
 import os
-=======
-from PySide2.QtGui import QPainter, QPixmap
-from PySide2.QtWidgets import QSplashScreen, QWidget, QLabel, QPushButton, QHBoxLayout
-
->>>>>>> master
 
 class LoadingGif(QSplashScreen):
     """
        Starting splash class
        """
-<<<<<<< HEAD
 
-=======
->>>>>>> master
     def __init__(self, movie, parent=None):
         movie.jumpToFrame(0)
         pixmap = QPixmap(movie.frameRect().size())
@@ -50,17 +41,6 @@ class LoadingGif(QSplashScreen):
         return self.movie.scaledSize()
 
 
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-class CustomQWidget(QWidget):
-    """
-    This class is for a custom widget, not used
-    """
-    def __init__(self, parent=None):
-        super(CustomQWidget, self).__init__(parent)
-=======
->>>>>>> master
 class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
     # Todo: adapt for any other available format
 
@@ -75,11 +55,7 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
         "Audio - m4a": "m4a"
     }
 
-<<<<<<< HEAD
     def __init__(self, dialog, mysignal):
-=======
-    def __init__(self, dialog, mysignal, folder):
->>>>>>> master
         Ui_DialogYoutubeDL.__init__(self)
         #super().__init__(self)
         self.setupUi(dialog)
@@ -92,11 +68,7 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
         self.queYoutube = Queue()
         self.listWidget.hide()
         self.frame_download.hide()
-<<<<<<< HEAD
         self.folder = os.getcwd()
-=======
-        self.folder = folder
->>>>>>> master
 
         self.lineEdit.setText(self.folder)
         self.pushButtonDownload.clicked.connect(self.threading_launcher)
@@ -187,7 +159,6 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
         #substring2 = 'https://www.youtube.com/'
         if substring in url:
             valid = True
-<<<<<<< HEAD
 
         return valid
 
@@ -203,14 +174,3 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
             self.listWidget.show()
         if not self.frame_download.isHidden():
             self.frame_download.hide()
-=======
->>>>>>> Stashed changes
-
-        label = QLabel("I am a custom widget")
-
-        button = QPushButton("A useless button")
-
-        layout = QHBoxLayout()
-        layout.addWidget(label)
-        layout.addWidget(button)
->>>>>>> master

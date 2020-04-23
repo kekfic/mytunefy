@@ -107,7 +107,6 @@ class Converter:
 
     def with_ffmpeg(self, trim_silence=False):
         #corrected to get the FFmped in exe_files folder
-<<<<<<< HEAD
         if os.path.isfile("exe_files\\ffmpeg.exe"):
             dir_exe = "exe_files\\"
         else:
@@ -115,10 +114,6 @@ class Converter:
 
         ffmpeg_pre = (
             dir_exe+"ffmpeg -y -nostdin "
-=======
-        ffmpeg_pre = (
-            "exe_files\\ffmpeg -y -nostdin "
->>>>>>> master
         )  # -nostdin is necessary for spotdl to be able to run in the backgroung.
 
         if not log.level == 10:

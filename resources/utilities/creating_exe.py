@@ -4,11 +4,7 @@ from shutil import copy
 
 
 myEndtime = datetime.datetime(2020, 5, 30, 0, 0).timestamp()
-<<<<<<< HEAD:resources/utilities/creating_exe.py
 myStartime = datetime.datetime(2020, 4, 1, 0, 0).timestamp()
-=======
-#myStartime = datetime.datetime(2020, 4, 1, 0, 0).timestamp()
->>>>>>> master:resources/utilities/creating_exe.py
 
 # with open('mytunelic.txt', 'wb') as licfile:
 #     dk = pbkdf2_hmac(bytes(str(myStartime)))

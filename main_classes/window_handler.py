@@ -3,7 +3,6 @@
 
 """
 from queue import Queue
-from random import randint
 
 from PySide2.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QDialog
 from PySide2.QtCore import QObject, Signal, SIGNAL
@@ -15,18 +14,10 @@ from spotdl_mod import const, handle, internals
 import threading
 import webbrowser
 
-<<<<<<< HEAD:main_classes/window_handler.py
 from .my_main_functions import main, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
 from resources.database_mytunefy import database_handler
 from resources.login import db_song_conn
 from main_classes.widget_class import YoutubeDialog
-=======
-
-from .my_main_functions import main, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
-from resources.database_mytunefy import database_handler
-from resources.login import db_song_conn
-
->>>>>>> master:main_classes/window_handler.py
 from resources import resources as rs
 
 """
@@ -124,18 +115,8 @@ class MainWin(QObject, Ui_MainWindow):
         self.connect(self.actionReadMe, SIGNAL("triggered()"), self.open_readme)
         self.connect(self.actionhelp, SIGNAL("triggered()"), self.open_manual)
 
-<<<<<<< HEAD:main_classes/window_handler.py
         self.pushButtonYoutube.clicked.connect(self.youtube_button)
 
-=======
-<<<<<<< Updated upstream
-=======
-        self.pu
-
-        self.pushButtonYoutube.clicked.connect(self.youtube_button)
-
->>>>>>> Stashed changes
->>>>>>> master:main_classes/window_handler.py
         'Setting thread tha take care of the download, this allow a responsive main window'
         # self.mythread = MyClassThread(target=self.startDownload)
         self.mythread = threading.Thread(target=self.startDownload, daemon=True)
@@ -237,7 +218,7 @@ class MainWin(QObject, Ui_MainWindow):
         if self.progressBar.isHidden():
             self.progressBar.show()
         if totalitem == 1:
-            percentage =  randint(20, 70)
+            percentage = round(1 / (totalitem + 0.5), 2) * 100
         else:
             percentage = round(1 / totalitem, 2) * 100
 
@@ -304,22 +285,9 @@ class MainWin(QObject, Ui_MainWindow):
                 const.args.trim_silence = False
             else:
                 self.actionTrim_Silence.isChecked(True)
-<<<<<<< HEAD:main_classes/window_handler.py
                 const.args.trim_silence = True
 
     def youtube_button(self):
         temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal)
         if temp.dialog.exec_():
             pass
-=======
-<<<<<<< Updated upstream
-                const.args.trim_silence = True
-=======
-                const.args.trim_silence = True
-
-    def youtube_button(self):
-        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal, self.mydir)
-        if temp.dialog.exec_():
-            pass
->>>>>>> Stashed changes
->>>>>>> master:main_classes/window_handler.py

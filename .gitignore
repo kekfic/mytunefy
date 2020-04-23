@@ -27,14 +27,8 @@
 
 #Folder
 exe_files/
-<<<<<<< HEAD
 txt/
 dist/
 build/
 resources/gif/
 resources/icons/
-=======
-dist/
-build/
-txt/
->>>>>>> master
