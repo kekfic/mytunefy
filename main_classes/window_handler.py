@@ -5,7 +5,7 @@
 from queue import Queue
 from random import randint
 
-from PySide2.QtWidgets import QMainWindow, QFileDialog, QMessageBox
+from PySide2.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QDialog
 from PySide2.QtCore import QObject, Signal, SIGNAL
 
 from gui.gui_main import Ui_MainWindow
@@ -15,11 +15,18 @@ from spotdl_mod import const, handle, internals
 import threading
 import webbrowser
 
+<<<<<<< HEAD:main_classes/window_handler.py
+from .my_main_functions import main, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
+from resources.database_mytunefy import database_handler
+from resources.login import db_song_conn
+from main_classes.widget_class import YoutubeDialog
+=======
 
 from .my_main_functions import main, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
 from resources.database_mytunefy import database_handler
 from resources.login import db_song_conn
 
+>>>>>>> master:main_classes/window_handler.py
 from resources import resources as rs
 
 """
@@ -35,10 +42,10 @@ My list of variables:
 """
 
 
-
 class MyClassThread(QObject, threading.Thread):
     "Inheritance of thread class, unused"
     mySignal = Signal(object)
+
 
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs=None, *, daemon=None):
@@ -67,6 +74,7 @@ class MyWindow(QMainWindow):
 class MainWin(QObject, Ui_MainWindow):
     """ this main class is the main window and contain all button specification """
     threadSignal = Signal(object)
+    dialogSignal = Signal(object)
 
     def __init__(self):
         self.mainwindow = MyWindow()
@@ -74,7 +82,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.setupUi(self.mainwindow)
 
         QObject.__init__(self)
-        #Todo; check all unused variables and functions
+        # Todo; check all unused variables and functions
         self.quecreat = Queue()
         self.all_urls = []
         self.all_categories = []
@@ -116,6 +124,10 @@ class MainWin(QObject, Ui_MainWindow):
         self.connect(self.actionReadMe, SIGNAL("triggered()"), self.open_readme)
         self.connect(self.actionhelp, SIGNAL("triggered()"), self.open_manual)
 
+<<<<<<< HEAD:main_classes/window_handler.py
+        self.pushButtonYoutube.clicked.connect(self.youtube_button)
+
+=======
 <<<<<<< Updated upstream
 =======
         self.pu
@@ -123,8 +135,9 @@ class MainWin(QObject, Ui_MainWindow):
         self.pushButtonYoutube.clicked.connect(self.youtube_button)
 
 >>>>>>> Stashed changes
+>>>>>>> master:main_classes/window_handler.py
         'Setting thread tha take care of the download, this allow a responsive main window'
-        #self.mythread = MyClassThread(target=self.startDownload)
+        # self.mythread = MyClassThread(target=self.startDownload)
         self.mythread = threading.Thread(target=self.startDownload, daemon=True)
         self.mythread.start()
 
@@ -140,6 +153,8 @@ class MainWin(QObject, Ui_MainWindow):
         """Selecting the download folder"""
         self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', self.mydir,
                                                       QFileDialog.ShowDirsOnly)
+        if not self.mydir:
+            self.mydir = rs.MY_WORKING_DIR
         self.plainTextDirectory.setPlainText(self.mydir)
         self.mydir.replace("/", "\\")
         const.args.folder = self.mydir
@@ -155,12 +170,13 @@ class MainWin(QObject, Ui_MainWindow):
 
     def threading_launcher(self):
         """When start button is pushed, check for correcteness nad start a thread for downloading"""
-        # Todo: trying implement a better way of threading
+        # Todo: trying implement a better way of threading.
         self.count = self.listWidgetUrls.count()
         if self.count:
             self.quecreat.put([self.count, self.all_categories.copy(), self.all_urls.copy()])
             "Clearing the QWidgetList and other objects"
             self.listWidgetUrls.clear()
+            self.listWidgetUrls.hide()
             self.all_categories.clear()
             self.all_urls.clear()
             self.progressBarHandler(self.count)
@@ -170,15 +186,15 @@ class MainWin(QObject, Ui_MainWindow):
         index = 0
         while threading.main_thread().is_alive():
             if index:
-                #todo : you must change this criteria
-                #if thread has ended the download, update the progressbar
+                # todo : you must change this criteria
+                # if thread has ended the download, update the progressbar
                 self.threadSignal.emit(index)
                 rs.songPusher.put(['end'])
 
                 index = 0
             count, all_categories, all_urls = self.quecreat.get()
             for i in range(count):
-                if i >0:
+                if i > 0:
                     rs.songPusher.put(['end'])
                 url = all_urls[i]
                 category_list = all_categories[i]
@@ -191,7 +207,6 @@ class MainWin(QObject, Ui_MainWindow):
                 "Resetting the parser because it is unique"
                 reset_parser_url()
             index += 1
-
 
     def text_from_plain_text(self, url=None):
         if url is None:
@@ -250,7 +265,6 @@ class MainWin(QObject, Ui_MainWindow):
             self.action_mp3.setChecked(False)
             self.action_m4a.setChecked(False)
 
-
     def encoding_sel(self):
 
         sender_object = self.sender().objectName()
@@ -290,6 +304,14 @@ class MainWin(QObject, Ui_MainWindow):
                 const.args.trim_silence = False
             else:
                 self.actionTrim_Silence.isChecked(True)
+<<<<<<< HEAD:main_classes/window_handler.py
+                const.args.trim_silence = True
+
+    def youtube_button(self):
+        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal)
+        if temp.dialog.exec_():
+            pass
+=======
 <<<<<<< Updated upstream
                 const.args.trim_silence = True
 =======
@@ -300,3 +322,4 @@ class MainWin(QObject, Ui_MainWindow):
         if temp.dialog.exec_():
             pass
 >>>>>>> Stashed changes
+>>>>>>> master:main_classes/window_handler.py

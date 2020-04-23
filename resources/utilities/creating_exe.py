@@ -1,9 +1,14 @@
 import os, sys , datetime, binascii
 from hashlib import pbkdf2_hmac
+from shutil import copy
 
 
 myEndtime = datetime.datetime(2020, 5, 30, 0, 0).timestamp()
+<<<<<<< HEAD:resources/utilities/creating_exe.py
+myStartime = datetime.datetime(2020, 4, 1, 0, 0).timestamp()
+=======
 #myStartime = datetime.datetime(2020, 4, 1, 0, 0).timestamp()
+>>>>>>> master:resources/utilities/creating_exe.py
 
 # with open('mytunelic.txt', 'wb') as licfile:
 #     dk = pbkdf2_hmac(bytes(str(myStartime)))
@@ -20,6 +25,10 @@ def executable_creator():
 
     fullcommand = command + addata + program
     os.system(fullcommand)
+    print('Command has ended. Now moving things inside dist folder')
+    os.mkdir('dist/mytunefy/db_data/')
+    copy("db_data/users_mtf", "dist/mytunefy/db_data/")
+
 
 def key_creator(address):
     mymac = address.lower()
