@@ -2,7 +2,10 @@ from bs4 import BeautifulSoup
 import urllib
 import pafy
 import youtube_dl
+<<<<<<< HEAD
 from .convert import song as song_download
+=======
+>>>>>>> master
 
 from slugify import slugify
 from logzero import logger as log

@@ -3,7 +3,11 @@ from binascii import hexlify
 
 from sqlalchemy import create_engine
 from sqlalchemy import Column, String, MetaData, Table, Binary
+<<<<<<< HEAD:resources/database_mytunefy.py
 from sqlalchemy.exc import IntegrityError, OperationalError
+=======
+from sqlalchemy.exc import IntegrityError
+>>>>>>> master:resources/database_mytunefy.py
 
 from main_classes.my_main_functions import get_name_for_list_widget, get_song_data
 from logzero import logger as log
@@ -138,6 +142,7 @@ def database_handler(mydatabase):
         elif dbparser[0] == 'end':
             'the string end indicate that download cicle has ended'
             if category == 'track':
+<<<<<<< HEAD:resources/database_mytunefy.py
                 try:
                     song_name, artist, album = get_song_data(song_url_list[0])
                     mydatabase.insert_song_table(songname=song_name, playlist=None, album=album,
@@ -146,6 +151,12 @@ def database_handler(mydatabase):
                     log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
                 except Exception as e:
                     print("Unable to retrieve song data.", e)
+=======
+                song_name, artist, album = get_song_data(song_url_list[0])
+                mydatabase.insert_song_table(songname=song_name, playlist=None, album=album,
+                                             artist=artist, folder=song_path_list[0],
+                                             url=song_url_list[0])
+>>>>>>> master:resources/database_mytunefy.py
 
             else:
                 junk, name = get_name_for_list_widget(category, url)
@@ -157,6 +168,7 @@ def database_handler(mydatabase):
 
                 for i in range(len(song_url_list)):
                     "I ll do a trick assign playlist and check if it is equal to the other names"
+<<<<<<< HEAD:resources/database_mytunefy.py
                     try:
                         song_name, artist, album = get_song_data(song_url_list[i])
                         name = refine_string(name)
@@ -174,14 +186,36 @@ def database_handler(mydatabase):
                                                      artist=artist, folder=song_path_list[i],
                                                      url=song_url_list[i])
 
+=======
+                    song_name, artist, album = get_song_data(song_url_list[i])
+                    name = refine_string(name)
+                    artist = refine_string(artist)
+                    album = refine_string(album)
+
+                    if name == album or name == artist:
+                        " the empty string is creating problem, generating a random index,"
+                        playlist = ''
+                    else:
+                        playlist = name
+                    mydatabase.insert_song_table(songname=song_name,
+                                                 playlist=playlist, album=album,
+                                                 artist=artist, folder=song_path_list[i],
+                                                 url=song_url_list[i])
+                    try:
+>>>>>>> master:resources/database_mytunefy.py
                         if playlist:
                             log.info('Inserting in song db. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album,
                                                                                             artist))
                         else:
                             log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
+<<<<<<< HEAD:resources/database_mytunefy.py
 
                     except Exception as e:
                         print("Unable to retrieve song data.", e)
+=======
+                    except Exception as e:
+                        print(e)
+>>>>>>> master:resources/database_mytunefy.py
 
             'clear list variable'
             song_path_list.clear()
@@ -200,6 +234,7 @@ def player_get_all_user_data():
     else:
         return None
 
+<<<<<<< HEAD:resources/database_mytunefy.py
 def parsing_user_db_data(fetchall_result):
     playlist = []
     album = []
@@ -218,6 +253,8 @@ def parsing_user_db_data(fetchall_result):
 
 
 
+=======
+>>>>>>> master:resources/database_mytunefy.py
 
 def get_songs_for_type(category):
     pass
@@ -254,7 +291,15 @@ class MySongDatabase:
             print("DBType is not found in DB_ENGINE")
 
     def create_db_tables(self):
+<<<<<<< HEAD:resources/database_mytunefy.py
         """ Database creatiion
+=======
+        """Todo: This type of db configuration is creating some trouble.
+            The pimary_key requires not null argument, but there should be such possibility
+            As wll is not clear how to save data.
+            Probably I should study a better configuration.
+            This is important
+>>>>>>> master:resources/database_mytunefy.py
         """
         metadata = MetaData()
         users = Table(self.USER, metadata,
@@ -311,12 +356,21 @@ class MySongDatabase:
                 connection.execute(query, variable)
             except IntegrityError as e:
                 log.warning("Song: {} of Artist: {} is already present."
+<<<<<<< HEAD:resources/database_mytunefy.py
                             .format(variable[1], variable[4]))
             except OperationalError as e:
                 log.error("Operational error as: {}".format(e))
+=======
+                            .format(variable[1], variable[2]))
+>>>>>>> master:resources/database_mytunefy.py
             except Exception as e:
                 print('General Error as:', e)
 
+
+    def query_user_general(self):
+        query = "SELECT * FROM {TBL_USR};".format(TBL_USR=self.USER)
+        res = self.execute_general_query(query)
+        return res
 
     def query_user_general(self):
         query = "SELECT * FROM {TBL_USR};".format(TBL_USR=self.USER)
@@ -353,11 +407,19 @@ class MySongDatabase:
         self.execute_query(query, variable)
 
     def insert_song_table(self, songname='', playlist='', album='', artist='', folder='', url=''):
+<<<<<<< HEAD:resources/database_mytunefy.py
         query = "INSERT INTO {TABL_USR} (id, song, playlist, album, artist, folder, url) " \
                 "VALUES (?, ?, ?, ? , ?, ?, ? );".format(TABL_USR=self.SONGTot)
 
         myid = song_id_creator(songname + artist)
         variable = (myid, songname, playlist, album, artist, folder, url)
+=======
+        query = "INSERT INTO {TABL_USR}(id, song, playlist, album, artist, folder , url) " \
+                "VALUES (?, ?, ?, ? , ?, ?, ? );".format(TABL_USR=self.SONGTot)
+
+        id = song_id_creator(songname + artist)
+        variable = (id, songname, playlist, album, artist, folder, url)
+>>>>>>> master:resources/database_mytunefy.py
         self.execute_query(query, variable)
 
     def delete_song_table(self, songname):

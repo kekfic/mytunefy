@@ -1,10 +1,13 @@
 import os, sys
+<<<<<<< HEAD
 from hashlib import pbkdf2_hmac
 from binascii import hexlify
 
 from sqlalchemy import create_engine
 from sqlalchemy import Column, String, MetaData, Table, Binary
 from sqlalchemy.exc import IntegrityError
+=======
+>>>>>>> master
 
 def testpath():
     if getattr(sys, 'frozen', False):
@@ -13,6 +16,7 @@ def testpath():
         # If it's not use the path we're on now
     else:
         CurrentPath = os.path.dirname(__file__)
+<<<<<<< HEAD
         print('second if', CurrentPath)
 
 
@@ -86,3 +90,6 @@ def test_user_db_select_all():
     res = select_all_from_user_database(db_engine)
 
     return res
+=======
+        print('second if', CurrentPath)
+>>>>>>> master
