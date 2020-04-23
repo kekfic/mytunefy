@@ -6,8 +6,8 @@ from os import listdir, chdir, getcwd
 songPusher = Queue()
 MY_WORKING_DIR = None
 
-myEndtime = datetime.datetime(2020, 5, 15, 0, 0).timestamp()
-myStarttime = datetime.datetime(2020, 5, 1, 0, 0).timestamp()
+myEndtime = datetime.datetime(2020, 7, 20, 0, 0).timestamp()
+#myStarttime = datetime.datetime(2020, 5, 15, 0, 0).timestamp()
 
 def check_my_dir(dir):
     if dir in listdir():

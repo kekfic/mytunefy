@@ -3,7 +3,7 @@ from binascii import hexlify
 
 from sqlalchemy import create_engine
 from sqlalchemy import Column, String, MetaData, Table, Binary
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError, OperationalError
 
 from main_classes.my_main_functions import get_name_for_list_widget, get_song_data
 from logzero import logger as log
@@ -138,10 +138,14 @@ def database_handler(mydatabase):
         elif dbparser[0] == 'end':
             'the string end indicate that download cicle has ended'
             if category == 'track':
-                song_name, artist, album = get_song_data(song_url_list[0])
-                mydatabase.insert_song_table(songname=song_name, playlist=None, album=album,
-                                             artist=artist, folder=song_path_list[0],
-                                             url=song_url_list[0])
+                try:
+                    song_name, artist, album = get_song_data(song_url_list[0])
+                    mydatabase.insert_song_table(songname=song_name, playlist=None, album=album,
+                                                 artist=artist, folder=song_path_list[0],
+                                                 url=song_url_list[0])
+                    log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
+                except Exception as e:
+                    print("Unable to retrieve song data.", e)
 
             else:
                 junk, name = get_name_for_list_widget(category, url)
@@ -153,28 +157,31 @@ def database_handler(mydatabase):
 
                 for i in range(len(song_url_list)):
                     "I ll do a trick assign playlist and check if it is equal to the other names"
-                    song_name, artist, album = get_song_data(song_url_list[i])
-                    name = refine_string(name)
-                    artist = refine_string(artist)
-                    album = refine_string(album)
-
-                    if name == album or name == artist:
-                        " the empty string is creating problem, generating a random index,"
-                        playlist = ''
-                    else:
-                        playlist = name
-                    mydatabase.insert_song_table(songname=song_name,
-                                                 playlist=playlist, album=album,
-                                                 artist=artist, folder=song_path_list[i],
-                                                 url=song_url_list[i])
                     try:
+                        song_name, artist, album = get_song_data(song_url_list[i])
+                        name = refine_string(name)
+                        artist = refine_string(artist)
+                        album = refine_string(album)
+
+
+                        if name == album or name == artist:
+                            " the empty string is creating problem, generating a random index,"
+                            playlist = ''
+                        else:
+                            playlist = name
+                        mydatabase.insert_song_table(songname=song_name,
+                                                     playlist=playlist, album=album,
+                                                     artist=artist, folder=song_path_list[i],
+                                                     url=song_url_list[i])
+
                         if playlist:
                             log.info('Inserting in song db. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album,
                                                                                             artist))
                         else:
                             log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
+
                     except Exception as e:
-                        print(e)
+                        print("Unable to retrieve song data.", e)
 
             'clear list variable'
             song_path_list.clear()
@@ -304,7 +311,9 @@ class MySongDatabase:
                 connection.execute(query, variable)
             except IntegrityError as e:
                 log.warning("Song: {} of Artist: {} is already present."
-                            .format(variable[1], variable[2]))
+                            .format(variable[1], variable[4]))
+            except OperationalError as e:
+                log.error("Operational error as: {}".format(e))
             except Exception as e:
                 print('General Error as:', e)
 
@@ -344,11 +353,11 @@ class MySongDatabase:
         self.execute_query(query, variable)
 
     def insert_song_table(self, songname='', playlist='', album='', artist='', folder='', url=''):
-        query = "INSERT INTO {TABL_USR}(id, song, playlist, album, artist, folder , url) " \
+        query = "INSERT INTO {TABL_USR} (id, song, playlist, album, artist, folder, url) " \
                 "VALUES (?, ?, ?, ? , ?, ?, ? );".format(TABL_USR=self.SONGTot)
 
-        id = song_id_creator(songname + artist)
-        variable = (id, songname, playlist, album, artist, folder, url)
+        myid = song_id_creator(songname + artist)
+        variable = (myid, songname, playlist, album, artist, folder, url)
         self.execute_query(query, variable)
 
     def delete_song_table(self, songname):

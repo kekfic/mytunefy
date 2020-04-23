@@ -1,5 +1,6 @@
 import os, sys , datetime, binascii
 from hashlib import pbkdf2_hmac
+from shutil import copy
 
 
 myEndtime = datetime.datetime(2020, 5, 30, 0, 0).timestamp()
@@ -20,6 +21,10 @@ def executable_creator():
 
     fullcommand = command + addata + program
     os.system(fullcommand)
+    print('Command has ended. Now moving things inside dist folder')
+    os.mkdir('dist/mytunefy/db_data/')
+    copy("db_data/users_mtf", "dist/mytunefy/db_data/")
+
 
 def key_creator(address):
     mymac = address.lower()

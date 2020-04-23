@@ -23,7 +23,12 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
-    movie = QMovie("resources/gif/music1.gif")
+    if os.path.isfile("gif/music1.gif"):
+        gifpath = "gif/music1.gif"
+    else:
+        gifpath = "resources/gif/music1.gif"
+
+    movie = QMovie(gifpath)
     splash = LoadingGif(movie)
     splash.show()
     # splash.showMessage("<h1><font color='white'>Welcome to MyTuneFy!</font></h1>")
