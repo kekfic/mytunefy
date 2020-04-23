@@ -26,8 +26,15 @@ txt = ideally textfiles\
 utilities = file used for development\
 
 
-Known issue:
+Known issue: -------solved! microsoft visual c++ 2015 was missing!
+https://support.microsoft.com/it-it/help/2977003/the-latest-supported-visual-c-downloads
 
 On some windows 10 distribution this error appears:
 
  File "site-packages\shiboken2\__init__.py", line 4, in <module> ImportError:
+ 
+##   Dependecy
+
+ Microsoft Visual C++ Redistributable per Visual Studio 2015, 2017 e 2019.
+https://support.microsoft.com/it-it/help/2977003/the-latest-supported-visual-c-downloads
+ 
