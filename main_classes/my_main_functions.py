@@ -108,12 +108,12 @@ def get_name_for_list_widget(category_list, url ):
         if category_list == 'playlist':
             playlist = spotify_tools.fetch_playlist(url)
             name = u"{0}".format(slugify(playlist["name"], ok="-_()[]{}"))
-            text_file = 'User: ' + playlist['tracks']['items'][0]['added_by']['id'] + ' - ' + "Playlist Name: " + name
+            text_file = "Playlist:  " + name
         elif category_list == 'track':
             track = spotify_tools.generate_metadata(url)
             name = track['name']
             artist_name = track['album']['artists'][0]['name']
-            text_file = 'Song: ' + name + ' - ' + artist_name
+            text_file = 'Song:  ' + name + ' - ' + artist_name
         elif category_list == 'artist':
             artist = spotify_tools.fetch_albums_from_artist(url)
             name = artist[0]['artists'][0]['name']
@@ -121,7 +121,7 @@ def get_name_for_list_widget(category_list, url ):
         elif category_list == 'album':
             album = spotify_tools.fetch_album(url)
             name = u"{0}".format(slugify(album["name"], ok="-_()[]{}"))
-            text_file = 'Album: ' + name + ' of : ' + album['artists'][0]['name']
+            text_file = 'Album:  ' + name + ' - ' + album['artists'][0]['name']
         else:
             text_file = 'Not Found name'
             name = ''

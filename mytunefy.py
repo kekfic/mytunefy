@@ -9,7 +9,11 @@ from PySide2.QtGui import QMovie
 from main_classes.window_handler import MainWin
 from main_classes.widget_class import LoadingGif
 from resources.login import valid_user
+<<<<<<< HEAD
+
+=======
 from main_classes.music_player_main import MainWinPlayer
+>>>>>>> master
 
 if __name__ == "__main__":
     if getattr(sys, 'frozen', False):
@@ -23,6 +27,28 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
+<<<<<<< HEAD
+    if os.path.isfile("gif/music1.gif"):
+        gifpath = "gif/music1.gif"
+    else:
+        gifpath = "resources/gif/music1.gif"
+
+    movie = QMovie(gifpath)
+    splash = LoadingGif(movie)
+    splash.show()
+    # splash.showMessage("<h1><font color='white'>Welcome to MyTuneFy!</font></h1>")
+    start = time.time()
+
+    while movie.state() == QMovie.Running and time.time() < start + 5:
+        app.processEvents()
+
+    if valid_user():
+
+        "downloader"
+        #  -------------------working on player
+        guiDown = MainWin()
+        guiDown.mainwindow.show()
+=======
     movie = QMovie("resources/gif/music1.gif")
     splash = LoadingGif(movie)
     splash.show()
@@ -43,6 +69,7 @@ if __name__ == "__main__":
         # guiPlayer = MainWinPlayer()
         # guiPlayer.main_window_player.show()
         # gui.show()
+>>>>>>> master
         splash.close()
         # gui.mainwindow.showMaximized()
         sys.exit(app.exec_())

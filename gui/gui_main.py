@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main.ui',
 # licensing of '.\gui_main.ui' applies.
 #
-# Created: Wed Apr  8 17:33:55 2020
+# Created: Wed Apr 22 18:06:16 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(743, 810)
+        MainWindow.resize(749, 775)
         MainWindow.setMaximumSize(QtCore.QSize(1920, 1080))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
@@ -22,53 +22,85 @@ class Ui_MainWindow(object):
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(249, 249, 249))
+        brush = QtGui.QBrush(QtGui.QColor(254, 254, 254))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.BrightText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(154, 154, 154))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(248, 248, 248))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(59, 59, 59))
+        brush = QtGui.QBrush(QtGui.QColor(2, 2, 2))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(218, 218, 218))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.AlternateBase, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.NoRole, brush)
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Text, brush)
-        brush = QtGui.QBrush(QtGui.QColor(249, 249, 249))
+        brush = QtGui.QBrush(QtGui.QColor(254, 254, 254))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.BrightText, brush)
+        brush = QtGui.QBrush(QtGui.QColor(154, 154, 154))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush = QtGui.QBrush(QtGui.QColor(248, 248, 248))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(59, 59, 59))
+        brush = QtGui.QBrush(QtGui.QColor(2, 2, 2))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(218, 218, 218))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.AlternateBase, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.NoRole, brush)
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Text, brush)
+        brush = QtGui.QBrush(QtGui.QColor(254, 254, 254))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.BrightText, brush)
         brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(59, 59, 59))
+        brush = QtGui.QBrush(QtGui.QColor(2, 2, 2))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(59, 59, 59))
+        brush = QtGui.QBrush(QtGui.QColor(2, 2, 2))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
+        brush = QtGui.QBrush(QtGui.QColor(218, 218, 218))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.AlternateBase, brush)
+        brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
+        brush.setStyle(QtCore.Qt.SolidPattern)
+        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.NoRole, brush)
         MainWindow.setPalette(palette)
         font = QtGui.QFont()
         font.setFamily("Gill Sans MT")
         font.setPointSize(9)
         MainWindow.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/cuffie.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/cuffie.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
+        MainWindow.setAutoFillBackground(False)
+        MainWindow.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
+        MainWindow.setDocumentMode(False)
+        MainWindow.setDockNestingEnabled(False)
+        MainWindow.setUnifiedTitleAndToolBarOnMac(False)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -85,15 +117,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setSpacing(10)
         self.verticalLayout_2.setContentsMargins(10, 10, 10, 10)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label_DownloadFolder = QtWidgets.QLabel(self.frame_Folder)
-        self.label_DownloadFolder.setMinimumSize(QtCore.QSize(0, 25))
-        font = QtGui.QFont()
-        font.setPointSize(14)
-        self.label_DownloadFolder.setFont(font)
-        self.label_DownloadFolder.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.label_DownloadFolder.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_DownloadFolder.setObjectName("label_DownloadFolder")
-        self.verticalLayout_2.addWidget(self.label_DownloadFolder)
         spacerItem = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_2.addItem(spacerItem)
         self.pushButtonFolder = QtWidgets.QPushButton(self.frame_Folder)
@@ -102,16 +125,39 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButtonFolder.sizePolicy().hasHeightForWidth())
         self.pushButtonFolder.setSizePolicy(sizePolicy)
-        self.pushButtonFolder.setMinimumSize(QtCore.QSize(0, 60))
+        self.pushButtonFolder.setMinimumSize(QtCore.QSize(204, 60))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.pushButtonFolder.setFont(font)
-        self.pushButtonFolder.setStyleSheet("background-color: rgb(253, 253, 253);\n"
-"color: rgb(255, 255, 255);")
-        self.pushButtonFolder.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/folder.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonFolder.setIcon(icon1)
+        self.pushButtonFolder.setStyleSheet("QPushButton {\n"
+"  \n"
+"    border: 2px solid #8f8f91;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #000000, stop: 1 #535353);\n"
+"    color: rgba(200, 200, 200, 200);\n"
+"    image-position:left;\n"
+"    \n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/folder.png);\n"
+"    min-width: 200px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+"}\n"
+"\n"
+"QPushButton:flat {\n"
+"    border: navy; /* no border for a flat push button */\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    color: white;\n"
+"    image-position: left;\n"
+"    \n"
+"    \n"
+"    }\n"
+"")
         self.pushButtonFolder.setIconSize(QtCore.QSize(60, 60))
         self.pushButtonFolder.setFlat(True)
         self.pushButtonFolder.setObjectName("pushButtonFolder")
@@ -136,6 +182,82 @@ class Ui_MainWindow(object):
         self.plainTextDirectory.setObjectName("plainTextDirectory")
         self.verticalLayout_2.addWidget(self.plainTextDirectory)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setContentsMargins(15, -1, -1, -1)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.pushButtonYoutube = QtWidgets.QPushButton(self.frame_Folder)
+        self.pushButtonYoutube.setMinimumSize(QtCore.QSize(202, 60))
+        font = QtGui.QFont()
+        font.setFamily("Gill Sans MT")
+        font.setPointSize(11)
+        self.pushButtonYoutube.setFont(font)
+        self.pushButtonYoutube.setStyleSheet("QPushButton {\n"
+"  \n"
+"    color: rgba(200, 200, 200, 200);\n"
+"    image-position:left;\n"
+"    \n"
+"    \n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/youtube.png);\n"
+"    min-width: 200px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+"}\n"
+"\n"
+"QPushButton:flat {\n"
+"    border: none; /* no border for a flat push button */\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    color: white;\n"
+"    image-position: left;\n"
+"    \n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/youtube2.png);\n"
+"    }\n"
+"")
+        self.pushButtonYoutube.setFlat(True)
+        self.pushButtonYoutube.setObjectName("pushButtonYoutube")
+        self.verticalLayout.addWidget(self.pushButtonYoutube)
+        self.pushButton_3 = QtWidgets.QPushButton(self.frame_Folder)
+        self.pushButton_3.setEnabled(False)
+        self.pushButton_3.setMinimumSize(QtCore.QSize(202, 60))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.pushButton_3.setFont(font)
+        self.pushButton_3.setStyleSheet("QPushButton {\n"
+"  \n"
+"    color: rgba(200, 200, 200, 200);\n"
+"    image-position:left;\n"
+"    \n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/playlist-azul-green.png);\n"
+"    min-width: 200px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+"}\n"
+"\n"
+"QPushButton:flat {\n"
+"    border: none; /* no border for a flat push button */\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    color: white;\n"
+"    image-position: left;\n"
+"    \n"
+"    \n"
+"    }\n"
+"")
+        self.pushButton_3.setFlat(True)
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.verticalLayout.addWidget(self.pushButton_3)
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.verticalLayout_3.addWidget(self.frame_Folder)
         spacerItem2 = QtWidgets.QSpacerItem(20, 15, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_3.addItem(spacerItem2)
@@ -256,36 +378,101 @@ class Ui_MainWindow(object):
         font.setPointSize(13)
         font.setItalic(True)
         self.listWidgetUrls.setFont(font)
-        self.listWidgetUrls.setStyleSheet("background-color: rgb(217, 217, 217);")
+        self.listWidgetUrls.setStyleSheet("QListWidget{\n"
+"    background-color: rgb(217, 217, 217);\n"
+"    font-family: \"Gill Sans MT\";\n"
+"}\n"
+"")
         self.listWidgetUrls.setAlternatingRowColors(True)
         self.listWidgetUrls.setTextElideMode(QtCore.Qt.ElideRight)
         self.listWidgetUrls.setResizeMode(QtWidgets.QListView.Adjust)
         self.listWidgetUrls.setObjectName("listWidgetUrls")
         self.verticalLayout_3.addWidget(self.listWidgetUrls)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_3.addItem(spacerItem4)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.StartPushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.StartPushButton.setMinimumSize(QtCore.QSize(0, 100))
+        self.StartPushButton.setMinimumSize(QtCore.QSize(200, 100))
         self.StartPushButton.setMaximumSize(QtCore.QSize(1500, 16777215))
         font = QtGui.QFont()
         font.setPointSize(15)
         self.StartPushButton.setFont(font)
         self.StartPushButton.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.StartPushButton.setStyleSheet("background-color: rgb(76, 76, 76);\n"
-"color: rgb(255, 255, 255);")
+        self.StartPushButton.setStyleSheet("QPushButton {\n"
+"  \n"
+"    border-radius: 20px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #000000, stop: 1 #535353);\n"
+"    color: rgba(200, 200, 200, 200);\n"
+"    \n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/down_music_dark_grey.png);\n"
+"    min-width: 200px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+"}\n"
+"\n"
+"QPushButton:flat {\n"
+"    border: none; /* no border for a flat push button */\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    color: white;\n"
+"    image: url(:/mytunefy/resources/icons/down_music_light_grey.png);\n"
+"    }\n"
+"")
         self.StartPushButton.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/down_music_red.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.StartPushButton.setIcon(icon2)
         self.StartPushButton.setIconSize(QtCore.QSize(80, 80))
         self.StartPushButton.setAutoRepeat(True)
         self.StartPushButton.setFlat(True)
         self.StartPushButton.setObjectName("StartPushButton")
-        self.verticalLayout_3.addWidget(self.StartPushButton)
+        self.horizontalLayout_3.addWidget(self.StartPushButton)
+        self.pushButtonStream = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButtonStream.setEnabled(False)
+        self.pushButtonStream.setMinimumSize(QtCore.QSize(200, 100))
+        self.pushButtonStream.setStyleSheet("QPushButton {\n"
+"  \n"
+"    border-radius: 20px;\n"
+"    color: rgba(200, 200, 200, 200);\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/stream_grey.png);\n"
+"    min-width: 200px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+"}\n"
+"\n"
+"QPushButton:flat {\n"
+"    border: none; /* no border for a flat push button */\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    color: white;\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/stream_light-grey.png);\n"
+"    }\n"
+"")
+        self.pushButtonStream.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/stream_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButtonStream.setIcon(icon1)
+        self.pushButtonStream.setIconSize(QtCore.QSize(80, 80))
+        self.pushButtonStream.setCheckable(True)
+        self.pushButtonStream.setFlat(True)
+        self.pushButtonStream.setObjectName("pushButtonStream")
+        self.horizontalLayout_3.addWidget(self.pushButtonStream)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout_3.addItem(spacerItem4)
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_3.addItem(spacerItem5)
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
         self.progressBar.setEnabled(True)
+        self.progressBar.setStyleSheet(" border-radius: 5px;")
         self.progressBar.setProperty("value", 0)
         self.progressBar.setAlignment(QtCore.Qt.AlignCenter)
         self.progressBar.setObjectName("progressBar")
@@ -311,7 +498,7 @@ class Ui_MainWindow(object):
         self.label_IconPlay = QtWidgets.QLabel(self.centralwidget)
         self.label_IconPlay.setMaximumSize(QtCore.QSize(30, 30))
         self.label_IconPlay.setText("")
-        self.label_IconPlay.setPixmap(QtGui.QPixmap(":/spotify/resources/icons/play1.png"))
+        self.label_IconPlay.setPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/play1.png"))
         self.label_IconPlay.setScaledContents(True)
         self.label_IconPlay.setObjectName("label_IconPlay")
         self.horizontalLayout.addWidget(self.label_IconPlay)
@@ -323,14 +510,14 @@ class Ui_MainWindow(object):
         self.label_IconHead.setSizePolicy(sizePolicy)
         self.label_IconHead.setMaximumSize(QtCore.QSize(30, 30))
         self.label_IconHead.setText("")
-        self.label_IconHead.setPixmap(QtGui.QPixmap(":/spotify/resources/icons/music4.png"))
+        self.label_IconHead.setPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/music4.png"))
         self.label_IconHead.setScaledContents(True)
         self.label_IconHead.setObjectName("label_IconHead")
         self.horizontalLayout.addWidget(self.label_IconHead)
         self.verticalLayout_3.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 743, 29))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 749, 29))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -339,11 +526,13 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(10)
         self.menubar.setFont(font)
+        self.menubar.setAutoFillBackground(False)
+        self.menubar.setStyleSheet("background-color: rgb(213, 213, 213);")
         self.menubar.setObjectName("menubar")
         self.menuMenu = QtWidgets.QMenu(self.menubar)
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/menu.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menuMenu.setIcon(icon3)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/menu.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuMenu.setIcon(icon2)
         self.menuMenu.setObjectName("menuMenu")
         self.menuFormat = QtWidgets.QMenu(self.menuMenu)
         self.menuFormat.setObjectName("menuFormat")
@@ -357,40 +546,43 @@ class Ui_MainWindow(object):
         self.menuEncoding = QtWidgets.QMenu(self.menuMenu)
         self.menuEncoding.setObjectName("menuEncoding")
         self.menuHelp = QtWidgets.QMenu(self.menubar)
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menuHelp.setIcon(icon4)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/interrogativo1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuHelp.setIcon(icon3)
         self.menuHelp.setObjectName("menuHelp")
         self.menuLanguage = QtWidgets.QMenu(self.menubar)
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/language.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menuLanguage.setIcon(icon5)
+        self.menuLanguage.setMinimumSize(QtCore.QSize(170, 0))
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/language.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuLanguage.setIcon(icon4)
         self.menuLanguage.setObjectName("menuLanguage")
         self.menuAppearence = QtWidgets.QMenu(self.menubar)
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/theme2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.menuAppearence.setIcon(icon6)
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/theme2.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.menuAppearence.setIcon(icon5)
         self.menuAppearence.setObjectName("menuAppearence")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
         self.actionhelp = QtWidgets.QAction(MainWindow)
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/manual.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionhelp.setIcon(icon7)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/manual.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionhelp.setIcon(icon6)
         self.actionhelp.setObjectName("actionhelp")
         self.actionReadMe = QtWidgets.QAction(MainWindow)
-        self.actionReadMe.setIcon(icon4)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.actionReadMe.setIcon(icon7)
         self.actionReadMe.setObjectName("actionReadMe")
         self.actionL = QtWidgets.QAction(MainWindow)
         icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/ita.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon8.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/ita.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionL.setIcon(icon8)
         self.actionL.setObjectName("actionL")
         self.actionEng = QtWidgets.QAction(MainWindow)
         icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/eng.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon9.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/eng.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.actionEng.setIcon(icon9)
         self.actionEng.setObjectName("actionEng")
         self.action_mp3 = QtWidgets.QAction(MainWindow)
@@ -456,6 +648,9 @@ class Ui_MainWindow(object):
         self.actionavconv = QtWidgets.QAction(MainWindow)
         self.actionavconv.setCheckable(True)
         self.actionavconv.setObjectName("actionavconv")
+        self.actionyml_Config = QtWidgets.QAction(MainWindow)
+        self.actionyml_Config.setEnabled(False)
+        self.actionyml_Config.setObjectName("actionyml_Config")
         self.menuFormat.addAction(self.action_mp3)
         self.menuFormat.addAction(self.action_m4a)
         self.menuFormat.addAction(self.action_flac)
@@ -467,6 +662,7 @@ class Ui_MainWindow(object):
         self.menuAdvanced.addAction(self.actionNo_Spaces)
         self.menuAdvanced.addAction(self.actionMusic_Video_Only)
         self.menuAdvanced.addAction(self.actionSkip_2)
+        self.menuAdvanced.addAction(self.actionyml_Config)
         self.menuIn_Format.addAction(self.action_mp4)
         self.menuIn_Format.addAction(self.action_wbm)
         self.menuEncoding.addAction(self.actionffmpeg)
@@ -498,14 +694,17 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "MyTuneFy", None, -1))
-        self.label_DownloadFolder.setText(QtWidgets.QApplication.translate("MainWindow", "Download Folder", None, -1))
+        self.pushButtonFolder.setText(QtWidgets.QApplication.translate("MainWindow", "Cartella Download", None, -1))
         self.plainTextDirectory.setWhatsThis(QtWidgets.QApplication.translate("MainWindow", "Download folder", None, -1))
         self.plainTextDirectory.setPlainText(QtWidgets.QApplication.translate("MainWindow", "C:\\Music", None, -1))
+        self.pushButtonYoutube.setText(QtWidgets.QApplication.translate("MainWindow", "Youtube", None, -1))
+        self.pushButton_3.setText(QtWidgets.QApplication.translate("MainWindow", "Lista Playlist", None, -1))
         self.label_URL.setText(QtWidgets.QApplication.translate("MainWindow", "URL", None, -1))
         self.plainTextEditUrl.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Copiare link  Spotify qui", None, -1))
         self.listWidgetUrls.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Doppio click sulla voce selezionata per rimuoverla dalla lista", None, -1))
         self.StartPushButton.setToolTip(QtWidgets.QApplication.translate("MainWindow", "download", None, -1))
         self.StartPushButton.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Press for download", None, -1))
+        self.pushButtonStream.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Premere per accedere al Player", None, -1))
         self.label_bottomPhrase.setText(QtWidgets.QApplication.translate("MainWindow", "Where words fail, music speaks.", None, -1))
         self.menuMenu.setTitle(QtWidgets.QApplication.translate("MainWindow", "Menu", None, -1))
         self.menuFormat.setStatusTip(QtWidgets.QApplication.translate("MainWindow", "Songs output format", None, -1))
@@ -541,5 +740,6 @@ class Ui_MainWindow(object):
         self.actionLight_Theme.setText(QtWidgets.QApplication.translate("MainWindow", "Light Theme", None, -1))
         self.actionffmpeg.setText(QtWidgets.QApplication.translate("MainWindow", "ffmpeg", None, -1))
         self.actionavconv.setText(QtWidgets.QApplication.translate("MainWindow", "avconv", None, -1))
+        self.actionyml_Config.setText(QtWidgets.QApplication.translate("MainWindow", "yml Config", None, -1))
 
 from .import icons_rc
