@@ -12,7 +12,8 @@ from PySide2.QtWidgets import QMainWindow, QMessageBox, QApplication, \
 from list_class.mydelegate import ButtonDelegate
 from gui.gui_main_player import Ui_PlayerMainWindow
 from list_class.tableViewClass import MyTableView
-#from resources.database_mytunefy import player_get_all_songs
+from resources.database_mytunefy import player_get_all_songs, player_get_all_user_data, parsing_user_db_data
+
 
 class MyReimplementedWindow(QMainWindow):
     """Reimplementing main window for closeEvent option"""
@@ -44,45 +45,21 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         # Initiating Pygame Mixer
         pygame.mixer.init()
 
-        try:
-            os.chdir("D:\\Musica\\")
-        except Exception as e:
-            print(e)
-            self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
+        if os.path.isfile('db_data/song_db'):
+            self.get_playlist_in_db()
 
-        # Fetching Songs
-        raw_song_tracks = os.listdir()
-        self.raw_songs = raw_song_tracks.copy()
-
-        res = player_get_all_songs()
-
-        songtracks= []
-
-        i = 0
-        for item in raw_song_tracks:
-            if '.mp3' in item:
-                try:
-                    labels = self.parsing_song(item)
-                  #  labels.insert(0, QPushButton(''))
-                    songtracks.append(labels)
-                except Exception as e:
-                    print('Song: {} - not consider cause {}'.format(item, e))
-                    self.raw_songs.pop(i)
-            else:
-                self.raw_songs.pop(i)
-            i += 1
+        self.comboBoxCategory.currentIndexChanged.connect(self.combo_box_handler)
+        # todo set
+        songtracks = self.local_song_folder()
 
         self.tableView = MyTableView(self.frame_songs, tracks=songtracks)
         self.verticalLayout_QTableView.addWidget(self.tableView)
 
         "Unsetting for now the delegate, I am not ready for using it"
         #self.tableView.setItemDelegate(ButtonDelegate(self))
-
         #self.connect(self.tableView.mouseDoubleClickEvent, SIGNAL("triggered()"), self.double_click_table)
-
         self.tableView.doubleClicked.connect(self.double_click_table)
         #self.PlayPauseButton.con
-
         self.connect(self.PlayPauseButton, SIGNAL('triggered()'), self.playsong)
 
 
@@ -97,6 +74,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         column = index.column()
 
     def parsing_song(self, song):
+        #todo call with another name and move from here
         listsplit = re.split(r'[-.]', song)
         listsong = [x.strip() for x in listsplit]
         art = listsong[1].split('(')[0]
@@ -104,7 +82,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         return [listsong[0], artist, listsong[2]]
 
-
+    #---------------------------------------------------------------------------------
     def playsong(self, songname):
         # Displaying Selected Song title
         #self.track.set(self.playlist.get(ACTIVE))
@@ -133,12 +111,49 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         # Playing back Song
         pygame.mixer.music.unpause()
 
+    #-----------------------------------------------------------------------
 
 
+    def get_playlist_in_db(self):
+        res = player_get_all_user_data()
+        if res:
+            self.playlist, self.artist, self.album = parsing_user_db_data(res)
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
 
-    # gui.show()
+    def local_song_folder(self, folder):
+        my_working_folder = os.getcwd()
+        try:
+            os.chdir(folder)
+        except Exception as e:
+            print(e)
+            self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
 
-    sys.exit(app.exec_())
+        # Fetching Songs
+        raw_song_tracks = os.listdir()
+        self.raw_songs = raw_song_tracks.copy()
+        songtracks = []
+
+        i = 0
+        for item in raw_song_tracks:
+            if '.mp3' in item:
+                try:
+                    labels = self.parsing_song(item)
+                    #  labels.insert(0, QPushButton(''))
+                    songtracks.append(labels)
+                except Exception as e:
+                    print('Song: {} - not consider cause {}'.format(item, e))
+                    self.raw_songs.pop(i)
+            else:
+                self.raw_songs.pop(i)
+            i += 1
+
+        os.chdir(my_working_folder)
+
+        return songtracks
+
+    def combo_box_handler(self):
+        category = self.comboBoxCategory.currentText()
+        self.fill_list_view(category)
+
+    def fill_list_view(self, category):
+        self.listWidget.addItem()

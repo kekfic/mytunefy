@@ -132,7 +132,7 @@
    <string>MyTuneFy Player</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="icons.qrc">
+   <iconset>
     <normaloff>:/spotify/resources/icons/play1.png</normaloff>:/spotify/resources/icons/play1.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -437,7 +437,7 @@ QPushButton:default {
     border-radius: 20px;
 	color: rgba(200, 200, 200, 200);
 	
-	image: url(:/spotify/resources/icons/setting1.png);
+	image: url(:/mytunefy/resources/icons/setting1.png);
    
 }
 
@@ -452,7 +452,7 @@ QPushButton:flat {
 
 QPushButton:hover{
 	color: white;
-	image: url(:/spotify/resources/icons/setting-white.png);
+	image: url(:/mytunefy/resources/icons/setting-white.png);
 	}
 </string>
            </property>
@@ -874,7 +874,7 @@ QPushButton:hover{
                                       stop: 0 #000000, stop: 1 #535353);
 	color: rgba(200, 200, 200, 200);
 	image-position:left;
-	image: url(:/spotify/resources/icons/stream_grey.png);
+	image: url(:/mytunefy/resources/icons/stream_grey.png);
     min-width: 200px;
 }
 
@@ -890,7 +890,7 @@ QPushButton:flat {
 QPushButton:hover{
 	color: white;
 	image-position: left;
-	image: url(:/spotify/resources/icons/stream_light-grey.png);
+	image: url(:/mytunefy/resources/icons/stream_light-grey.png);
 	}
 </string>
             </property>
@@ -930,7 +930,7 @@ QPushButton:hover{
 	color: rgba(200, 200, 200, 200);
 	image-position:left;
 	
-	image: url(:/spotify/resources/icons/down_music_dark_grey.png);
+	image: url(:/mytunefy/resources/icons/down_music_dark_grey.png);
     min-width: 200px;
 }
 
@@ -947,7 +947,7 @@ QPushButton:hover{
 	color: white;
 	image-position: left;
 	
-	image: url(:/spotify/resources/icons/down_music_light_grey.png);
+	image: url(:/mytunefy/resources/icons/down_music_light_grey.png);
 	}
 </string>
             </property>
@@ -2923,14 +2923,14 @@ color: rgb(255, 255, 255);
                 <property name="styleSheet">
                  <string notr="true">QPushButton {
 	
-	image: url(:/spotify/resources/icons/shuffle-darker-grey.png);
+	image: url(:/mytunefy/resources/icons/shuffle-darker-grey.png);
   
 }
 
 QPushButton:pressed {
 	
 	
-	image: url(:/spotify/resources/icons/shuffle-azul-grey.png);
+	image: url(:/mytunefy/resources/icons/shuffle-azul-grey.png);
 }
 
 QPushButton:flat {
@@ -2939,11 +2939,11 @@ QPushButton:flat {
 
 QPushButton:hover{
         
-	image: url(:/spotify/resources/icons/shuffle-light-grey.png);
+	image: url(:/mytunefy/resources/icons/shuffle-light-grey.png);
 }
 QPushButton:checked{
 	
-	image: url(:/spotify/resources/icons/shuffle-green-grey.png);
+	image: url(:/mytunefy/resources/icons/shuffle-green-grey.png);
 }</string>
                 </property>
                 <property name="text">
@@ -2999,11 +2999,11 @@ QPushButton:checked{
                 <property name="styleSheet">
                  <string notr="true">QPushButton {
 	
-	image: url(:/spotify/resources/icons/backtrack4.png);
+	image: url(:/mytunefy/resources/icons/backtrack4.png);
 }
 QPushButton:pressed {
 	
-	image: url(:/spotify/resources/icons/backtrack4.png);
+	image: url(:/mytunefy/resources/icons/backtrack4.png);
 }
 
 QPushButton:flat {
@@ -3012,7 +3012,7 @@ QPushButton:flat {
 
 QPushButton:hover{
         
-	image: url(:/spotify/resources/icons/backtrack5.png);
+	image: url(:/mytunefy/resources/icons/backtrack5.png);
 }
 </string>
                 </property>
@@ -3079,12 +3079,12 @@ QPushButton:hover{
 	background-color: rgb(40, 40, 40);
 	
 	
-	image: url(:/spotify/resources/icons/play_grey.png);
+	image: url(:/mytunefy/resources/icons/play_grey.png);
 
 }
 
 QPushButton:pressed {
-	image: url(:/spotify/resources/icons/pause-butt.png);
+	image: url(:/mytunefy/resources/icons/pause-butt.png);
 }
 
 QPushButton:flat {
@@ -3092,11 +3092,11 @@ QPushButton:flat {
 }
 QPushButton:hover{
 		
-	image: url(:/spotify/resources/icons/play_white.png);
+	image: url(:/mytunefy/resources/icons/play_white.png);
 }
 
 QPushButton:checked{
-image: url(:/spotify/resources/icons/pause2.png);
+image: url(:/mytunefy/resources/icons/pause2.png);
 }</string>
                 </property>
                 <property name="text">
@@ -3152,11 +3152,11 @@ image: url(:/spotify/resources/icons/pause2.png);
                 <property name="styleSheet">
                  <string notr="true">QPushButton {
 	
-	image: url(:/spotify/resources/icons/next-darker-grey.png);
+	image: url(:/mytunefy/resources/icons/next-darker-grey.png);
 }
 QPushButton:pressed {
 	
-	image: url(:/spotify/resources/icons/next-light-grey.png);
+	image: url(:/mytunefy/resources/icons/next-light-grey.png);
 }
 
 QPushButton:flat {
@@ -3165,7 +3165,7 @@ QPushButton:flat {
 
 QPushButton:hover{
         
-	image: url(:/spotify/resources/icons/next-light-grey.png);
+	image: url(:/mytunefy/resources/icons/next-light-grey.png);
 }
 </string>
                 </property>
@@ -3219,7 +3219,7 @@ QPushButton:hover{
                 <property name="styleSheet">
                  <string notr="true">QPushButton {
 	
-	image: url(:/spotify/resources/icons/repeat-track-dark-grey.png);
+	image: url(:/mytunefy/resources/icons/repeat-track-dark-grey.png);
   
 }
 
@@ -3234,10 +3234,10 @@ QPushButton:flat {
 
 QPushButton:hover{
         
-	image: url(:/spotify/resources/icons/repeat-track-light-grey.png);
+	image: url(:/mytunefy/resources/icons/repeat-track-light-grey.png);
 }
 QPushButton:checked{
-image: url(:/spotify/resources/icons/repeat-track-green.png);
+image: url(:/mytunefy/resources/icons/repeat-track-green.png);
 }</string>
                 </property>
                 <property name="text">
@@ -3373,7 +3373,7 @@ background-image: url(:/spotify/resources/icons/play-red.png);</string>
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="icons.qrc">:/spotify/resources/icons/music4.png</pixmap>
+               <pixmap>:/spotify/resources/icons/music4.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
