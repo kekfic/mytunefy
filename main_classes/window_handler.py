@@ -3,6 +3,7 @@
 
 """
 from queue import Queue
+from random import randint
 
 from PySide2.QtWidgets import QMainWindow, QFileDialog, QMessageBox
 from PySide2.QtCore import QObject, Signal, SIGNAL
@@ -115,6 +116,13 @@ class MainWin(QObject, Ui_MainWindow):
         self.connect(self.actionReadMe, SIGNAL("triggered()"), self.open_readme)
         self.connect(self.actionhelp, SIGNAL("triggered()"), self.open_manual)
 
+<<<<<<< Updated upstream
+=======
+        self.pu
+
+        self.pushButtonYoutube.clicked.connect(self.youtube_button)
+
+>>>>>>> Stashed changes
         'Setting thread tha take care of the download, this allow a responsive main window'
         #self.mythread = MyClassThread(target=self.startDownload)
         self.mythread = threading.Thread(target=self.startDownload, daemon=True)
@@ -214,7 +222,7 @@ class MainWin(QObject, Ui_MainWindow):
         if self.progressBar.isHidden():
             self.progressBar.show()
         if totalitem == 1:
-            percentage = round(1 / (totalitem + 0.5), 2) * 100
+            percentage =  randint(20, 70)
         else:
             percentage = round(1 / totalitem, 2) * 100
 
@@ -282,4 +290,13 @@ class MainWin(QObject, Ui_MainWindow):
                 const.args.trim_silence = False
             else:
                 self.actionTrim_Silence.isChecked(True)
+<<<<<<< Updated upstream
                 const.args.trim_silence = True
+=======
+                const.args.trim_silence = True
+
+    def youtube_button(self):
+        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal, self.mydir)
+        if temp.dialog.exec_():
+            pass
+>>>>>>> Stashed changes
