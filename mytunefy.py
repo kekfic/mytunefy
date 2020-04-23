@@ -6,7 +6,7 @@ import time
 from resources.resources import set_current_directory
 from PySide2.QtWidgets import QApplication, QMessageBox, QDialog
 from PySide2.QtGui import QMovie
-from main_classes.window_handler import MainWin
+from main_classes.downld_main import MainWin
 from main_classes.widget_class import LoadingGif
 from main_classes.music_player_main import MainWinPlayer
 from resources.login import valid_user
@@ -43,11 +43,11 @@ if __name__ == "__main__":
         "downloader"
         #  -------------------working on player
         #
-        # guiDown = MainWin()
-        # guiDown.mainwindow.show()
+        guiDown = MainWin()
+        guiDown.mainwindow.show()
         #
-        guiPlayer = MainWinPlayer()
-        guiPlayer.main_window_player.show()
+        # guiPlayer = MainWinPlayer()
+        # guiPlayer.main_window_player.show()
         splash.close()
         # gui.mainwindow.showMaximized()
         sys.exit(app.exec_())

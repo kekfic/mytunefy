@@ -50,7 +50,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         self.comboBoxCategory.currentIndexChanged.connect(self.combo_box_handler)
         # todo set
-        songtracks = self.local_song_folder()
+        songtracks = self.local_song_folder(os.getcwd())
 
         self.tableView = MyTableView(self.frame_songs, tracks=songtracks)
         self.verticalLayout_QTableView.addWidget(self.tableView)

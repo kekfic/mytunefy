@@ -6,7 +6,7 @@ from PySide2.QtWidgets import QSplashScreen, QWidget, QLabel, QPushButton, QHBox
 from gui.youtube_downloader import Ui_DialogYoutubeDL
 import getpass
 import threading
-from spotdl_mod.youtube_tools import mySimpleYoutubeDownloader
+from main_classes.handle import mySimpleYoutubeDownloader
 from random import randint
 from logzero import logger as log
 import os
@@ -55,7 +55,7 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
         "Audio - m4a": "m4a"
     }
 
-    def __init__(self, dialog, mysignal, folder):
+    def __init__(self, dialog, mysignal):
         Ui_DialogYoutubeDL.__init__(self)
         #super().__init__(self)
         self.setupUi(dialog)
@@ -68,7 +68,7 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
         self.queYoutube = Queue()
         self.listWidget.hide()
         self.frame_download.hide()
-        self.folder = folder
+        self.folder = os.getcwd()
 
         self.lineEdit.setText(self.folder)
         self.pushButtonDownload.clicked.connect(self.threading_launcher)

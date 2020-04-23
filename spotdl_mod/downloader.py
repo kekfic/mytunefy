@@ -1,12 +1,11 @@
-
 import urllib
 import os
 import time
 from logzero import logger as log
-from spotdl_mod import const, youtube_tools, convert, metadata, internals
+
+from spotdl import const, metadata, internals, convert, youtube_tools
 from resources import resources as rs
 
-SONGLIST = []
 
 class CheckExists:
     def __init__(self, music_file, meta_tags=None):
@@ -108,9 +107,6 @@ class Downloader:
         # generate file name of the song to download
         songname = self.refine_songname(self.content.title)
 
-        #Todo test
-        SONGLIST.append(songname)
-
         if const.args.dry_run:
             return
 
@@ -209,9 +205,7 @@ class ListDownloader:
         return self._download_list()
 
     def _download_list(self):
-        global SONGLIST
         downloaded_songs = []
-        SONGLIST = []
         for number, raw_song in enumerate(self.tracks, 1):
             print("")
             try:
@@ -233,7 +227,6 @@ class ListDownloader:
             log.debug("Removing downloaded song from tracks file")
             elminated_track = internals.trim_song(self.tracks_file)
 
-        self.mysonglist = SONGLIST
         return downloaded_songs
 
     def _override_file(self):

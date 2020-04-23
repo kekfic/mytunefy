@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, String, MetaData, Table, Binary
 from sqlalchemy.exc import IntegrityError, OperationalError
 
-from main_classes.my_main_functions import get_name_for_list_widget, get_song_data
+from main_classes.handle import get_name_for_list_widget, get_song_data
 from logzero import logger as log
 from resources import resources as rs
 

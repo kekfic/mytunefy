@@ -10,11 +10,12 @@ from PySide2.QtCore import QObject, Signal, SIGNAL
 from gui.gui_main import Ui_MainWindow
 import getpass
 
-from spotdl_mod import const, handle, internals
+from main_classes import handle
+from spotdl import const, internals
 import threading
 import webbrowser
 
-from .my_main_functions import main, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
+from .handle import main_func_caller, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
 from resources.database_mytunefy import database_handler
 from resources.login import db_song_conn
 from main_classes.widget_class import YoutubeDialog
@@ -184,7 +185,7 @@ class MainWin(QObject, Ui_MainWindow):
                 'pushing category to database thread'
                 rs.songPusher.put(['mylist', category_list, url])
                 "Starting the main according url parsing"
-                main()
+                main_func_caller()
                 "Resetting the parser because it is unique"
                 reset_parser_url()
             index += 1
@@ -288,6 +289,6 @@ class MainWin(QObject, Ui_MainWindow):
                 const.args.trim_silence = True
 
     def youtube_button(self):
-        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal, self.mydir)
+        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal)
         if temp.dialog.exec_():
             pass
