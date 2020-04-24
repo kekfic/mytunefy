@@ -1,5 +1,3 @@
-from hashlib import pbkdf2_hmac
-from binascii import hexlify
 
 from sqlalchemy import create_engine
 from sqlalchemy import Column, String, MetaData, Table, Binary
@@ -8,9 +6,6 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from main_classes.handle import get_name_for_list_widget, get_song_data
 from logzero import logger as log
 from resources import resources as rs
-
-from random import choice
-import string
 
 # Global Variables
 
@@ -62,41 +57,13 @@ def get_user_database(dbtype='sqlite', dbname='users_mtf'):
 #
 #     elif id == 'end':
 #         pass
-def song_id_creator(variable):
-    """This function create the hash-like mac to check with db and for song id purpose"""
-    variable_b = bytes(variable, 'utf8')
-    dk = pbkdf2_hmac('sha256', variable_b, b'salt', 100000)
-    key_bin = hexlify(dk)
-
-    return key_bin
 
 
-def refine_string(string_to_refine):
-    mystring = string_to_refine.lower()
-    mystring = mystring.replace('-', ' ')
-    mystring = mystring.replace('_', ' ')
-    mystring = mystring.replace(':', ' ')
-    mystring = mystring.replace('  ', ' ')
-    mystring = mystring.replace('.', ' ')
-    mystring = mystring.replace('á', 'a')
-    mystring = mystring.replace('à', 'a')
-    mystring = mystring.replace('í', 'i')
-    mystring = mystring.replace('ó', 'o')
-    # mystring = mystring.replace('ñ', 'n')
-    mystring = mystring.replace('ú', 'u')
-    mystring = mystring.replace('é', 'e')
-    mystring = mystring.replace('è', 'e')
-
-    return mystring
-
-
-def randomword(length):
-    letters = string.ascii_lowercase
-    return ''.join(choice(letters) for i in range(length))
-
-
-""" Function of the downloader """
-
+"""
+ -----------------------------------------------
+            Function of the downloader 
+ ----------------------------------------------
+ """
 
 def database_handler(mydatabase):
     # Todo: Complete all the cases - Update, delete, rename. As well the function is quite large
@@ -115,73 +82,46 @@ def database_handler(mydatabase):
 
     song_path_list = []
     song_url_list = []
-    category = ''
     url = ''
-    existing_cat = False
     running = True
     "Pre-variable before infinite loop"
     while running:
         'get a list of value from queue of other thread'
-
         dbparser = rs.songPusher.get()
 
-        if dbparser[0] == 'mylist':
-            'parsing, my list is the put inside start download function'
-            first_junk, category, url = dbparser
-
-        elif dbparser[0] == 'song':
+        if dbparser[0] == 'song':
             'parsing inside downloader'
-            first_junk, songpath, url_song = dbparser
-            song_path_list.append(songpath)
-            song_url_list.append(url_song)
+            first_junk, song_path, song_url = dbparser
 
-        elif dbparser[0] == 'end':
-            'the string end indicate that download cicle has ended'
-            if category == 'track':
-                try:
-                    song_name, artist, album = get_song_data(song_url_list[0])
-                    mydatabase.insert_song_table(songname=song_name, playlist=None, album=album,
-                                                 artist=artist, folder=song_path_list[0],
-                                                 url=song_url_list[0])
-                    log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
-                except Exception as e:
-                    print("Unable to retrieve song data.", e)
+            song_name, playlist, album, artist = get_song_data(song_url)
+            mydatabase.insert_song_table(songname=song_name, playlist=playlist, album=album,
+                                         artist=artist, folder=song_path,
+                                         url=song_url)
+            log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
 
-            else:
-                junk, name = get_name_for_list_widget(category, url)
-                'obtain name of the category'
-                res_db_category = mydatabase.query_user_table(category, name)
-                if not res_db_category:
-                    'check if playlist/album is already present, if not add it in db'
-                    mydatabase.insert_user_table(category, url, name)
+        elif dbparser[0] == 'list':
+            #todo solve this parser
+            'parsing, my list is the put inside start download function'
+            junk, folder, song_url_list, category, name_file = dbparser
+            raw_name = name_file.split('.')[0]
+            name = rs.refine_string(raw_name)
+            "check if this category exist in db"
+            res_db_category = mydatabase.query_user_table(category, name)
+            if not res_db_category:
+                ' add it in db'
+                mydatabase.insert_user_table(category, url, name)
 
-                for i in range(len(song_url_list)):
-                    "I ll do a trick assign playlist and check if it is equal to the other names"
-                    try:
-                        song_name, artist, album = get_song_data(song_url_list[i])
-                        name = refine_string(name)
-                        artist = refine_string(artist)
-                        album = refine_string(album)
+            for i in range(len(song_url_list)):
+                "I ll do a trick assign playlist and check if it is equal to the other names"
 
+                song_name, playlist, album, artist = get_song_data(song_url_list[i], name)
+                mydatabase.insert_song_table(songname=song_name,
+                                             playlist=playlist, album=album,
+                                             artist=artist, folder=folder,
+                                             url=song_url_list[i])
 
-                        if name == album or name == artist:
-                            " the empty string is creating problem, generating a random index,"
-                            playlist = ''
-                        else:
-                            playlist = name
-                        mydatabase.insert_song_table(songname=song_name,
-                                                     playlist=playlist, album=album,
-                                                     artist=artist, folder=song_path_list[i],
-                                                     url=song_url_list[i])
-
-                        if playlist:
-                            log.info('Inserting in song db. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album,
-                                                                                            artist))
-                        else:
-                            log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
-
-                    except Exception as e:
-                        print("Unable to retrieve song data.", e)
+                log.info('Inserting song in database. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album,
+                                                                                    artist))
 
             'clear list variable'
             song_path_list.clear()
@@ -357,7 +297,7 @@ class MySongDatabase:
         query = "INSERT INTO {TABL_USR} (id, song, playlist, album, artist, folder, url) " \
                 "VALUES (?, ?, ?, ? , ?, ?, ? );".format(TABL_USR=self.SONGTot)
 
-        myid = song_id_creator(songname + artist)
+        myid = rs.song_id_creator(songname + artist)
         variable = (myid, songname, playlist, album, artist, folder, url)
         self.execute_query(query, variable)
 

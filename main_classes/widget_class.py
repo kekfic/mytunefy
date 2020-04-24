@@ -1,10 +1,9 @@
 from queue import Queue
 
-from PySide2.QtCore import SIGNAL, Signal, QObject
+from PySide2.QtCore import  QObject
 from PySide2.QtGui import QPainter, QPixmap
-from PySide2.QtWidgets import QSplashScreen, QWidget, QLabel, QPushButton, QHBoxLayout, QFileDialog
+from PySide2.QtWidgets import QSplashScreen, QFileDialog
 from gui.youtube_downloader import Ui_DialogYoutubeDL
-import getpass
 import threading
 from main_classes.handle import mySimpleYoutubeDownloader
 from random import randint

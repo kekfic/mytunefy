@@ -89,7 +89,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.StartPushButton.clicked.connect(self.threading_launcher)
 
         'setting the args global variable with default values'
-        const.args = handle.get_arguments()
+        const.args = rs.get_arguments()
         const.args.folder = internals.get_music_dir()
 
         'Plain text, setting folder text and configuring signal'
@@ -100,21 +100,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.listWidgetUrls.hide()
         self.listWidgetUrls.itemDoubleClicked.connect(self.remove_item)
 
-        'Menu signals'
-        self.connect(self.action_m4a, SIGNAL("triggered()"), self.out_format)
-        self.connect(self.action_flac, SIGNAL("triggered()"), self.out_format)
-        self.connect(self.action_mp3, SIGNAL("triggered()"), self.out_format)
-
-        self.connect(self.actionffmpeg, SIGNAL("triggered()"), self.encoding_sel)
-        self.connect(self.actionavconv, SIGNAL("triggered()"), self.encoding_sel)
-
-        self.connect(self.actionDry_Run, SIGNAL("triggered()"), self.advanced_option)
-        self.connect(self.actionMusic_Video_Only, SIGNAL("triggered()"), self.advanced_option)
-        self.connect(self.actionNo_Spaces, SIGNAL("triggered()"), self.advanced_option)
-        self.connect(self.actionTrim_Silence, SIGNAL("triggered()"), self.advanced_option)
-
-        self.connect(self.actionReadMe, SIGNAL("triggered()"), self.open_readme)
-        self.connect(self.actionhelp, SIGNAL("triggered()"), self.open_manual)
+        self.menu_connection()
 
         self.pushButtonYoutube.clicked.connect(self.youtube_button)
 
@@ -130,6 +116,8 @@ class MainWin(QObject, Ui_MainWindow):
         if self.database:
             self.db_thread = threading.Thread(target=database_handler, daemon=True, args=(self.database,))
             self.db_thread.start()
+
+
 
     def folder_opener(self):
         """Selecting the download folder"""
@@ -172,22 +160,18 @@ class MainWin(QObject, Ui_MainWindow):
                 # if thread has ended the download, update the progressbar
                 self.threadSignal.emit(index)
                 rs.songPusher.put(['end'])
-
                 index = 0
             count, all_categories, all_urls = self.quecreat.get()
             for i in range(count):
-                if i > 0:
-                    rs.songPusher.put(['end'])
                 url = all_urls[i]
                 category_list = all_categories[i]
                 "assign the current const.args.group"
                 assign_parser_url(category_list, url)
-                'pushing category to database thread'
-                rs.songPusher.put(['mylist', category_list, url])
                 "Starting the main according url parsing"
                 main_func_caller()
                 "Resetting the parser because it is unique"
                 reset_parser_url()
+
             index += 1
 
     def text_from_plain_text(self, url=None):
@@ -224,6 +208,33 @@ class MainWin(QObject, Ui_MainWindow):
             percentage = round(1 / totalitem, 2) * 100
 
         self.progressBar.setValue(percentage)
+
+
+    def youtube_button(self):
+        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal)
+        if temp.dialog.exec_():
+            pass
+    """ 
+        ------------------------------------------------------------
+                                Menu
+        ------------------------------------------------------------
+    """
+    def menu_connection(self):
+        'Menu signals'
+        self.connect(self.action_m4a, SIGNAL("triggered()"), self.out_format)
+        self.connect(self.action_flac, SIGNAL("triggered()"), self.out_format)
+        self.connect(self.action_mp3, SIGNAL("triggered()"), self.out_format)
+
+        self.connect(self.actionffmpeg, SIGNAL("triggered()"), self.encoding_sel)
+        self.connect(self.actionavconv, SIGNAL("triggered()"), self.encoding_sel)
+
+        self.connect(self.actionDry_Run, SIGNAL("triggered()"), self.advanced_option)
+        self.connect(self.actionMusic_Video_Only, SIGNAL("triggered()"), self.advanced_option)
+        self.connect(self.actionNo_Spaces, SIGNAL("triggered()"), self.advanced_option)
+        self.connect(self.actionTrim_Silence, SIGNAL("triggered()"), self.advanced_option)
+
+        self.connect(self.actionReadMe, SIGNAL("triggered()"), self.open_readme)
+        self.connect(self.actionhelp, SIGNAL("triggered()"), self.open_manual)
 
     def open_readme(self):
         pass
@@ -287,8 +298,3 @@ class MainWin(QObject, Ui_MainWindow):
             else:
                 self.actionTrim_Silence.isChecked(True)
                 const.args.trim_silence = True
-
-    def youtube_button(self):
-        temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal)
-        if temp.dialog.exec_():
-            pass
