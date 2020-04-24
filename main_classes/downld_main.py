@@ -14,8 +14,8 @@ from main_classes import handle
 from spotdl import const, internals
 import threading
 import webbrowser
-
-from .handle import main_func_caller, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
+from .import handle as hdl
+#from .handle import main_func_caller, url_parser, assign_parser_url, reset_parser_url, get_name_for_list_widget
 from resources.database_mytunefy import database_handler
 from resources.login import db_song_conn
 from main_classes.widget_class import YoutubeDialog
@@ -86,7 +86,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.progressBar.hide()
         'Two signal for folder and download button launch'
         self.pushButtonFolder.clicked.connect(self.folder_opener)
-        self.StartPushButton.clicked.connect(self.threading_launcher)
+        self.StartPushButton.clicked.connect(self.download_button_handler)
 
         'setting the args global variable with default values'
         const.args = rs.get_arguments()
@@ -106,7 +106,7 @@ class MainWin(QObject, Ui_MainWindow):
 
         'Setting thread tha take care of the download, this allow a responsive main window'
         # self.mythread = MyClassThread(target=self.startDownload)
-        self.mythread = threading.Thread(target=self.startDownload, daemon=True)
+        self.mythread = threading.Thread(target=self.threaded_downloader, daemon=True)
         self.mythread.start()
 
         self.threadSignal.connect(self.progress_Bar_complete)
@@ -138,7 +138,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.all_urls.pop(item)
         self.all_categories.pop(item)
 
-    def threading_launcher(self):
+    def download_button_handler(self):
         """When start button is pushed, check for correcteness nad start a thread for downloading"""
         # Todo: trying implement a better way of threading.
         self.count = self.listWidgetUrls.count()
@@ -151,7 +151,7 @@ class MainWin(QObject, Ui_MainWindow):
             self.all_urls.clear()
             self.progressBarHandler(self.count)
 
-    def startDownload(self):
+    def threaded_downloader(self):
         "Start the function for downloading"
         index = 0
         while threading.main_thread().is_alive():
@@ -166,18 +166,18 @@ class MainWin(QObject, Ui_MainWindow):
                 url = all_urls[i]
                 category_list = all_categories[i]
                 "assign the current const.args.group"
-                assign_parser_url(category_list, url)
+                hdl.assign_parser_url(category_list, url)
                 "Starting the main according url parsing"
-                main_func_caller()
+                hdl.main_func_caller()
                 "Resetting the parser because it is unique"
-                reset_parser_url()
+                hdl.reset_parser_url()
 
             index += 1
 
     def text_from_plain_text(self, url=None):
         if url is None:
             url = self.plainTextEditUrl.toPlainText()
-            category_list = url_parser(url)
+            category_list = hdl.url_parser(url)
             if category_list:
                 self.listWidgetHandler(url, category_list)
                 self.plainTextEditUrl.clear()
@@ -185,7 +185,7 @@ class MainWin(QObject, Ui_MainWindow):
     def listWidgetHandler(self, url, category_list):
         "Get from urls and adding to list widget"
 
-        text_playlist, junk = get_name_for_list_widget(category_list, url)
+        text_playlist, junk = hdl.get_name_for_list_widget(category_list, url)
         self.listWidgetUrls.addItem(text_playlist)
         self.all_categories.append(category_list)
         self.all_urls.append(url)
@@ -209,6 +209,11 @@ class MainWin(QObject, Ui_MainWindow):
 
         self.progressBar.setValue(percentage)
 
+    """
+        ------------------------------------------------------------
+                    Youtube Dialog - blocking
+        ------------------------------------------------------------
+    """
 
     def youtube_button(self):
         temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal)

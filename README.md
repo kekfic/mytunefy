@@ -10,6 +10,13 @@ Contributions are very much appreciated!
 
 * Python 3.3+ and Windows.
 
+## Dependency
+
+youtube-dl\
+spotdl ---> modified for handling youtube cache download error\
+pafy\
+sqlalchemy\
+PySide2\
 
 ## Code conventions
 
