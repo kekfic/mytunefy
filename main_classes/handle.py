@@ -80,9 +80,10 @@ def list_downloader(operation, text_file, tracks_url):
                 skip_file=const.args.skip,
                 write_successful_file=const.args.write_successful,
             )
-            list_dl.download_list()
-            # todo: resolve all album
-            rs.songPusher.put(['artist', const.args.folder, [], operation, text_file])
+            downloaded = list_dl.download_list()
+            # Todo: downloade are different from tracks_url, ideally I should have both.
+            "it is tricky here because downloaded are not the tracks_url"
+            rs.songPusher.put(['artist', const.args.folder, downloaded, operation, text_file])
             rs.songPusher.put(['list', const.args.folder, tracks_url, operation, text_file])
 
             try:

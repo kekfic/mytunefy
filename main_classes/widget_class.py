@@ -3,6 +3,8 @@ from queue import Queue
 from PySide2.QtCore import  QObject
 from PySide2.QtGui import QPainter, QPixmap
 from PySide2.QtWidgets import QSplashScreen, QFileDialog
+from spotdl import internals
+
 from gui.youtube_downloader import Ui_DialogYoutubeDL
 import threading
 from main_classes.handle import mySimpleYoutubeDownloader
@@ -67,7 +69,7 @@ class YoutubeDialog(QObject, Ui_DialogYoutubeDL):
         self.queYoutube = Queue()
         self.listWidget.hide()
         self.frame_download.hide()
-        self.folder = os.getcwd()
+        self.folder = internals.get_music_dir()
 
         self.lineEdit.setText(self.folder)
         self.pushButtonDownload.clicked.connect(self.threading_launcher)

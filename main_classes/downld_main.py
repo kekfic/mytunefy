@@ -24,12 +24,12 @@ from resources import resources as rs
 """
 My list of variables:
 
-        self.quecreat = Queue() - queue object for pushing data between threads
-        self.all_urls = [] - list of the urls to be downloaded
-        self.all_categories = [] - list of the type of argument (Playlist, Album, Song)
-        self.url_text = False - Probably unused
-        self.count = 0 - TO be modified
-        self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\' - default folder to be opened for user 
+    self.quecreat = Queue() - queue object for pushing data between threads
+    self.all_urls = [] - list of the urls to be downloaded
+    self.all_categories:  list of the type of argument (Playlist, Album, Song)
+ 
+    self.count: TO be modified
+    self.mydir: default folder to be opened for user 
 
 """
 
@@ -78,9 +78,8 @@ class MainWin(QObject, Ui_MainWindow):
         self.quecreat = Queue()
         self.all_urls = []
         self.all_categories = []
-        self.url_text = False
+
         self.count = 0
-        self.mydir = 'C:\\Users\\' + getpass.getuser() + '\\Music\\'
 
         'hiding progress bar'
         self.progressBar.hide()
@@ -121,10 +120,10 @@ class MainWin(QObject, Ui_MainWindow):
 
     def folder_opener(self):
         """Selecting the download folder"""
-        self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', self.mydir,
+        self.mydir = QFileDialog.getExistingDirectory(self.mainwindow, 'Select a directory', const.args.folder,
                                                       QFileDialog.ShowDirsOnly)
         if not self.mydir:
-            self.mydir = rs.MY_WORKING_DIR
+            self.mydir = internals.get_music_dir()
         self.plainTextDirectory.setPlainText(self.mydir)
         self.mydir.replace("/", "\\")
         const.args.folder = self.mydir

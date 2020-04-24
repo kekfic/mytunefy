@@ -13,7 +13,14 @@ Contributions are very much appreciated!
 ## Dependency
 
 youtube-dl\
-spotdl ---> modified for handling youtube cache download error\
+spotdl ---> modified for handling youtube cache download error:\
+at youtube_tools, line 193\
+
+`
+with youtube_dl.YoutubeDL(pafy.g.def_ydl_opts) as ydl:
+    ydl.cache.remove()
+                 `\
+                 
 pafy\
 sqlalchemy\
 PySide2\
