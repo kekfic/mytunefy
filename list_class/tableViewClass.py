@@ -30,6 +30,10 @@ class MyTableModel(QAbstractTableModel):
                 return self.mylist[index.row()][1]
             elif column == 3:
                 return self.mylist[index.row()][0]
+            elif column == 4:
+                return self.mylist[index.row()][2]
+            elif column == 5:
+                return self.mylist[index.row()][3]
             elif column == 0:
                 return QtWidgets.QPushButton
 
@@ -107,13 +111,25 @@ class MyTableView(QTableView):
 
         table_model = MyTableModel(parent, tracks, header)
         self.setModel(table_model)
-        self.resizeColumnsToContents()
-        self.setColumnWidth(2, 280)
-        self.setColumnWidth(3, 230)
+        #self.resizeColumnsToContents()
+        self.setColumnWidth(0, 10)
+        self.setColumnWidth(1, 10)
+        self.setColumnWidth(2, 390)
+        self.setColumnWidth(3, 280)
+        self.setColumnWidth(4, 240)
+        self.setColumnWidth(5, 250)
+        self.resizeRowsToContents()
         self.setSelectionBehavior(QTableView.SelectRows)
         self.setShowGrid(False)
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
+        self.horizontalScrollBar().hide()
+
+    def set_new_model(self, parent, tracks, header):
+        header = ['', '', 'Title', 'Artist', 'Album', 'Folder', '', '']
+        table_model = MyTableModel(parent, tracks, header)
+        self.setModel(table_model)
+        self.resizeRowsToContents()
 
     def mouseMoveEvent(self, event):
 

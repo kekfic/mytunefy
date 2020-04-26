@@ -7,7 +7,7 @@ import requests
 from os import listdir, makedirs, path
 import base64
 from resources.resources import myEndtime, MY_WORKING_DIR
-from resources.database_mytunefy import MySongDatabase, get_user_database
+from resources.db_handler import MySongDatabase, get_user_database
 
 
 

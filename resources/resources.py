@@ -18,10 +18,10 @@ _LOG_LEVELS_STR = ["INFO", "WARNING", "ERROR", "DEBUG"]
 songPusher = Queue()
 MY_WORKING_DIR = None
 
-myEndtime = datetime.datetime(2020, 7, 20, 0, 0).timestamp()
+myEndtime = datetime.datetime(2020, 12, 31, 0, 0).timestamp()
 
 
-# Todo ---> changed overwrite default to skip
+# Todo: this was from the spotfl handle, I could implement in a different way
 default_conf = {
     "spotify-downloader": {
         "no-remove-original": False,

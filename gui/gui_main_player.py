@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main_player.ui',
 # licensing of '.\gui_main_player.ui' applies.
 #
-# Created: Mon Apr 20 20:34:58 2020
+# Created: Sat Apr 25 13:35:08 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -171,7 +171,7 @@ class Ui_PlayerMainWindow(object):
 "    border-radius: 20px;\n"
 "    color: rgba(200, 200, 200, 200);\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/setting1.png);\n"
+"    image: url(:/mytunefy/resources/icons/setting1.png);\n"
 "   \n"
 "}\n"
 "\n"
@@ -186,7 +186,7 @@ class Ui_PlayerMainWindow(object):
 "\n"
 "QPushButton:hover{\n"
 "    color: white;\n"
-"    image: url(:/spotify/resources/icons/setting-white.png);\n"
+"    image: url(:/mytunefy/resources/icons/setting-white.png);\n"
 "    }\n"
 "")
         self.pushButton.setText("")
@@ -332,7 +332,7 @@ class Ui_PlayerMainWindow(object):
 "                                      stop: 0 #000000, stop: 1 #535353);\n"
 "    color: rgba(200, 200, 200, 200);\n"
 "    image-position:left;\n"
-"    image: url(:/spotify/resources/icons/stream_grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/stream_grey.png);\n"
 "    min-width: 200px;\n"
 "}\n"
 "\n"
@@ -348,7 +348,7 @@ class Ui_PlayerMainWindow(object):
 "QPushButton:hover{\n"
 "    color: white;\n"
 "    image-position: left;\n"
-"    image: url(:/spotify/resources/icons/stream_light-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/stream_light-grey.png);\n"
 "    }\n"
 "")
         self.StreamModeButton.setDefault(False)
@@ -368,7 +368,7 @@ class Ui_PlayerMainWindow(object):
 "    color: rgba(200, 200, 200, 200);\n"
 "    image-position:left;\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/down_music_dark_grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/down_music_dark_grey.png);\n"
 "    min-width: 200px;\n"
 "}\n"
 "\n"
@@ -385,7 +385,7 @@ class Ui_PlayerMainWindow(object):
 "    color: white;\n"
 "    image-position: left;\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/down_music_light_grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/down_music_light_grey.png);\n"
 "    }\n"
 "")
         self.pushButton_2.setObjectName("pushButton_2")
@@ -529,21 +529,24 @@ class Ui_PlayerMainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.listWidget.sizePolicy().hasHeightForWidth())
         self.listWidget.setSizePolicy(sizePolicy)
-        self.listWidget.setMinimumSize(QtCore.QSize(200, 320))
+        self.listWidget.setMinimumSize(QtCore.QSize(245, 320))
         self.listWidget.setMaximumSize(QtCore.QSize(350, 16777215))
+        font = QtGui.QFont()
+        font.setFamily("Gill Sans MT")
+        font.setPointSize(10)
+        font.setWeight(75)
+        font.setBold(True)
+        self.listWidget.setFont(font)
         self.listWidget.setAutoFillBackground(False)
         self.listWidget.setStyleSheet("QListView {\n"
-"background-color: rgb(15, 15, 15);\n"
+"    background-color: rgb(15, 15, 15);\n"
+"    color:  rgb(210, 210, 210);\n"
+"    font-weight: bold;\n"
+"\n"
 "}")
         self.listWidget.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.listWidget.setObjectName("listWidget")
         self.horizontalLayout_library.addWidget(self.listWidget)
-        self.verticalScrollBar = QtWidgets.QScrollBar(self.centralwidget)
-        self.verticalScrollBar.setMinimumSize(QtCore.QSize(20, 300))
-        self.verticalScrollBar.setStyleSheet("")
-        self.verticalScrollBar.setOrientation(QtCore.Qt.Vertical)
-        self.verticalScrollBar.setObjectName("verticalScrollBar")
-        self.horizontalLayout_library.addWidget(self.verticalScrollBar)
         self.verticalLayout_Library.addLayout(self.horizontalLayout_library)
         self.newPlaylistButton = QtWidgets.QPushButton(self.centralwidget)
         self.newPlaylistButton.setEnabled(False)
@@ -1139,14 +1142,14 @@ class Ui_PlayerMainWindow(object):
         self.shuffleButton.setMaximumSize(QtCore.QSize(27, 27))
         self.shuffleButton.setStyleSheet("QPushButton {\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/shuffle-darker-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/shuffle-darker-grey.png);\n"
 "  \n"
 "}\n"
 "\n"
 "QPushButton:pressed {\n"
 "    \n"
 "    \n"
-"    image: url(:/spotify/resources/icons/shuffle-azul-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/shuffle-azul-grey.png);\n"
 "}\n"
 "\n"
 "QPushButton:flat {\n"
@@ -1155,11 +1158,11 @@ class Ui_PlayerMainWindow(object):
 "\n"
 "QPushButton:hover{\n"
 "        \n"
-"    image: url(:/spotify/resources/icons/shuffle-light-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/shuffle-light-grey.png);\n"
 "}\n"
 "QPushButton:checked{\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/shuffle-green-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/shuffle-green-grey.png);\n"
 "}")
         self.shuffleButton.setText("")
         self.shuffleButton.setIconSize(QtCore.QSize(25, 18))
@@ -1176,11 +1179,11 @@ class Ui_PlayerMainWindow(object):
         self.backTrackButton.setAutoFillBackground(False)
         self.backTrackButton.setStyleSheet("QPushButton {\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/backtrack4.png);\n"
+"    image: url(:/mytunefy/resources/icons/backtrack4.png);\n"
 "}\n"
 "QPushButton:pressed {\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/backtrack4.png);\n"
+"    image: url(:/mytunefy/resources/icons/backtrack4.png);\n"
 "}\n"
 "\n"
 "QPushButton:flat {\n"
@@ -1189,7 +1192,7 @@ class Ui_PlayerMainWindow(object):
 "\n"
 "QPushButton:hover{\n"
 "        \n"
-"    image: url(:/spotify/resources/icons/backtrack5.png);\n"
+"    image: url(:/mytunefy/resources/icons/backtrack5.png);\n"
 "}\n"
 "")
         self.backTrackButton.setText("")
@@ -1216,12 +1219,12 @@ class Ui_PlayerMainWindow(object):
 "    background-color: rgb(40, 40, 40);\n"
 "    \n"
 "    \n"
-"    image: url(:/spotify/resources/icons/play_grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/play_grey.png);\n"
 "\n"
 "}\n"
 "\n"
 "QPushButton:pressed {\n"
-"    image: url(:/spotify/resources/icons/pause-butt.png);\n"
+"    image: url(:/mytunefy/resources/icons/pause-butt.png);\n"
 "}\n"
 "\n"
 "QPushButton:flat {\n"
@@ -1229,11 +1232,11 @@ class Ui_PlayerMainWindow(object):
 "}\n"
 "QPushButton:hover{\n"
 "        \n"
-"    image: url(:/spotify/resources/icons/play_white.png);\n"
+"    image: url(:/mytunefy/resources/icons/play_white.png);\n"
 "}\n"
 "\n"
 "QPushButton:checked{\n"
-"image: url(:/spotify/resources/icons/pause2.png);\n"
+"image: url(:/mytunefy/resources/icons/pause2.png);\n"
 "}")
         self.PlayPauseButton.setText("")
         self.PlayPauseButton.setIconSize(QtCore.QSize(35, 35))
@@ -1250,11 +1253,11 @@ class Ui_PlayerMainWindow(object):
         self.nextTrackButton.setMaximumSize(QtCore.QSize(35, 35))
         self.nextTrackButton.setStyleSheet("QPushButton {\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/next-darker-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/next-darker-grey.png);\n"
 "}\n"
 "QPushButton:pressed {\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/next-light-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/next-light-grey.png);\n"
 "}\n"
 "\n"
 "QPushButton:flat {\n"
@@ -1263,7 +1266,7 @@ class Ui_PlayerMainWindow(object):
 "\n"
 "QPushButton:hover{\n"
 "        \n"
-"    image: url(:/spotify/resources/icons/next-light-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/next-light-grey.png);\n"
 "}\n"
 "")
         self.nextTrackButton.setText("")
@@ -1280,7 +1283,7 @@ class Ui_PlayerMainWindow(object):
         self.repeatButton.setAutoFillBackground(False)
         self.repeatButton.setStyleSheet("QPushButton {\n"
 "    \n"
-"    image: url(:/spotify/resources/icons/repeat-track-dark-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/repeat-track-dark-grey.png);\n"
 "  \n"
 "}\n"
 "\n"
@@ -1295,10 +1298,10 @@ class Ui_PlayerMainWindow(object):
 "\n"
 "QPushButton:hover{\n"
 "        \n"
-"    image: url(:/spotify/resources/icons/repeat-track-light-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/repeat-track-light-grey.png);\n"
 "}\n"
 "QPushButton:checked{\n"
-"image: url(:/spotify/resources/icons/repeat-track-green.png);\n"
+"image: url(:/mytunefy/resources/icons/repeat-track-green.png);\n"
 "}")
         self.repeatButton.setText("")
         self.repeatButton.setIconSize(QtCore.QSize(25, 20))

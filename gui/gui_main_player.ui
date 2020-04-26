@@ -431,6 +431,9 @@ QPushButton:default {
              <height>40</height>
             </size>
            </property>
+           <property name="statusTip">
+            <string>Impostazioni</string>
+           </property>
            <property name="styleSheet">
             <string notr="true">QPushButton {
   
@@ -866,6 +869,9 @@ QPushButton:hover{
               <bold>false</bold>
              </font>
             </property>
+            <property name="statusTip">
+             <string>Play streaming quando la canzone non si trova nella cartella locale</string>
+            </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
   
@@ -920,6 +926,9 @@ QPushButton:hover{
              <font>
               <pointsize>9</pointsize>
              </font>
+            </property>
+            <property name="statusTip">
+             <string>Scarica Musica</string>
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {
@@ -1212,6 +1221,11 @@ QListView::item:hover{
               <string>Brani</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Cartella</string>
+             </property>
+            </item>
            </widget>
           </item>
          </layout>
@@ -1308,7 +1322,7 @@ QListView::item:hover{
             </property>
             <property name="minimumSize">
              <size>
-              <width>200</width>
+              <width>245</width>
               <height>320</height>
              </size>
             </property>
@@ -1318,32 +1332,27 @@ QListView::item:hover{
               <height>16777215</height>
              </size>
             </property>
+            <property name="font">
+             <font>
+              <family>Gill Sans MT</family>
+              <pointsize>10</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="autoFillBackground">
              <bool>false</bool>
             </property>
             <property name="styleSheet">
              <string notr="true">QListView {
-background-color: rgb(15, 15, 15);
+	background-color: rgb(15, 15, 15);
+	color:  rgb(210, 210, 210);
+	font-weight: bold;
+
 }</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QScrollBar" name="verticalScrollBar">
-            <property name="minimumSize">
-             <size>
-              <width>20</width>
-              <height>300</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
             </property>
            </widget>
           </item>
