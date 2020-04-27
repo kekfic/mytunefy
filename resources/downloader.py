@@ -83,8 +83,8 @@ def list_downloader(operation, text_file, tracks_url):
             downloaded = list_dl.download_list()
             # Todo: downloade are different from tracks_url, ideally I should have both.
             "it is tricky here because downloaded are not the tracks_url"
-            rs.songPusher.put(['artist', const.args.folder, downloaded, operation, text_file])
-            rs.songPusher.put(['list', const.args.folder, tracks_url, operation, text_file])
+            rs.songPusher.put(['list', const.args.folder, downloaded, operation, text_file, const.args])
+           # rs.songPusher.put(['list', const.args.folder, tracks_url, operation, text_file, const.args])
 
             try:
                 os.remove(text_file)
@@ -143,31 +143,29 @@ def get_tracks_album(url):
 
 
 
-def get_song_data(url, name=''):
+def get_song_data(url):
     """Retrieve song, artist, album, playlist name from url"""
 
     song_name = ''
-    artist = ''
-    album = ''
-    playlist = ''
+    album_name = ''
+    album_url = ''
+    artist_name =''
+    artist_url=''
+    duration = None
 
     try:
         track = spotify_tools.generate_metadata(url)
         song_name = track['name']
         artist_name = track['album']['artists'][0]['name']
         album_name = track['album']['name']
-
-        artist = rs.refine_string(artist_name)
-        album = rs.refine_string(album_name)
-        refined_name = rs.refine_string(name)
-
-        if refined_name != album and refined_name != artist:
-            playlist = name
+        album_url = track['album']['external_urls']['spotify']
+        artist_url = track['album']['artists'][0]['external_urls']['spotify']
+        duration = track['duration']
 
     except Exception as e:
         print('Error as :', e)
 
-    return [song_name, playlist, album_name, artist_name]
+    return [song_name, album_name, artist_name, album_url, artist_url, duration]
 
 
 def get_name_for_list_widget(category_list, url):
@@ -175,7 +173,7 @@ def get_name_for_list_widget(category_list, url):
     try:
         if category_list == 'playlist':
             playlist = spotify_tools.fetch_playlist(url)
-            name = u"{0}".format(slugify(playlist["name"], ok="-_()[]{}"))
+            name = playlist['name']
             text_file = "Playlist:  " + name
         elif category_list == 'track':
             track = spotify_tools.generate_metadata(url)

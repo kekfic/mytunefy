@@ -97,7 +97,7 @@ def set_current_directory():
 
     return MY_WORKING_DIR
 
-def song_id_creator(variable):
+def key_id_creator(variable):
     """This function create the hash-like mac to check with db and for song id purpose"""
     variable_b = bytes(variable, 'utf8')
     dk = pbkdf2_hmac('sha256', variable_b, b'salt', 100000)

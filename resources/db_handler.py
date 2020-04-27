@@ -1,6 +1,6 @@
-
-from sqlalchemy import create_engine
-from sqlalchemy import Column, String, MetaData, Table, Binary
+from spotdl.spotify_tools import fetch_playlist
+from sqlalchemy import create_engine, ForeignKey
+from sqlalchemy import Column, String, MetaData, Table, Binary, Integer, Float
 from sqlalchemy.exc import IntegrityError, OperationalError
 
 from resources.downloader import get_song_data
@@ -65,6 +65,7 @@ def get_user_database(dbtype='sqlite', dbname='users_mtf'):
  ----------------------------------------------
  """
 
+
 def db_music_inserter(mydatabase):
     # Todo: Complete all the cases - Update, delete, rename. As well the function is quite large
     """This function is within a thread and write/read from music user database
@@ -93,38 +94,45 @@ def db_music_inserter(mydatabase):
             'parsing inside downloader'
             first_junk, song_path, song_url = dbparser
 
-            song_name, playlist, album, artist = get_song_data(song_url)
-            mydatabase.insert_song_table(songname=song_name, playlist=playlist, album=album,
-                                         artist=artist, folder=song_path,
-                                         url=song_url)
-            log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album, artist))
+            song_name, album_name, artist_name, \
+            album_url, artist_url, duration = get_song_data(song_url)
+            artist_id = mydatabase.check_artist(artist_name, artist_url)
+            album_id = mydatabase.check_album(album_name, artist_id, album_url)
+            # todo put choice for format
+            filename = artist_name + ' - ' + song_name + '.mp3'
+            mydatabase.insert_song(song_name, album_id, artist_id, filename, song_path, song_url, duration)
+            log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album_name, artist_name))
 
-        elif dbparser[0] == 'list':
-            #todo solve this parser
+        elif dbparser[0] == 'list' or 'artist':
+            # todo solve this parser
             'parsing, my list is the put inside start download function'
-            junk, folder, song_url_list, category, name_file = dbparser
-            raw_name = name_file.split('.')[0]
-            name = rs.refine_string(raw_name)
-            "check if this category exist in db"
-            res_db_category = mydatabase.query_user_table(category, name)
-            if not res_db_category:
-                ' add it in db'
-                mydatabase.insert_user_table(category, url, raw_name)
-                playlist_checker = False
+            junk, folder, song_url_list, category, name_file, args = dbparser
+
+            playlist_url = args.playlist
+            if playlist_url:
+                playlist = fetch_playlist(playlist_url)['name']
             else:
-                playlist_checker = True
+                playlist = ''
+
+            print(playlist)
 
             for i in range(len(song_url_list)):
                 "I ll do a trick assign playlist and check if it is equal to the other names"
 
-                song_name, playlist, album, artist = get_song_data(song_url_list[i], raw_name)
-                mydatabase.insert_song_table(songname=song_name,
-                                             playlist=playlist, album=album,
-                                             artist=artist, folder=folder,
-                                             url=song_url_list[i])
+                song_name, album_name, artist_name, \
+                album_url, artist_url, duration = get_song_data(song_url_list[i])
 
-                log.info('Inserting song in database. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album,
-                                                                                    artist))
+                # todo put choice for format
+                filename = artist_name + ' - ' + song_name + args.output_ext
+
+                mydatabase.insert_song_list_into_db(song_name, playlist, album_name, artist_name,
+                                                    filename, folder, [album_url,
+                                                                       artist_url,
+                                                                       song_url_list[i],
+                                                                       playlist_url], duration)
+
+                log.info('Inserting song in database. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album_name,
+                                                                                      artist_name))
 
             'clear list variable'
             song_path_list.clear()
@@ -138,43 +146,50 @@ def player_get_all_user_data():
     file_name = rs.MY_WORKING_DIR + '\\db_data\\song_db'
     if file_name:
         mydbObj = MySongDatabase(dbtype='sqlite', dbname='song_db')
-        result = mydbObj.query_user_general()
-        return result
+        artist_row = mydbObj.query_select_all('artists')
+        album_row = mydbObj.query_select_all('albums')
+        playlist_row = mydbObj.query_select_all('playlists')
+        return [artist_row, album_row, playlist_row]
     else:
         return None
 
-def parsing_user_db_data(fetchall_result):
-    playlist = []
-    album = []
-    artist = []
-    plname = []
-    alname = []
-    arname = []
-    if fetchall_result:
-        for row in fetchall_result:
-            if row[0]:
-                playlist.append([row[0], row[3]])
-                plname.append(row[0])
-            elif row[1]:
-                album.append([row[1], row[3]])
-                alname.append(row[1])
-            elif row[2]:
-                artist.append([row[2], row[3]])
-                arname.append(row[2])
 
-    return playlist, album, artist, plname, alname, arname
+def parsing_user_db_data(fetchall_result):
+    if fetchall_result:
+        artist, album, playlist = fetchall_result
+    else:
+        return
+
+    pldata = []
+    aldata = []
+    ardata = []
+
+    for row in artist:
+        ardata.append(row[1])
+    for row in album:
+        aldata.append(row[2])
+    for row in playlist:
+        pldata.append(row[1])
+
+    return playlist, album, artist, pldata, aldata, ardata
+
 
 def player_get_all_songs():
     pass
 
 
-
-def get_songs_from_db(category='', option=''):
+def get_songs_from_db(id_type, option):
     """ Player function for geting all playlist and songs in db """
     file_name = rs.MY_WORKING_DIR + '\\db_data\\song_db'
+    if not option:
+        return None
     if file_name:
         mydbObj = MySongDatabase(dbtype='sqlite', dbname='song_db')
-        result = mydbObj.query_song_table(category, option)
+        if option == 'Brani':
+            result = mydbObj.query_select_all('songs')
+        else:
+            result = mydbObj.query_all_song_for_specified_type(id_type=id_type, option=option)
+
         return result
     else:
         return None
@@ -188,10 +203,22 @@ class MySongDatabase:
 
     """
     "Class global variables"
-    # Song database
     SQLITE = 'sqlite'
-    USER = 'db_user'
+    USER = 'db_user'  # deprecated
+
     SONGTot = 'total_song'
+    ALBUMS = 'db_albums'
+    ARTISTS = 'db_artists'
+    PLAYLISTS = 'db_playlist'
+    PLAYLIST_SONG = 'db_play_song'
+
+    dictTable = {
+        'songs': 'total_song',
+        'albums': 'db_albums',
+        'artists': 'db_artists',
+        'playlists': 'db_playlist',
+        'play_song': 'db_play_song'
+    }
 
     MY_SONG_DB = rs.MY_WORKING_DIR + '\\db_data\\song_db'
 
@@ -215,27 +242,66 @@ class MySongDatabase:
         """ Database creatiion
         """
         metadata = MetaData()
-        users = Table(self.USER, metadata,
-                      Column('playlist', String),
-                      Column('album', String),
-                      Column('artist', String),
-                      Column('url', String)
-                      )
-        songdata = Table(self.SONGTot, metadata,
-                         Column('id', Binary, primary_key=True),
-                         Column('song', String),
-                         Column('playlist', String),
-                         Column('album', String),
-                         Column('artist', String),
-                         Column('folder', String),
-                         Column('url', String)
-                         )
+
+        artists = Table(self.ARTISTS, metadata,
+                        Column('id', Integer, primary_key=True),
+                        Column('name', String, unique=True),
+                        Column('url', String)
+                        )
+        albumsT = Table(self.ALBUMS, metadata,
+                        Column('id', Integer, primary_key=True),
+                        Column('artist_id', Integer, ForeignKey('db_artists.id')),
+                        Column('name', String),
+                        Column('key', Binary, unique=True),
+                        Column('url', String)
+                        )
+        playlistT = Table(self.PLAYLISTS, metadata,
+                          Column('id', Integer, primary_key=True),
+                          Column('name', String, unique=True),
+                          Column('url', String)
+                          )
+        songdataT = Table(self.SONGTot, metadata,
+                          Column('id', Integer, primary_key=True),
+                          Column('key', Binary, unique=True),
+                          Column('name', String),
+                          Column('album_id', Integer, ForeignKey('db_albums.id')),
+                          Column('artist_id', Integer, ForeignKey('db_artists.id')),
+                          Column('filename', String),
+                          Column('folder', String),
+                          Column('url', String),
+                          Column('duration', Float)
+                          )
+
+        playlistsongT = Table(self.PLAYLIST_SONG, metadata,
+                              Column('id', Integer, primary_key=True),
+                              Column('playlist_id', Integer, ForeignKey('db_playlist.id')),
+                              Column('song_id', Integer, ForeignKey('total_song.id')),
+                              Column('key', Binary, unique=True)
+                              )
         try:
             metadata.create_all(self.db_engine)
-            # print("Tables created")
+            print("Tables created")
         except Exception as e:
             print("Error occurred during Table creation!")
             print(e)
+
+    "-----------------------------------------------------------------------------------"
+    def execute_insert_query(self, query='', variable=()):
+        if query == '': return
+        # print(query)
+        with self.db_engine.connect() as connection:
+            try:
+                result = connection.execute(query, variable)
+                res = result.lastrowid
+
+            except IntegrityError as e:
+                log.warning('IntegrityError as: {}'.format(e))
+            except OperationalError as e:
+                log.error("Operational error as: {}".format(e))
+            except Exception as e:
+                print(e)
+                res = False
+        return res
 
     def execute_select_query(self, query='', variable=()):
         if query == '': return
@@ -248,6 +314,7 @@ class MySongDatabase:
                 print(e)
                 res = False
         return res
+
 
     def execute_general_query(self, query=''):
         "Usualli called when want to retreive all data from query"
@@ -264,7 +331,7 @@ class MySongDatabase:
         return result
 
     def execute_query(self, query='', variable=()):
-        "Called from insert into table"
+        "Called when no feedback is required"
         if query == '': return
         with self.db_engine.connect() as connection:
             try:
@@ -272,72 +339,137 @@ class MySongDatabase:
             except IntegrityError as e:
                 log.warning("Song: {} of Artist: {} is already present."
                             .format(variable[1], variable[4]))
-                self.playlist_checker()
             except OperationalError as e:
                 log.error("Operational error as: {}".format(e))
             except Exception as e:
                 print('General Error as:', e)
 
+    "------------------------------------------------------------------------------"
 
-    def query_user_general(self):
-        query = "SELECT * FROM {TBL_USR};".format(TBL_USR=self.USER)
-        res = self.execute_general_query(query)
-        return res
-
-    def query_user_table(self, category, name):
-        # Sample Query
-        # query = "SELECT * FROM {TAB_USER} WHERE {CAT} = ? ;".format(TAB_USER=USERS, CAT=category)
-        query = "SELECT * FROM {TBL_USR} WHERE {CAT}=?;".format(TBL_USR=self.USER, CAT=category)
-        variable = (name,)
-        res = self.execute_select_query(query, name)
-        return res
-
-    def query_song_table(self, category, option):
-        if not option:
-            "select all song"
-            query = "SELECT * FROM {TBL_USR};".format(TBL_USR=self.SONGTot)
-            res = self.execute_general_query(query)
+    def check_playlist(self, playlist, url):
+        query = 'SELECT id FROM {TABL} where name = ? '.format(TABL=self.PLAYLISTS)
+        playlist_id = self.execute_select_query(query, (playlist,))
+        if not playlist_id:
+            queryPl = "INSERT INTO {TABL} (name, url) VALUES (?, ?);".format(TABL=self.PLAYLISTS)
+            playlist_id = self.execute_insert_query(queryPl, (playlist, url))
         else:
-            query = "SELECT * FROM {TBL_USR} WHERE {CAT} = ?;".format(TBL_USR=self.SONGTot, CAT=category)
-            variable = (option,)
-            res = self.execute_select_query(query, variable)
+            playlist_id = playlist_id[0][0]
 
-        return res
+        return playlist_id
 
-    def select_specified_song(self, category, songname = '', playlist = '', artist=''):
-        myid = rs.song_id_creator(songname + artist)
+    def check_artist(self, artist, url):
+        query = 'SELECT id FROM {TABL} where name = ? '.format(TABL=self.ARTISTS)
+        artist_id = self.execute_select_query(query, (artist,))
+        if not artist_id:
+            queryAr = "INSERT INTO {TABL} (name, url) " \
+                      "VALUES (?, ? )".format(TABL=self.ARTISTS)
+            artist_id = self.execute_insert_query(queryAr, (artist, url))
+        else:
+            artist_id = artist_id[0][0]
+
+        return artist_id
+
+    def check_album(self, album, artist_id, url):
+        myid = rs.key_id_creator(album + str(artist_id))
+        query = 'SELECT id FROM {TABL} where key = ? '.format(TABL=self.ALBUMS)
+        album_id = self.execute_select_query(query, (myid,))
+        if not album_id:
+            query = "INSERT INTO {TABL} (artist_id, name, key, url) " \
+                    "VALUES (?, ?, ?, ? )".format(TABL=self.ALBUMS)
+            album_id = self.execute_insert_query(query, (artist_id, album, myid, url))
+        else:
+            album_id = album_id[0][0]
+        return album_id
+
+    def insert_song(self, name, album_id, artist_id, folder, filename, url, duration):
+
+        key = rs.key_id_creator(name + str(artist_id))
+        query = 'SELECT id FROM {TABL} where key = ? '.format(TABL=self.SONGTot)
+        song_id = self.execute_select_query(query, (key))
+        if not song_id:
+            query = "INSERT INTO {TABL} (key, name, album_id, artist_id, filename, folder, url, duration) " \
+                    "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)".format(TABL=self.SONGTot)
+            song_id = self.execute_insert_query(query, (key, name, album_id, artist_id,
+                                                        filename, folder, url, duration))
+        else:
+            song_id = song_id[0][0]
+
+        return song_id
+
+    def insert_song_list_into_db(self, songname='', playlist='', album='',
+                                 artist='', filename='', folder='', url=[], duration=''):
+
+        url_art, url_alb, url_song, url_playlist = url
+        # Todo --- complex
+        if artist == '': return
+        if album == '': return
+        "insert should return row index of inserted data, what if artist is already there?"
+
+        artist_id = self.check_artist(artist, url_art)
+        album_id = self.check_album(album, artist_id, url_alb)
+
+        myid = rs.key_id_creator(songname + str(artist_id))
+        query = "SELECT id FROM {TABL} where key = ? ".format(TABL=self.SONGTot)
+        song_id = self.execute_select_query(query, variable=myid)
+
+        if not song_id:
+            song_id = self.insert_song(songname, album_id, artist_id, folder, filename, url_song, duration)
+
+        if playlist:
+            playlist_id = self.check_playlist(playlist, url_playlist)
+            query = "INSERT INTO {TABL} (playlist_id, song_id, key)" \
+                    " VALUES (?, ?, ?)".format(TABL=self.PLAYLIST_SONG)
+            mykey = rs.key_id_creator(songname + playlist)
+            self.execute_insert_query(query, (playlist_id, song_id, mykey))
+
+    "---------------------------------------------------------------------------------------------------"
+
+
+    def query_select_specified_rows(self, table, index_table, identifier):
+        "select a specified item from table"
+        query = "SELECT * FROM {TABL} where {OPT} = ? ".format(TABL=self.dictTable[table], OPT=index_table)
+        rows = self.execute_select_query(query, (identifier))
+
+        return rows
+
+    def query_select_all(self, table):
+        "Select all data from a table"
+        query = "SELECT * FROM {TABL}".format(TABL=self.dictTable[table])
+        all_data = self.execute_general_query(query)
+        return all_data
+
+    def query_all_song_for_specified_type(self, id_type=None, option=''):
+
+        if not option or id_type == None:
+            return
+
+        if option == 'Artista':
+            rows_songs = self.query_select_specified_rows('songs', 'artist_id', id_type)
+        elif option == 'Album':
+            rows_songs = self.query_select_specified_rows('songs', 'album_id', id_type)
+
+        elif option == 'Playlist':
+            rows = self.query_select_specified_rows('play_song', 'playlist_id', id_type)
+            rows_songs = []
+            for item in rows:
+                song_id = item[2]
+                res = self.query_select_specified_rows('songs', 'id', song_id)
+                rows_songs.append(res[0])
+        else:
+            rows_songs=[]
+
+        return rows_songs
+
+    def select_specified_song(self, category, songname='', playlist='', artist=''):
+        myid = rs.key_id_creator(songname + artist)
         variable = (myid,)
         pass
 
 
-    def insert_user_table(self, category, url, name):
-        playlist = ''
-        album = ''
-        artist = ''
-        query = "INSERT INTO {TABL_USR}(playlist, album, artist, url) " \
-                "VALUES (?, ?, ? , ? );".format(TABL_USR=self.USER)
-        if category == 'playlist':
-            playlist = name
-        elif category == 'album':
-            album = name
-        elif category == 'artist':
-            artist = name
-        variable = (playlist, album, artist, url)
-        self.execute_query(query, variable)
-
-    def insert_song_table(self, songname='', playlist='', album='', artist='', folder='', url=''):
-        query = "INSERT INTO {TABL_USR} (id, song, playlist, album, artist, folder, url) " \
-                "VALUES (?, ?, ?, ? , ?, ?, ? );".format(TABL_USR=self.SONGTot)
-
-        myid = rs.song_id_creator(songname + artist)
-        variable = (myid, songname, playlist, album, artist, folder, url)
-        self.playCheckVariable = (myid, playlist)
-        self.execute_query(query, variable)
 
     def delete_song_table(self, songname):
         query = "DELETE FROM {TABL_USR} (song) VALUES (?)".format(TABL_USR=self.SONGTot)
         variable = (songname,)
-
 
     def print_all_data(self, table='', query=''):
         query = query if query != '' else "SELECT * FROM '{}';".format(table)
@@ -352,15 +484,6 @@ class MySongDatabase:
                     print(row)  # print(row[0], row[1], row[2])
                 result.close()
         print("\n")
-
-    def playlist_checker(self):
-        """
-         This function is called when we try to add to db a song that is altready present.
-         This can happen in two cases: recharging data from an already used item,
-         album or artist or playlist. Or from a song that is in two playlist.You should check this one
-
-        """
-        pass
 
 
 

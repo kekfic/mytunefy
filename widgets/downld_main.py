@@ -16,7 +16,7 @@ import webbrowser
 from resources.db_handler import db_music_inserter
 from resources.login import db_song_conn
 from widgets.widget_class import YoutubeDialog
-from resources import resources as rs, downloader as hdl
+from resources import resources as rs, downloader as dwldr
 
 
 """
@@ -156,25 +156,25 @@ class MainWin(QObject, Ui_MainWindow):
                 # todo : you must change this criteria
                 # if thread has ended the download, update the progressbar
                 self.threadSignal.emit(index)
-                rs.songPusher.put(['end'])
+                #rs.songPusher.put(['end'])
                 index = 0
             count, all_categories, all_urls = self.quecreat.get()
             for i in range(count):
                 url = all_urls[i]
                 category_list = all_categories[i]
                 "assign the current const.args.group"
-                hdl.assign_parser_url(category_list, url)
+                dwldr.assign_parser_url(category_list, url)
                 "Starting the main according url parsing"
-                hdl.main_func_caller()
+                dwldr.main_func_caller()
                 "Resetting the parser because it is unique"
-                hdl.reset_parser_url()
+                dwldr.reset_parser_url()
 
             index += 1
 
     def text_from_plain_text(self, url=None):
         if url is None:
             url = self.plainTextEditUrl.toPlainText()
-            category_list = hdl.url_parser(url)
+            category_list = dwldr.url_parser(url)
             if category_list:
                 self.listWidgetHandler(url, category_list)
                 self.plainTextEditUrl.clear()
@@ -182,7 +182,7 @@ class MainWin(QObject, Ui_MainWindow):
     def listWidgetHandler(self, url, category_list):
         "Get from urls and adding to list widget"
 
-        text_playlist, junk = hdl.get_name_for_list_widget(category_list, url)
+        text_playlist, junk = dwldr.get_name_for_list_widget(category_list, url)
         self.listWidgetUrls.addItem(text_playlist)
         self.all_categories.append(category_list)
         self.all_urls.append(url)
