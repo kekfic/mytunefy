@@ -1,52 +1,118 @@
-
-
 import platform
 import os
 import sys
+from random import random
+
 import vlc
+from PySide2 import QtCore
 
 
 class SongPlayer:
 
-    def __init__(self):
+    def __init__(self, slider, audio_slider):
         # Create a basic vlc instance
-        self.instance = vlc.Instance()
-        self.media = None
+
+        self.instance = vlc.Instance('--novideo')
+        self._slider = slider
+        self._audio_slider = audio_slider
+
+        self._media = None
+
         # Create an empty vlc media player
-        self.mediaplayer = self.instance.media_player_new()
+        self._mediaplayer = self.instance.media_list_player_new()
+        self._mediaplayer.event_manager().event_attach(vlc.EventType.MediaPlayerEndReached, self._song_finished)
         self.is_paused = False
-      #  self.timer = QtCore.QTimer(self)
-        #self.timer.setInterval(100)
-       # self.timer.timeout.connect(self.update_ui)
+        self.timer = QtCore.QTimer()
+
+
+    def set_list(self, filenames, shuffle=False, repeat=False):
+        self.duration = None
+        self._song_number = len(filenames)
+        self._shuffle= shuffle
+        self._repeat = repeat
+
+        self.filenames = filenames
+        current_filenames = filenames.copy()
+
+        if self._shuffle:
+            random.shuffle(current_filenames)
+        self._open_file(current_filenames)
+
+    def _plays_song(self, current_filenames):
+
+        self.open_file(current_filenames)
+        self._mediaplayer.play()
+        self.is_paused = False
+
+    def pause_track(self):
+        self._mediaplayer.pause()
+        self.timer.stop()
+
+    def play_track(self):
+        self._mediaplayer.play()
+        self.timer.start()
+
+    def next_track(self):
+        if self._mediaplayer.is_playing():
+            self._mediaplayer.next()
+
+    def back_track(self):
+        if self._mediaplayer.is_playing():
+            self._mediaplayer.back()
+
+    def set_track(self, index):
+        self._mediaplayer.play_item_at_index(index)
 
     def play_pause(self):
         """Toggle play/pause status
         """
-        if self.mediaplayer.is_playing():
-            self.mediaplayer.pause()
-            #self.playbutton.setText("Play")
+        if self._mediaplayer.is_playing():
+            self._mediaplayer.pause()
+
             self.is_paused = True
-            #self.timer.stop()
+            self.timer.stop()
         else:
-            if self.mediaplayer.play() == -1:
-             #   self.open_file()
+            if self._mediaplayer.play() == -1:
+                #todo:----
+                print('the player is closed')
+                pass
+
                 return
 
-            self.mediaplayer.play()
-            #self.playbutton.setText("Pause")
-            #self.timer.start()
+            self._mediaplayer.play()
             self.is_paused = False
 
     def stop(self):
         """Stop player
         """
-        self.mediaplayer.stop()
-       # self.playbutton.setText("Play")
+        self._mediaplayer.stop()
+
+    def _song_finished(self):
+        pass
+
+    def is_playing(self):
+        return self._mediaplayer.is_playing()
+
+    def shuffle_mode(self):
+        if self._shuffle_is_active == True:
+            self._shuffle_is_active = False
+        else:
+            self._shuffle_is_active = True
+
 
     def set_volume(self, volume):
         """Set the volume
         """
-        self.mediaplayer.audio_set_volume(volume)
+        self._mediaplayer.audio_set_volume(volume)
+
+    def _open_file(self, filenames):
+
+        self._media = self.instance.media_list_new(filenames)
+        # Set the the file list
+        self._mediaplayer.set_media_list(self._media)
+        # Parse the metadata of the file
+#        self._media.parse()
+
 
     def set_position(self):
         """Set the movie position according to the position slider.
@@ -58,22 +124,18 @@ class SongPlayer:
 
         # Set the media position to where the slider was dragged
         self.timer.stop()
-        pos = self.positionslider.value()
+        pos = self._slider.value()
         self.mediaplayer.set_position(pos / 1000.0)
         self.timer.start()
 
     def time_change(self, time):
-        if not self.horizontalSlider.isSliderDown():
-            self.horizontalSlider.setValue(time)
+        if not self._slider.isSliderDown():
+            self._slider.setValue(time)
 
     def total_time_change(self, time):
-        self.horizontalSlider.setRange(0, time)
+        self._slider.setRange(0, time)
 
-    def slider_value_change(self):
-        value = self.horizontalSlider.value()
-        print
-        value
-        self.media_obj.seek(value)
+
 
     def update_ui(self):
         """Updates the user interface"""
@@ -82,7 +144,7 @@ class SongPlayer:
         # Note that the setValue function only takes values of type int,
         # so we must first convert the corresponding media position.
         media_pos = int(self.mediaplayer.get_position() * 1000)
-        self.positionslider.setValue(media_pos)
+        self._slider.setValue(media_pos)
 
         # No need to call this function if nothing is played
         if not self.mediaplayer.is_playing():

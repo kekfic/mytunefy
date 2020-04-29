@@ -9,10 +9,12 @@ from PySide2.QtCore import QObject, Signal, QAbstractTableModel, SIGNAL, Qt, QMo
 from PySide2.QtWidgets import QMainWindow, QMessageBox, QApplication, \
     QHeaderView, QTableView
 from spotdl import internals
+from spotdl.internals import sanitize_title
 
 from list_class.mydelegate import ButtonDelegate
 from gui.gui_main_player import Ui_PlayerMainWindow
 from list_class.tableViewClass import MyTableView
+from resources.player import SongPlayer
 from resources.db_handler import player_get_all_songs, player_get_all_user_data, parsing_user_db_data, get_songs_from_db
 from resources.downloader import get_tracks_playlist, get_tracks_album
 
@@ -50,15 +52,11 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         QObject.__init__(self)
 
-        pygame.init()
-        # Initiating Pygame Mixer
-        pygame.mixer.init(48000, -16, 2, 1024)
+        self.my_song_player = SongPlayer(self.horizontalSlider, self.verticalSlider)
 
         if os.path.isfile('db_data/song_db'):
             self.category = self.comboBoxCategory.currentText()
             self.category_list = self.get_list_in_db()
-            # songs_in_db = self.get_songs(self.category, self.category_list)
-            # self.category_list.append(songs_in_db)
             self.fill_list_view(self.category, self.category_list)
 
         self.comboBoxCategory.currentIndexChanged.connect(self.combo_box_handler)
@@ -71,6 +69,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         self.listWidget.itemDoubleClicked.connect(self.play_item)
         self.listWidget.itemClicked.connect(self.select_list)
+        self.listWidget.itemDoubleClicked.connect(self.play_list)
         "Unsetting for now the delegate, I am not ready for using it"
         # self.tableView.setItemDelegate(ButtonDelegate(self))
         # self.connect(self.tableView.mouseDoubleClickEvent, SIGNAL("triggered()"), self.double_click_table)
@@ -79,7 +78,10 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         # self.PlayPauseButton.con
         #self.connect(self.PlayPauseButton, SIGNAL('triggered()'), self.playsong)
         self.PlayPauseButton.clicked.connect(self.playsong)
+        self.pushButtonPlaylist.clicked.connect(self.play_list)
 
+    # def close_Event(self):
+    #     self.my_song_player.stop()
 
     def printer(self):
         print('hello')
@@ -88,6 +90,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         pass
 
     def select_list(self):
+        self.list_selected = True
         item = self.listWidget.currentItem()
         self.songtracks = self.get_songs(item.text(), self.category, self.category_list)
 
@@ -95,13 +98,19 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         self.playlist_label.setText(item.text())
         self.tableView.set_new_model(self.frame_songs, self.songtracks, header)
 
+    def play_list(self):
+        self.select_list()
+        self.play = True
+        self.my_song_player.set_list(self.filenames)
+        self.my_song_player.play_track()
+
     def double_click_table(self, index):
         row = index.row()
         print(row)
         print(self.songtracks[row])
         self.song_name_label.setText(self.songtracks[row][1])
         self.song_artist_label.setText(self.songtracks[row][0])
-        self.playsong(self.playlist[row], self.folder_song[row])
+       # self.playsong(self.playlist[row], self.folder_song[row])
 
     def parsing_song(self, song):
         # todo call with another name and move from here
@@ -114,36 +123,15 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         return [listsong[0], artist, 'Album', 'Current Folder']
 
     # ---------------------------------------------------------------------------------
-    def playsong(self, songname, folder_song):
-        if self.status_play == True:
-            self.stopsong()
-        # Displaying Selected Song title
-        # self.track.set(self.playlist.get(ACTIVE))
-        # # Displaying Status
-        # self.status.set("-Playing")
-        # Loading Selected Song
-        pygame.mixer.music.load(songname+'/'+folder_song)
-        # Playing Selected Song
-        pygame.mixer.music.play()
-        self.status_play = True
+    def playsong(self):
+        if self.my_song_player.is_playing():
+            self.my_song_player.pause_track()
+            #self.PlayPauseButton.setStyleSheet('image: url(:/mytunefy/resources/icons/play_grey.png);')
+        else:
+            self.my_song_player.play_pause()
+            #self.PlayPauseButton.setStyleSheet('image: url(:/mytunefy/resources/icons/pause-butt.png)')
 
-    def stopsong(self):
-        # Displaying Status
-        self.status.set("-Stopped")
-        # Stopped Song
-        pygame.mixer.music.stop()
 
-    def pausesong(self):
-        # Displaying Status
-        self.status.set("-Paused")
-        # Paused Song
-        pygame.mixer.music.pause()
-
-    def unpausesong(self):
-        # Displaying Status
-        self.status.set("-Playing")
-        # Playing back Song
-        pygame.mixer.music.unpause()
 
     # -----------------------------------------------------------------------
 
@@ -212,13 +200,18 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
             tracks = []
             self.playlist = []
             self.folder_song = []
+            self.filenames = []
+            self.duration = []
             for item in raw_songs:
                 artist_id = item[4]
                 album_id = item[3]
                 tracks.append([category_list[2][artist_id - 1], item[2],
                                category_list[1][album_id - 1], item[5], item[6]])
-                self.playlist.append(item[5])
-                self.folder_song.append(item[6])
+                title_raw, ext = item[5].split('.mp3')
+                ext = '.mp3'
+                title = sanitize_title(title_raw)
+                self.filenames.append(item[6] + '/' + title+ext)
+                self.duration.append(item[8])
 
         return tracks
 

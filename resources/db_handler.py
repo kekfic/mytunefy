@@ -2,7 +2,7 @@ from spotdl.spotify_tools import fetch_playlist
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, String, MetaData, Table, Binary, Integer, Float
 from sqlalchemy.exc import IntegrityError, OperationalError
-
+from spotdl.internals import sanitize_title
 from resources.downloader import get_song_data
 from logzero import logger as log
 from resources import resources as rs
@@ -99,7 +99,7 @@ def db_music_inserter(mydatabase):
             artist_id = mydatabase.check_artist(artist_name, artist_url)
             album_id = mydatabase.check_album(album_name, artist_id, album_url)
             # todo put choice for format
-            filename = artist_name + ' - ' + song_name + '.mp3'
+            filename = sanitize_title(artist_name + ' - ' + song_name) + '.mp3'
             mydatabase.insert_song(song_name, album_id, artist_id, filename, song_path, song_url, duration)
             log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album_name, artist_name))
 
@@ -123,7 +123,7 @@ def db_music_inserter(mydatabase):
                 album_url, artist_url, duration = get_song_data(song_url_list[i])
 
                 # todo put choice for format
-                filename = artist_name + ' - ' + song_name + args.output_ext
+                filename = sanitize_title(artist_name + ' - ' + song_name) + args.output_ext
 
                 mydatabase.insert_song_list_into_db(song_name, playlist, album_name, artist_name,
                                                     filename, folder, [album_url,
