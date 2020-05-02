@@ -76,7 +76,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.quecreat = Queue()
         self.all_urls = []
         self.all_categories = []
-
+        self.name_categories = []
         self.count = 0
 
         'hiding progress bar'
@@ -106,7 +106,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.mythread = threading.Thread(target=self.threaded_downloader, daemon=True)
         self.mythread.start()
 
-        self.threadSignal.connect(self.progress_Bar_complete)
+        self.threadSignal.connect(self.thread_down_status_completed)
 
         'database connection configuration, in progress'
         self.database = db_song_conn()
@@ -131,7 +131,7 @@ class MainWin(QObject, Ui_MainWindow):
 
         item = self.listWidgetUrls.currentRow()
         self.listWidgetUrls.takeItem(item)
-
+        self.name_categories.pop(item)
         self.all_urls.pop(item)
         self.all_categories.pop(item)
 
@@ -140,12 +140,15 @@ class MainWin(QObject, Ui_MainWindow):
         # Todo: trying implement a better way of threading.
         self.count = self.listWidgetUrls.count()
         if self.count:
-            self.quecreat.put([self.count, self.all_categories.copy(), self.all_urls.copy()])
+            self.quecreat.put([self.count, self.all_categories.copy(), self.all_urls.copy(), self.name_categories])
             "Clearing the QWidgetList and other objects"
             self.listWidgetUrls.clear()
             self.listWidgetUrls.hide()
             self.all_categories.clear()
             self.all_urls.clear()
+            self.name_categories.clear()
+            "Dehabilitate folder button"
+            self.pushButtonFolder.setEnabled(False)
             self.progressBarHandler(self.count)
 
     def threaded_downloader(self):
@@ -153,15 +156,17 @@ class MainWin(QObject, Ui_MainWindow):
         index = 0
         while threading.main_thread().is_alive():
             if index:
-                # todo : you must change this criteria
+                # todo : change this criteria
                 # if thread has ended the download, update the progressbar
                 self.threadSignal.emit(index)
                 #rs.songPusher.put(['end'])
                 index = 0
-            count, all_categories, all_urls = self.quecreat.get()
+            count, all_categories, all_urls, name_categories = self.quecreat.get()
             for i in range(count):
                 url = all_urls[i]
                 category_list = all_categories[i]
+                "push"
+                rs.songPusher.put('category', category_list[i], all_urls[i], name_categories[i])
                 "assign the current const.args.group"
                 dwldr.assign_parser_url(category_list, url)
                 "Starting the main according url parsing"
@@ -184,6 +189,7 @@ class MainWin(QObject, Ui_MainWindow):
 
         text_playlist, junk = dwldr.get_name_for_list_widget(category_list, url)
         self.listWidgetUrls.addItem(text_playlist)
+        self.name_categories.append(text_playlist)
         self.all_categories.append(category_list)
         self.all_urls.append(url)
         number_item = self.listWidgetUrls.count()
@@ -193,7 +199,8 @@ class MainWin(QObject, Ui_MainWindow):
         if not self.progressBar.isHidden():
             self.progressBar.hide()
 
-    def progress_Bar_complete(self, index):
+    def thread_down_status_completed(self, index):
+        self.pushButtonFolder.setEnabled(True)
         self.progressBar.setValue(100)
 
     def progressBarHandler(self, totalitem):

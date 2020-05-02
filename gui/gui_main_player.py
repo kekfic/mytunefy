@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main_player.ui',
 # licensing of '.\gui_main_player.ui' applies.
 #
-# Created: Sat Apr 25 13:35:08 2020
+# Created: Thu Apr 30 18:44:23 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -497,6 +497,7 @@ class Ui_PlayerMainWindow(object):
         self.comboBoxCategory.addItem("")
         self.comboBoxCategory.addItem("")
         self.comboBoxCategory.addItem("")
+        self.comboBoxCategory.addItem("")
         self.verticalLayout_7.addWidget(self.comboBoxCategory)
         self.verticalLayout_Library.addLayout(self.verticalLayout_7)
         spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
@@ -780,7 +781,7 @@ class Ui_PlayerMainWindow(object):
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_3.addWidget(self.label_3)
         self.title_label = QtWidgets.QLabel(self.frame_songs)
-        self.title_label.setMinimumSize(QtCore.QSize(330, 0))
+        self.title_label.setMinimumSize(QtCore.QSize(360, 0))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(231, 231, 231))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -1181,7 +1182,7 @@ class Ui_PlayerMainWindow(object):
 "    \n"
 "    image: url(:/mytunefy/resources/icons/backtrack4.png);\n"
 "}\n"
-"QPushButton:pressed {\n"
+"QPushButton:pressed:hover {\n"
 "    \n"
 "    image: url(:/mytunefy/resources/icons/backtrack4.png);\n"
 "}\n"
@@ -1237,7 +1238,13 @@ class Ui_PlayerMainWindow(object):
 "\n"
 "QPushButton:checked{\n"
 "image: url(:/mytunefy/resources/icons/pause2.png);\n"
-"}")
+"\n"
+"}\n"
+"\n"
+"QPushButton:hover:checked{\n"
+"image: url(:/mytunefy/resources/icons/pause-light-grey.png);\n"
+"} \n"
+"")
         self.PlayPauseButton.setText("")
         self.PlayPauseButton.setIconSize(QtCore.QSize(35, 35))
         self.PlayPauseButton.setCheckable(True)
@@ -1255,9 +1262,9 @@ class Ui_PlayerMainWindow(object):
 "    \n"
 "    image: url(:/mytunefy/resources/icons/next-darker-grey.png);\n"
 "}\n"
-"QPushButton:pressed {\n"
+"QPushButton:pressed:hover {\n"
 "    \n"
-"    image: url(:/mytunefy/resources/icons/next-light-grey.png);\n"
+"    image: url(:/mytunefy/resources/icons/next-darker-grey.png);\n"
 "}\n"
 "\n"
 "QPushButton:flat {\n"
@@ -1317,22 +1324,64 @@ class Ui_PlayerMainWindow(object):
 "    min-height: 30px;\n"
 "    max-height: 30px;\n"
 "}\n"
-"QSlider::groove:horizontal { \n"
-"    background: black;\n"
-"    border: 0px solid #424242; \n"
-"    height: 10px; \n"
-"    border-radius: 4px;\n"
+"QSlider::groove:horizontal {\n"
+"border: 1px solid #bbb;\n"
+"background: white;\n"
+"height: 8px;\n"
+"border-radius: 4px;\n"
 "}\n"
 "\n"
-"QSlider::handle:horizontal { \n"
-"    background-color: green; \n"
-"    border: 2px solid green; \n"
-"    width: 16px; \n"
-"    height: 18px; \n"
-"    line-height: 20px; \n"
-"    margin-top: -5px; \n"
-"    margin-bottom: -5px; \n"
-"    border-radius: 10px; \n"
+"QSlider::sub-page:horizontal {\n"
+"background: qlineargradient(x1: 0, y1: 0,    x2: 0, y2: 1,\n"
+"    stop: 0 #66e, stop: 1 #bbf);\n"
+"background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1,\n"
+"    stop: 0 #bbf, stop: 1 #55f);\n"
+"border: 1px solid #777;\n"
+"height: 10px;\n"
+"border-radius: 4px;\n"
+"}\n"
+"\n"
+"QSlider::add-page:horizontal {\n"
+"background: #fff;\n"
+"border: 1px solid #777;\n"
+"height: 10px;\n"
+"border-radius: 4px;\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal {\n"
+"background: qlineargradient(x1:0, y1:0, x2:1, y2:1,\n"
+"    stop:0 #eee, stop:1 #ccc);\n"
+"border: 1px solid #777;\n"
+"width: 13px;\n"
+"margin-top: -2px;\n"
+"margin-bottom: -2px;\n"
+"border-radius: 4px;\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal:hover {\n"
+"background: qlineargradient(x1:0, y1:0, x2:1, y2:1,\n"
+"    stop:0 #fff, stop:1 #ddd);\n"
+"border: 1px solid #777;\n"
+"width: 13px;\n"
+"margin-top: -2px;\n"
+"margin-bottom: -2px;\n"
+"border-radius: 4px;\n"
+"}\n"
+"\n"
+"QSlider::sub-page:horizontal:disabled {\n"
+"background: #bbb;\n"
+"border-color: #999;\n"
+"}\n"
+"\n"
+"QSlider::add-page:horizontal:disabled {\n"
+"background: #eee;\n"
+"border-color: #999;\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal:disabled {\n"
+"background: #eee;\n"
+"border: 1px solid #aaa;\n"
+"border-radius: 4px;\n"
 "}")
         self.horizontalSlider.setSliderPosition(0)
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
@@ -1366,25 +1415,39 @@ class Ui_PlayerMainWindow(object):
 "    min-height: 90px;\n"
 "    max-height: 90px;\n"
 "}\n"
+"QSlider::handle:vertiical {\n"
+"background: qlineargradient(x1:0, y1:0, x2:1, y2:1,\n"
+"    stop:0 #eee, stop:1 #ccc);\n"
+"border: 1px solid #777;\n"
+"width: 13px;\n"
+"margin-top: -2px;\n"
+"margin-bottom: -2px;\n"
+"border-radius: 4px;\n"
+"}\n"
 "\n"
 "QSlider::groove:vertical { \n"
 "    background: black;\n"
 "    border: 2px solid #424242; \n"
 "    height: 70px; \n"
-"    width: 12px;\n"
+"    width: 6px;\n"
 "    border-radius: 2px;\n"
 "}\n"
 "\n"
-"QSlider::handle:vertical { \n"
-"    background-color: green; \n"
-"    border: 1px solid green; \n"
-"    width: 12px; \n"
-"    height: 10px; \n"
-"    line-height: 20px; \n"
-"    margin-top: -10px; \n"
-"    margin-bottom: +0px; \n"
-"    border-radius: 5px; \n"
-"}")
+"QSlider::sub-page:vertical {\n"
+"background: #fff;\n"
+"border: 1px solid #777;\n"
+"border-radius: 4px;\n"
+"}\n"
+"QSlider::add-page:vertical {\n"
+"background: qlineargradient(x1: 0, y1: 0,    x2: 0, y2: 1,\n"
+"    stop: 0 #66e, stop: 1 #bbf);\n"
+"background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1,\n"
+"    stop: 0 #bbf, stop: 1 #55f);\n"
+"border: 1px solid #777;\n"
+"height: 10px;\n"
+"border-radius: 4px;\n"
+"}\n"
+"")
         self.verticalSlider.setOrientation(QtCore.Qt.Vertical)
         self.verticalSlider.setObjectName("verticalSlider")
         self.horizontalLayout_5.addWidget(self.verticalSlider)
@@ -1400,14 +1463,18 @@ class Ui_PlayerMainWindow(object):
         PlayerMainWindow.setWindowTitle(QtWidgets.QApplication.translate("PlayerMainWindow", "MyTuneFy Player", None, -1))
         self.toolButtonGeneral.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "...", None, -1))
         self.Folder.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "PushButton", None, -1))
+        self.pushButton.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Impostazioni", None, -1))
         self.label_2.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "User Name", None, -1))
+        self.StreamModeButton.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Play streaming quando la canzone non si trova nella cartella locale", None, -1))
         self.StreamModeButton.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Streaming Music", None, -1))
+        self.pushButton_2.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Scarica Musica", None, -1))
         self.pushButton_2.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Download", None, -1))
         self.comboBoxCategory.setCurrentText(QtWidgets.QApplication.translate("PlayerMainWindow", "Playlist", None, -1))
         self.comboBoxCategory.setItemText(0, QtWidgets.QApplication.translate("PlayerMainWindow", "Playlist", None, -1))
         self.comboBoxCategory.setItemText(1, QtWidgets.QApplication.translate("PlayerMainWindow", "Album", None, -1))
         self.comboBoxCategory.setItemText(2, QtWidgets.QApplication.translate("PlayerMainWindow", "Artista", None, -1))
         self.comboBoxCategory.setItemText(3, QtWidgets.QApplication.translate("PlayerMainWindow", "Brani", None, -1))
+        self.comboBoxCategory.setItemText(4, QtWidgets.QApplication.translate("PlayerMainWindow", "Cartella", None, -1))
         self.label_library.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "La Tua Libreria", None, -1))
         self.newPlaylistButton.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Nuova playlist", None, -1))
         self.playlist_label.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Playlist name", None, -1))

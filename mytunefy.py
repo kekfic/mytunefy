@@ -50,7 +50,10 @@ if __name__ == "__main__":
         guiPlayer.main_window_player.show()
         splash.close()
         # gui.mainwindow.showMaximized()
+
         sys.exit(app.exec_())
+
+
 
     else:
         # Todo: add type of error (Db not found, no user, time licence, other).

@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="mytunefy">
+    <file>../resources/icons/pause-grey-dark.png</file>
+    <file>../resources/icons/pause-light-grey.png</file>
     <file>../resources/icons/backtrack4.png</file>
     <file>../resources/icons/backtrack5.png</file>
     <file>../resources/icons/next-darker-grey.png</file>

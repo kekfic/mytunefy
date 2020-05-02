@@ -1,5 +1,5 @@
 from spotdl.spotify_tools import fetch_album, fetch_playlist, fetch_albums_from_artist
-from spotdl import const, spotify_tools, internals, youtube_tools, downloader, convert,internals
+from spotdl import const, spotify_tools, youtube_tools, downloader, convert,internals
 # todo resolve the import
 import re
 import sys
@@ -83,7 +83,7 @@ def list_downloader(operation, text_file, tracks_url):
             downloaded = list_dl.download_list()
             # Todo: downloade are different from tracks_url, ideally I should have both.
             "it is tricky here because downloaded are not the tracks_url"
-            rs.songPusher.put(['list', const.args.folder, downloaded, operation, text_file, const.args])
+            rs.songPusher.put(['list', downloaded, operation, text_file, const.args])
            # rs.songPusher.put(['list', const.args.folder, tracks_url, operation, text_file, const.args])
 
             try:

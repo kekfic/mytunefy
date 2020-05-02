@@ -82,7 +82,7 @@ class MyTableModel(QAbstractTableModel):
         self.emit(SIGNAL("layoutAboutToBeChanged()"))
         self.mylist = sorted(self.mylist,
                              key=operator.itemgetter(col))
-        if order == Qt.DescendingOrder:
+        if order == Qt.AscendingOrder:
             self.mylist.reverse()
         self.emit(SIGNAL("layoutChanged()"))
 
@@ -124,6 +124,7 @@ class MyTableView(QTableView):
         self.verticalHeader().hide()
         self.horizontalHeader().hide()
         self.horizontalScrollBar().hide()
+        #self.sortByColumn(2)
 
     def set_new_model(self, parent, tracks, header):
         header = ['', '', 'Title', 'Artist', 'Album', 'Folder', '', '']
@@ -149,6 +150,10 @@ class MyTableView(QTableView):
         #print(QTableView.indexAt(QTableView.currentIndex(QModelIndex.row())))
         return None
 
+    def playing_behavior(self, index):
+        # todo: find method to keep selected even when plylist is changed
+        self.selectRow(index)
+       # self.setBackgroundRole(QtGui.QColor('rgb(45, 200, 0)'))
 
        # if (self.selectionBehavior() == SelectRows and oldHoverRow != mHoverRow):
        #     for (int i in range columnCount()):

@@ -1,3 +1,4 @@
+from spotdl import youtube_tools, internals
 from spotdl.spotify_tools import fetch_playlist
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, String, MetaData, Table, Binary, Integer, Float
@@ -84,29 +85,40 @@ def db_music_inserter(mydatabase):
     song_path_list = []
     song_url_list = []
     url = ''
+    playlist = ''
     running = True
     "Pre-variable before infinite loop"
     while running:
         'get a list of value from queue of other thread'
         dbparser = rs.songPusher.get()
+        if dbparser[0] == 'category':
+            if dbparser[1] == 'playlist':
+                playlist = dbparser[3]
+            else:
+                playlist = ''
+        # if dbparser[0] == 'song':
+        #     'parsing inside downloader'
+        #     first_junk, song_path, song_url = dbparser
+        #
+        #     song_name, album_name, artist_name, \
+        #     album_url, artist_url, duration = get_song_data(song_url)
+        #     artist_id = mydatabase.check_artist(artist_name, artist_url)
+        #     album_id = mydatabase.check_album(album_name, artist_id, album_url)
+        #     try:
+        #         content, meta_tags = youtube_tools.match_video_and_metadata(song_url_list[i])
+        #         refined_name = refine_songname(content.title, meta_tags)
+        #         filename = refined_name + args.output_ext
+        #     except Exception as e:
+        #         print(e)
+        #         filename = sanitize_title(artist_name + ' - ' + song_name) + args.output_ext
+        #     filename = song_path + '/' + filename
+        #     mydatabase.insert_song(song_name, album_id, artist_id, filename, song_url, duration)
+        #     log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album_name, artist_name))
 
-        if dbparser[0] == 'song':
-            'parsing inside downloader'
-            first_junk, song_path, song_url = dbparser
-
-            song_name, album_name, artist_name, \
-            album_url, artist_url, duration = get_song_data(song_url)
-            artist_id = mydatabase.check_artist(artist_name, artist_url)
-            album_id = mydatabase.check_album(album_name, artist_id, album_url)
-            # todo put choice for format
-            filename = sanitize_title(artist_name + ' - ' + song_name) + '.mp3'
-            mydatabase.insert_song(song_name, album_id, artist_id, filename, song_path, song_url, duration)
-            log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album_name, artist_name))
-
-        elif dbparser[0] == 'list' or 'artist':
+        elif dbparser[0] == 'song' or 'list' or 'artist':
             # todo solve this parser
             'parsing, my list is the put inside start download function'
-            junk, folder, song_url_list, category, name_file, args = dbparser
+            junk, filename, song_url_list, category, name_file, args = dbparser
 
             playlist_url = args.playlist
             if playlist_url:
@@ -114,7 +126,6 @@ def db_music_inserter(mydatabase):
             else:
                 playlist = ''
 
-            print(playlist)
 
             for i in range(len(song_url_list)):
                 "I ll do a trick assign playlist and check if it is equal to the other names"
@@ -123,10 +134,19 @@ def db_music_inserter(mydatabase):
                 album_url, artist_url, duration = get_song_data(song_url_list[i])
 
                 # todo put choice for format
-                filename = sanitize_title(artist_name + ' - ' + song_name) + args.output_ext
+                #filename = sanitize_title(artist_name + ' - ' + song_name) + args.output_ext
+                # todo issue with youtube dl
+                try:
+                    content, meta_tags = youtube_tools.match_video_and_metadata(song_url_list[i])
+                    refined_name = refine_songname(content.title, meta_tags)
+                    filename = refined_name + args.output_ext
+                except Exception as e:
+                    print(e)
+                    filename = sanitize_title(artist_name + ' - ' + song_name) + args.output_ext
 
+                filename = args.folder + '/' + filename
                 mydatabase.insert_song_list_into_db(song_name, playlist, album_name, artist_name,
-                                                    filename, folder, [album_url,
+                                                    filename, [album_url,
                                                                        artist_url,
                                                                        song_url_list[i],
                                                                        playlist_url], duration)
@@ -140,6 +160,28 @@ def db_music_inserter(mydatabase):
         elif dbparser[0] == 'exit_thread':
             running = False
 
+
+def refine_songname(songname, meta_tags):
+    total_songs = int(meta_tags["total_tracks"])
+    file_format = "{artist} - {track_name}"
+    if meta_tags is not None:
+        refined_songname = internals.format_string(
+            file_format,
+            meta_tags,
+            slugification=True,
+            total_songs=total_songs,
+        )
+        log.debug(
+            'Refining songname from "{0}" to "{1}"'.format(
+                songname, refined_songname
+            )
+        )
+        if not refined_songname == " - ":
+            songname = refined_songname
+    else:
+        songname = internals.sanitize_title(songname)
+
+    return songname
 
 def player_get_all_user_data():
     """ Player function for geting all playlist and songs in db """
@@ -267,7 +309,6 @@ class MySongDatabase:
                           Column('album_id', Integer, ForeignKey('db_albums.id')),
                           Column('artist_id', Integer, ForeignKey('db_artists.id')),
                           Column('filename', String),
-                          Column('folder', String),
                           Column('url', String),
                           Column('duration', Float)
                           )
@@ -287,6 +328,7 @@ class MySongDatabase:
 
     "-----------------------------------------------------------------------------------"
     def execute_insert_query(self, query='', variable=()):
+        # todo. check the res exit
         if query == '': return
         # print(query)
         with self.db_engine.connect() as connection:
@@ -381,23 +423,23 @@ class MySongDatabase:
             album_id = album_id[0][0]
         return album_id
 
-    def insert_song(self, name, album_id, artist_id, folder, filename, url, duration):
+    def insert_song(self, name, album_id, artist_id, filename, url, duration):
 
         key = rs.key_id_creator(name + str(artist_id))
         query = 'SELECT id FROM {TABL} where key = ? '.format(TABL=self.SONGTot)
         song_id = self.execute_select_query(query, (key))
         if not song_id:
-            query = "INSERT INTO {TABL} (key, name, album_id, artist_id, filename, folder, url, duration) " \
-                    "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)".format(TABL=self.SONGTot)
+            query = "INSERT INTO {TABL} (key, name, album_id, artist_id, filename, url, duration) " \
+                    "VALUES ( ?, ?, ?, ?, ?, ?, ?)".format(TABL=self.SONGTot)
             song_id = self.execute_insert_query(query, (key, name, album_id, artist_id,
-                                                        filename, folder, url, duration))
+                                                        filename, url, duration))
         else:
             song_id = song_id[0][0]
 
         return song_id
 
     def insert_song_list_into_db(self, songname='', playlist='', album='',
-                                 artist='', filename='', folder='', url=[], duration=''):
+                                 artist='', filename='', url=[], duration=''):
 
         url_art, url_alb, url_song, url_playlist = url
         # Todo --- complex
@@ -413,7 +455,7 @@ class MySongDatabase:
         song_id = self.execute_select_query(query, variable=myid)
 
         if not song_id:
-            song_id = self.insert_song(songname, album_id, artist_id, folder, filename, url_song, duration)
+            song_id = self.insert_song(songname, album_id, artist_id, filename, url_song, duration)
 
         if playlist:
             playlist_id = self.check_playlist(playlist, url_playlist)

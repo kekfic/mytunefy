@@ -33,3 +33,8 @@ PySide2\
 
 * Ensure all functions and classes have a PEP257 compliant docstring and the
 code is PEP8 compliant.
+
+## Purpose
+
+Downloading music may be illegal in your country. Please support artists respecting copyrights.
+This application is only for didactic purpose.

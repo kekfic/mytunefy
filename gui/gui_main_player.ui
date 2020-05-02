@@ -1985,7 +1985,7 @@ QPushButton:hover{
             <widget class="QLabel" name="title_label">
              <property name="minimumSize">
               <size>
-               <width>330</width>
+               <width>360</width>
                <height>0</height>
               </size>
              </property>
@@ -3010,7 +3010,7 @@ QPushButton:checked{
 	
 	image: url(:/mytunefy/resources/icons/backtrack4.png);
 }
-QPushButton:pressed {
+QPushButton:pressed:hover {
 	
 	image: url(:/mytunefy/resources/icons/backtrack4.png);
 }
@@ -3106,7 +3106,13 @@ QPushButton:hover{
 
 QPushButton:checked{
 image: url(:/mytunefy/resources/icons/pause2.png);
-}</string>
+
+}
+
+QPushButton:hover:checked{
+image: url(:/mytunefy/resources/icons/pause-light-grey.png);
+} 
+</string>
                 </property>
                 <property name="text">
                  <string/>
@@ -3163,9 +3169,9 @@ image: url(:/mytunefy/resources/icons/pause2.png);
 	
 	image: url(:/mytunefy/resources/icons/next-darker-grey.png);
 }
-QPushButton:pressed {
+QPushButton:pressed:hover {
 	
-	image: url(:/mytunefy/resources/icons/next-light-grey.png);
+	image: url(:/mytunefy/resources/icons/next-darker-grey.png);
 }
 
 QPushButton:flat {
@@ -3287,22 +3293,64 @@ image: url(:/mytunefy/resources/icons/repeat-track-green.png);
     min-height: 30px;
     max-height: 30px;
 }
-QSlider::groove:horizontal { 
-	background: black;
-	border: 0px solid #424242; 
-	height: 10px; 
-	border-radius: 4px;
+QSlider::groove:horizontal {
+border: 1px solid #bbb;
+background: white;
+height: 8px;
+border-radius: 4px;
 }
 
-QSlider::handle:horizontal { 
-	background-color: green; 
-	border: 2px solid green; 
-	width: 16px; 
-	height: 18px; 
-	line-height: 20px; 
-	margin-top: -5px; 
-	margin-bottom: -5px; 
-	border-radius: 10px; 
+QSlider::sub-page:horizontal {
+background: qlineargradient(x1: 0, y1: 0,    x2: 0, y2: 1,
+    stop: 0 #66e, stop: 1 #bbf);
+background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1,
+    stop: 0 #bbf, stop: 1 #55f);
+border: 1px solid #777;
+height: 10px;
+border-radius: 4px;
+}
+
+QSlider::add-page:horizontal {
+background: #fff;
+border: 1px solid #777;
+height: 10px;
+border-radius: 4px;
+}
+
+QSlider::handle:horizontal {
+background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+    stop:0 #eee, stop:1 #ccc);
+border: 1px solid #777;
+width: 13px;
+margin-top: -2px;
+margin-bottom: -2px;
+border-radius: 4px;
+}
+
+QSlider::handle:horizontal:hover {
+background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+    stop:0 #fff, stop:1 #ddd);
+border: 1px solid #777;
+width: 13px;
+margin-top: -2px;
+margin-bottom: -2px;
+border-radius: 4px;
+}
+
+QSlider::sub-page:horizontal:disabled {
+background: #bbb;
+border-color: #999;
+}
+
+QSlider::add-page:horizontal:disabled {
+background: #eee;
+border-color: #999;
+}
+
+QSlider::handle:horizontal:disabled {
+background: #eee;
+border: 1px solid #aaa;
+border-radius: 4px;
 }</string>
               </property>
               <property name="sliderPosition">
@@ -3396,25 +3444,39 @@ background-image: url(:/spotify/resources/icons/play-red.png);</string>
     min-height: 90px;
     max-height: 90px;
 }
+QSlider::handle:vertiical {
+background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+    stop:0 #eee, stop:1 #ccc);
+border: 1px solid #777;
+width: 13px;
+margin-top: -2px;
+margin-bottom: -2px;
+border-radius: 4px;
+}
 
 QSlider::groove:vertical { 
 	background: black;
 	border: 2px solid #424242; 
 	height: 70px; 
-	width: 12px;
+	width: 6px;
 	border-radius: 2px;
 }
 
-QSlider::handle:vertical { 
-	background-color: green; 
-	border: 1px solid green; 
-	width: 12px; 
-	height: 10px; 
-	line-height: 20px; 
-	margin-top: -10px; 
-	margin-bottom: +0px; 
-	border-radius: 5px; 
-}</string>
+QSlider::sub-page:vertical {
+background: #fff;
+border: 1px solid #777;
+border-radius: 4px;
+}
+QSlider::add-page:vertical {
+background: qlineargradient(x1: 0, y1: 0,    x2: 0, y2: 1,
+    stop: 0 #66e, stop: 1 #bbf);
+background: qlineargradient(x1: 0, y1: 0.2, x2: 1, y2: 1,
+    stop: 0 #bbf, stop: 1 #55f);
+border: 1px solid #777;
+height: 10px;
+border-radius: 4px;
+}
+</string>
               </property>
               <property name="orientation">
                <enum>Qt::Vertical</enum>
