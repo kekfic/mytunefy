@@ -5,7 +5,7 @@ from queue import Queue
 import datetime
 from os import listdir, getcwd
 from random import choice
-
+import re
 from logzero import logger as log
 import platform
 import pprint
@@ -113,6 +113,21 @@ def parser_db(res):
 #     return MY_WORKING_DIR
 
 
+def url_parser(url):
+    category_list = ''
+    substring = 'https://open.spotify.com/'
+    if substring in url:
+        try:
+            junk, data = re.split(r'.com/', url)
+            category_list, junk = re.split(r'/', data)
+        except ValueError as e:
+            print("Url Parser Error: {}".format(e))
+        except Exception as e:
+            print("General error in url splitting:", e)
+    else:
+        category_list = False
+
+    return category_list
 
 
 
@@ -151,3 +166,79 @@ def get_arguments(raw_args=None, to_group=True, to_merge=True):
     parser.spotify_client_secret = "0f02b7c483c04257984695007a4a8d5c"
 
     return parser
+
+def assign_parser_url(category_list, url):
+    if category_list == 'playlist':
+        const.args.playlist = url
+    elif category_list == 'track':
+        const.args.song = [url]
+    elif category_list == 'album':
+        const.args.album = url
+    elif category_list == 'artist':
+        const.args.all_albums = url
+
+
+def reset_parser_url():
+    const.args.playlist = ''
+    const.args.song = ''
+    const.args.album = ''
+    const.args.artist = ''
+
+def characters_converter(fileplayer):
+
+    fileplayer = fileplayer.split('/')[-1].lower()
+    fileplayer = fileplayer.replace('%c3%a9', 'é')
+    fileplayer = fileplayer.replace('%c3%a8', 'è')
+    fileplayer = fileplayer.replace('%c3%a0', 'à')
+    fileplayer = fileplayer.replace('%c3%b9', 'ù')
+    fileplayer = fileplayer.replace('%28', '(')
+    fileplayer = fileplayer.replace('%29', ')')
+    fileplayer = fileplayer.replace('%c3%ad', 'í')
+    fileplayer = fileplayer.replace('%c3%a1', 'á')
+    fileplayer = fileplayer.replace('%27', '\'')
+    fileplayer = fileplayer.replace('%c3%ba', 'ú')
+    fileplayer = fileplayer.replace('%c3%b3', 'ó')
+    fileplayer = fileplayer.replace(' %c3%b1', 'ñ')
+
+    return fileplayer
+
+
+def get_data_from_mrl(self, fileplayer, filenames):
+    #todo: no reference to class, move in another place
+    artist_raw = ''
+    raw_name = ''
+    artist = ''
+    song_name = ''
+    index = None
+    try:
+        fileplayer = characters_converter(fileplayer)
+        print("Filename trying to play ------>", fileplayer)
+        songs_in_path = []
+        for song in filenames:
+            text_s = song.split('/')[-1].lower()
+            songs_in_path.append(text_s)
+        if fileplayer in songs_in_path:
+            index = songs_in_path.index(fileplayer)
+            if fileplayer.count(' - ') > 1:
+                fileplayer = fileplayer.replace(' - live', '')
+                fileplayer = fileplayer.replace(' - remastered', '')
+                fileplayer = fileplayer.replace(' - remix', '')
+                fileplayer = fileplayer.replace(' - spanish', '')
+                fileplayer = fileplayer.replace(' - 2001', '')
+                fileplayer = fileplayer.replace(' - 2012', '')
+
+                if fileplayer.count(' - ') > 1:
+                    print('NOTE: Unable to sanitize song. Song name or artist name could be wrong.')
+                    artist_raw, raw_name, junk = fileplayer.split(' - ')
+                else:
+                    artist_raw, raw_name = fileplayer.split(' - ')
+
+            artist = artist_raw.strip()
+            song_name = raw_name.split('.mp')[0].strip()
+        else:
+            print('Song Not Found!!')
+
+    except Exception as e:
+        print('Player error as: -----> ', e)
+
+    return [artist, song_name, index]

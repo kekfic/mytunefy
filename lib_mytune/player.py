@@ -2,6 +2,7 @@ import platform
 import os
 import sys
 import random
+from resources import resources as rs
 
 import vlc
 from PySide2 import QtCore
@@ -120,64 +121,11 @@ class SongPlayer(QObject):
         filepath = self._mediaplayer.get_media_player().\
             get_media().get_mrl().title().replace('%20', ' ')
 
-        artist, song_name, index = self.get_data_from_mrl\
-                                        (filepath)
+        artist, song_name, index = self.rs.get_data_from_mrl\
+                                        (filepath, self.filenames)
 
         return artist, song_name, index
 
-    def get_data_from_mrl(self, fileplayer):
-        #todo: no reference to class, move in another place
-        artist_raw = ''
-        raw_name = ''
-        artist = ''
-        song_name = ''
-        index = None
-        try:
-            fileplayer = fileplayer.split('/')[-1].lower()
-            fileplayer = fileplayer.replace('%c3%a9', 'é')
-            fileplayer = fileplayer.replace('%c3%a8', 'è')
-            fileplayer = fileplayer.replace('%c3%a0', 'à')
-            fileplayer = fileplayer.replace('%c3%b9', 'ù')
-            fileplayer = fileplayer.replace('%28', '(')
-            fileplayer = fileplayer.replace('%29', ')')
-            fileplayer = fileplayer.replace('%c3%ad', 'í')
-            fileplayer = fileplayer.replace('%c3%a1', 'á')
-            fileplayer = fileplayer.replace('%27', '\'')
-            fileplayer = fileplayer.replace('%c3%ba', 'ú')
-            fileplayer = fileplayer.replace('%c3%b3', 'ó')
-            fileplayer = fileplayer.replace(' %c3%b1', 'ñ')
-
-            print(fileplayer)
-            songs_in_path = []
-            for song in self.filenames:
-                text_s=song.split('/')[-1].lower()
-                songs_in_path.append(text_s)
-            if fileplayer in songs_in_path:
-                index = songs_in_path.index(fileplayer)
-                if fileplayer.count(' - ') > 1:
-                    fileplayer = fileplayer.replace(' - live', '')
-                    fileplayer = fileplayer.replace(' - remastered', '')
-                    fileplayer = fileplayer.replace(' - remix', '')
-                    fileplayer = fileplayer.replace(' - spanish', '')
-                    fileplayer = fileplayer.replace(' - 2001', '')
-                    fileplayer = fileplayer.replace(' - 2012', '')
-
-                    if fileplayer.count(' - ') > 1:
-                        print('Unable to sanitaze song, song name could be wrong')
-                        artist_raw, raw_name, junk = fileplayer.split(' - ')
-                    else:
-                        artist_raw, raw_name = fileplayer.split(' - ')
-
-                artist = artist_raw.strip()
-                song_name = raw_name.split('.mp')[0].strip()
-                print('Song exist')
-            else:
-                print('song not found')
-
-        except Exception as e:
-            print('Player error as ', e)
-
-        return [artist, song_name, index]
 
     def set_volume(self, volume):
         """Set the volume

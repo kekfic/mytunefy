@@ -16,8 +16,8 @@ import webbrowser
 from resources.db_handler import db_music_inserter
 from resources.login import db_song_conn
 from widgets.widget_class import YoutubeDialog
-from resources import resources as rs, downloader as dwldr
-
+from resources import resources as rs
+from lib_mytune import spotdl_inherited as spt_dl_in
 
 """
 My list of variables:
@@ -140,7 +140,7 @@ class MainWin(QObject, Ui_MainWindow):
         # Todo: trying implement a better way of threading.
         self.count = self.listWidgetUrls.count()
         if self.count:
-            self.quecreat.put([self.count, self.all_categories.copy(), self.all_urls.copy(), self.name_categories])
+            self.quecreat.put([self.count, self.all_categories.copy(), self.all_urls.copy(), self.name_categories.copy()])
             "Clearing the QWidgetList and other objects"
             self.listWidgetUrls.clear()
             self.listWidgetUrls.hide()
@@ -166,20 +166,20 @@ class MainWin(QObject, Ui_MainWindow):
                 url = all_urls[i]
                 category_list = all_categories[i]
                 "push"
-                rs.songPusher.put('category', category_list[i], all_urls[i], name_categories[i])
+                rs.songPusher.put(['category', all_categories[i], all_urls[i], name_categories[i]])
                 "assign the current const.args.group"
-                dwldr.assign_parser_url(category_list, url)
+                rs.assign_parser_url(category_list, url)
                 "Starting the main according url parsing"
-                dwldr.main_func_caller()
+                spt_dl_in.main_func_caller()
                 "Resetting the parser because it is unique"
-                dwldr.reset_parser_url()
+                rs.reset_parser_url()
 
             index += 1
 
     def text_from_plain_text(self, url=None):
         if url is None:
             url = self.plainTextEditUrl.toPlainText()
-            category_list = dwldr.url_parser(url)
+            category_list = rs.url_parser(url)
             if category_list:
                 self.listWidgetHandler(url, category_list)
                 self.plainTextEditUrl.clear()
@@ -187,9 +187,9 @@ class MainWin(QObject, Ui_MainWindow):
     def listWidgetHandler(self, url, category_list):
         "Get from urls and adding to list widget"
 
-        text_playlist, junk = dwldr.get_name_for_list_widget(category_list, url)
+        text_playlist, name = spt_dl_in.get_name_for_list_widget(category_list, url)
         self.listWidgetUrls.addItem(text_playlist)
-        self.name_categories.append(text_playlist)
+        self.name_categories.append(name)
         self.all_categories.append(category_list)
         self.all_urls.append(url)
         number_item = self.listWidgetUrls.count()

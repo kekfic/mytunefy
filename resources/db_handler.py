@@ -1,10 +1,8 @@
-from spotdl import youtube_tools, internals
-from spotdl.spotify_tools import fetch_playlist
+from spotdl import internals
 from sqlalchemy import create_engine, ForeignKey
 from sqlalchemy import Column, String, MetaData, Table, Binary, Integer, Float
 from sqlalchemy.exc import IntegrityError, OperationalError
-from spotdl.internals import sanitize_title
-from resources.downloader import get_song_data
+from lib_mytune.spotdl_inherited import get_song_data
 from logzero import logger as log
 from resources import resources as rs
 
@@ -44,26 +42,11 @@ def get_user_database(dbtype='sqlite', dbname='users_mtf'):
     return res, user_list
 
 
-# def get_put_db_thread_parser(data):
-#
-#     id = data[0]
-#
-#     if id == 'mylist':
-#         first_junk, category, url = data
-#         result = [category, url]
-#
-#     elif id == 'song':
-#         first_junk, songpath, url_song = data
-#         result = [songpath, url_song]
-#
-#     elif id == 'end':
-#         pass
-
 
 """
- -----------------------------------------------
-            Function of the downloader 
- ----------------------------------------------
+ -----------------------------------------------------------------
+            Function of the downloader
+ ----------------------------------------------------------------
  """
 
 
@@ -86,6 +69,7 @@ def db_music_inserter(mydatabase):
     song_url_list = []
     url = ''
     playlist = ''
+    playlist_url = ''
     running = True
     "Pre-variable before infinite loop"
     while running:
@@ -94,94 +78,37 @@ def db_music_inserter(mydatabase):
         if dbparser[0] == 'category':
             if dbparser[1] == 'playlist':
                 playlist = dbparser[3]
+                playlist_url = dbparser[2]
             else:
                 playlist = ''
-        # if dbparser[0] == 'song':
-        #     'parsing inside downloader'
-        #     first_junk, song_path, song_url = dbparser
-        #
-        #     song_name, album_name, artist_name, \
-        #     album_url, artist_url, duration = get_song_data(song_url)
-        #     artist_id = mydatabase.check_artist(artist_name, artist_url)
-        #     album_id = mydatabase.check_album(album_name, artist_id, album_url)
-        #     try:
-        #         content, meta_tags = youtube_tools.match_video_and_metadata(song_url_list[i])
-        #         refined_name = refine_songname(content.title, meta_tags)
-        #         filename = refined_name + args.output_ext
-        #     except Exception as e:
-        #         print(e)
-        #         filename = sanitize_title(artist_name + ' - ' + song_name) + args.output_ext
-        #     filename = song_path + '/' + filename
-        #     mydatabase.insert_song(song_name, album_id, artist_id, filename, song_url, duration)
-        #     log.info("Inserting in song db. As: {0}, {1}, {2}".format(song_name, album_name, artist_name))
+                playlist_url = ''
 
-        elif dbparser[0] == 'song' or 'list' or 'artist':
+        elif dbparser[0] == 'track' or 'list' or 'artist':
             # todo solve this parser
             'parsing, my list is the put inside start download function'
-            junk, filename, song_url_list, category, name_file, args = dbparser
+            junk, filename, song_url_list, meta_data, args = dbparser
+            song_name, album_name, artist_name, \
+            album_url, artist_url, duration = get_song_data(song_url_list)
 
-            playlist_url = args.playlist
-            if playlist_url:
-                playlist = fetch_playlist(playlist_url)['name']
-            else:
-                playlist = ''
+            # todo put choice for format
+            filename = args.folder + '/' + filename
+            mydatabase.insert_song_list_into_db(song_name, playlist, album_name, artist_name,
+                                                filename, [album_url,
+                                                                   artist_url,
+                                                                   song_url_list,
+                                                                   playlist_url], duration)
 
+            log.info('Inserting song in database. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album_name,
+                                                                                  artist_name))
 
-            for i in range(len(song_url_list)):
-                "I ll do a trick assign playlist and check if it is equal to the other names"
-
-                song_name, album_name, artist_name, \
-                album_url, artist_url, duration = get_song_data(song_url_list[i])
-
-                # todo put choice for format
-                #filename = sanitize_title(artist_name + ' - ' + song_name) + args.output_ext
-                # todo issue with youtube dl
-                try:
-                    content, meta_tags = youtube_tools.match_video_and_metadata(song_url_list[i])
-                    refined_name = refine_songname(content.title, meta_tags)
-                    filename = refined_name + args.output_ext
-                except Exception as e:
-                    print(e)
-                    filename = sanitize_title(artist_name + ' - ' + song_name) + args.output_ext
-
-                filename = args.folder + '/' + filename
-                mydatabase.insert_song_list_into_db(song_name, playlist, album_name, artist_name,
-                                                    filename, [album_url,
-                                                                       artist_url,
-                                                                       song_url_list[i],
-                                                                       playlist_url], duration)
-
-                log.info('Inserting song in database. As: {0}, {1}, {2}, {3} '.format(song_name, playlist, album_name,
-                                                                                      artist_name))
-
-            'clear list variable'
-            song_path_list.clear()
-            song_url_list.clear()
         elif dbparser[0] == 'exit_thread':
             running = False
 
-
-def refine_songname(songname, meta_tags):
-    total_songs = int(meta_tags["total_tracks"])
-    file_format = "{artist} - {track_name}"
-    if meta_tags is not None:
-        refined_songname = internals.format_string(
-            file_format,
-            meta_tags,
-            slugification=True,
-            total_songs=total_songs,
-        )
-        log.debug(
-            'Refining songname from "{0}" to "{1}"'.format(
-                songname, refined_songname
-            )
-        )
-        if not refined_songname == " - ":
-            songname = refined_songname
-    else:
-        songname = internals.sanitize_title(songname)
-
-    return songname
+"""
+    ----------------------------------------------------------
+        Functions of Player
+    -----------------------------------------------------------
+"""
 
 def player_get_all_user_data():
     """ Player function for geting all playlist and songs in db """
@@ -235,6 +162,12 @@ def get_songs_from_db(id_type, option):
         return result
     else:
         return None
+
+"""
+--------------------------------------------------------------------    
+                            Class Database
+--------------------------------------------------------------------
+"""
 
 
 class MySongDatabase:
@@ -329,6 +262,7 @@ class MySongDatabase:
     "-----------------------------------------------------------------------------------"
     def execute_insert_query(self, query='', variable=()):
         # todo. check the res exit
+        res = None
         if query == '': return
         # print(query)
         with self.db_engine.connect() as connection:
@@ -342,10 +276,10 @@ class MySongDatabase:
                 log.error("Operational error as: {}".format(e))
             except Exception as e:
                 print(e)
-                res = False
         return res
 
     def execute_select_query(self, query='', variable=()):
+        res = None
         if query == '': return
         # print(query)
         with self.db_engine.connect() as connection:
@@ -354,12 +288,13 @@ class MySongDatabase:
                 res = result.fetchall()
             except Exception as e:
                 print(e)
-                res = False
+
         return res
 
 
     def execute_general_query(self, query=''):
         "Usualli called when want to retreive all data from query"
+        result = None
         if query == '': return
 
         result = ''

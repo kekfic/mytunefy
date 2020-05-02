@@ -7,7 +7,7 @@ from spotdl import internals
 
 from gui.youtube_downloader import Ui_DialogYoutubeDL
 import threading
-from resources.downloader import mySimpleYoutubeDownloader
+from lib_mytune.downld_mytune import mySimpleYoutubeDownloader
 from random import randint
 from logzero import logger as log
 import os

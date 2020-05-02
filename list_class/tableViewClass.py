@@ -117,7 +117,7 @@ class MyTableView(QTableView):
         self.setColumnWidth(2, 390)
         self.setColumnWidth(3, 280)
         self.setColumnWidth(4, 240)
-        self.setColumnWidth(5, 250)
+        self.setColumnWidth(5, 350)
         self.resizeRowsToContents()
         self.setSelectionBehavior(QTableView.SelectRows)
         self.setShowGrid(False)

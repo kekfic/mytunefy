@@ -1,15 +1,108 @@
-from spotdl.spotify_tools import fetch_album, fetch_playlist, fetch_albums_from_artist
-from spotdl import const, spotify_tools, youtube_tools, downloader, convert,internals
-# todo resolve the import
-import re
+import time
+import urllib
+import os
 import sys
 import logzero
-from slugify import slugify
-import os
-from resources import resources as rs
+from spotdl import downloader, spotify_tools, const, convert, metadata, internals, youtube_tools
 from logzero import logger as log
+import youtube_dl
 import pafy
+from resources import resources as rs
+from slugify import slugify
 
+
+class EnhancedDownloader(downloader.Downloader):
+    """Inherited class"""
+    def __init__(self, raw_song, number=None):
+        super().__init__(raw_song, number=None)
+
+    def download_single(self):
+        """ Logic behind downloading a song. """
+
+        if self._to_skip():
+            return
+
+        # "[number]. [artist] - [song]" if downloading from list
+        # otherwise "[artist] - [song]"
+        youtube_title = youtube_tools.get_youtube_title(self.content, self.number)
+        log.info("{} ({})".format(youtube_title, self.content.watchv_url))
+
+        # generate file name of the song to download
+        songname = self.refine_songname(self.content.title)
+
+        if const.args.dry_run:
+            return
+
+        song_existence = downloader.CheckExists(songname, self.meta_tags)
+        if not song_existence.already_exists(self.raw_song):
+            return self._download_single(songname)
+
+        rs.songPusher.put(['track', songname+const.args.output_ext, self.raw_song, self.meta_tags, const.args])
+
+
+class ListDownloaderInherited(downloader.ListDownloader):
+    """Inherited class"""
+    def __init__(self, tracks_file, skip_file, write_successful_file):
+        super().__init__(tracks_file, skip_file=None, write_successful_file=None)
+
+    def _download_list(self):
+        downloaded_songs = []
+
+        for number, raw_song in enumerate(self.tracks, 1):
+            print("")
+            try:
+                track_dl = EnhancedDownloader(raw_song, number=number)
+                track_dl.download_single()
+            except (urllib.request.URLError, TypeError, IOError) as e:
+                # detect network problems
+                self._cleanup(raw_song, e)
+                # TODO: remove this sleep once #397 is fixed
+                # wait 0.5 sec to avoid infinite looping
+                time.sleep(0.5)
+                continue
+
+            downloaded_songs.append(raw_song)
+            # Add track to file of successful downloads
+            if self.write_successful_file is not None:
+                self._write_successful(raw_song)
+
+            log.debug("Removing downloaded song from tracks file")
+            internals.trim_song(self.tracks_file)
+
+        return downloaded_songs
+
+
+# spotify_tools.write_all_albums_from_artist()
+
+def download_song(file_name, content):
+    """ Download the audio file from YouTube. """
+    _, extension = os.path.splitext(file_name)
+    if extension in (".webm", ".m4a"):
+        link = content.getbestaudio(preftype=extension[1:])
+    else:
+        log.debug("No audio streams available for {} type".format(extension))
+        return False
+
+    if link:
+        try:
+            log.debug("Downloading from URL: " + link.url)
+            filepath = os.path.join(const.args.folder, file_name)
+            log.debug("Saving to: " + filepath)
+            link.download(filepath=filepath)
+        except Exception as e:
+            log.debug("Youtube cache error")
+            with youtube_dl.YoutubeDL(pafy.g.def_ydl_opts) as ydl:
+                ydl.cache.remove()
+
+            log.debug("Downloading from URL: " + link.url)
+            filepath = os.path.join(const.args.folder, file_name)
+            log.debug("Saving to: " + filepath)
+            link.download(filepath=filepath)
+
+        return True
+    else:
+        log.debug("No audio streams available")
+        return False
 
 
 def match_args():
@@ -21,11 +114,8 @@ def match_args():
 
     if const.args.song:
         for track in const.args.song:
-            track_dl = downloader.Downloader(raw_song=track)
+            track_dl = EnhancedDownloader(raw_song=track)
             track_dl.download_single()
-            # pushing the songame and path for streaming/downloadin/database
-            rs.songPusher.put(['song', const.args.folder, track])
-            # when only one track is downloaded, there is no need for listing
         operation = 'list'
 
     elif const.args.playlist:
@@ -33,7 +123,7 @@ def match_args():
             playlist_url=const.args.playlist, text_file=const.args.write_to
         )
 
-        playlist = fetch_playlist(const.args.playlist)
+        playlist = spotify_tools.fetch_playlist(const.args.playlist)
         text_file = u"{0}.txt".format(slugify(playlist["name"], ok="-_()[]{}"))
         operation = 'playlist'
 
@@ -41,19 +131,19 @@ def match_args():
         tracks_url = spotify_tools.write_album(
             album_url=const.args.album, text_file=const.args.write_to
         )
-        album = fetch_album(const.args.album)
-        text_file =  u"{0}.txt".format(slugify(album["name"], ok="-_()[]{}"))
+        album = spotify_tools.fetch_album(const.args.album)
+        text_file = u"{0}.txt".format(slugify(album["name"], ok="-_()[]{}"))
         operation = 'album'
 
     elif const.args.all_albums:
         spotify_tools.write_all_albums_from_artist(
             artist_url=const.args.all_albums, text_file=const.args.write_to
         )
-        albums = fetch_albums_from_artist(const.args.all_albums, album_type=None)
+        albums = spotify_tools.fetch_albums_from_artist(const.args.all_albums, album_type=None)
         text_file = albums[0]["artists"][0]["name"] + ".txt"
         operation = 'all_album'
 
-    #Todo: the user playlist require user input in cmd. I will exclude it for now.
+    # Todo: the user playlist require user input in cmd. I will exclude it for now.
     """     
     elif const.args.username:
         spotify_tools.write_user_playlist(
@@ -75,47 +165,26 @@ def list_downloader(operation, text_file, tracks_url):
             )
         else:
             # list_name = str(self.category_list) + '.txt'
-            list_dl = downloader.ListDownloader(
+            list_dl = ListDownloaderInherited(
                 tracks_file=text_file,
                 skip_file=const.args.skip,
                 write_successful_file=const.args.write_successful,
             )
             downloaded = list_dl.download_list()
-            # Todo: downloade are different from tracks_url, ideally I should have both.
-            "it is tricky here because downloaded are not the tracks_url"
-            rs.songPusher.put(['list', downloaded, operation, text_file, const.args])
-           # rs.songPusher.put(['list', const.args.folder, tracks_url, operation, text_file, const.args])
 
             try:
                 os.remove(text_file)
             except Exception as e:
                 print("Unable to remove txt file.")
 
-def url_parser(url):
-    category_list = ''
-    substring = 'https://open.spotify.com/'
-    if substring in url:
-        try:
-            junk, data = re.split(r'.com/', url)
-            category_list, junk = re.split(r'/', data)
-        except ValueError as e:
-            print("Url Parser Error: {}".format(e))
-        except Exception as e:
-            print("General error in url splitting:", e)
-    else:
-        category_list = False
-
-    return category_list
-
 
 def get_tracks_playlist(url):
-    playlist = fetch_playlist(url)
+    playlist = spotify_tools.fetch_playlist(url)
     tracks_very_raw = playlist["tracks"]
     songs_in_playlist = len(tracks_very_raw)
     i = 0
     track = []
     for item in tracks_very_raw['items']:
-
         data = item['track']
         song_name = data['name']
         artist_name = data['artists'][0]['name']
@@ -128,8 +197,7 @@ def get_tracks_playlist(url):
 
 
 def get_tracks_album(url):
-    #todo: add duration
-    album = fetch_album(url)
+    album = spotify_tools.fetch_album(url)
     album_name = album['name']
     artist = album['artists'][0]['name']
     num_song = len(album['tracks']['items'])
@@ -142,15 +210,14 @@ def get_tracks_album(url):
     return ([song_name, artist, album_name, duration], num_song)
 
 
-
 def get_song_data(url):
     """Retrieve song, artist, album, playlist name from url"""
 
     song_name = ''
     album_name = ''
     album_url = ''
-    artist_name =''
-    artist_url=''
+    artist_name = ''
+    artist_url = ''
     duration = None
 
     try:
@@ -199,24 +266,6 @@ def get_name_for_list_widget(category_list, url):
     return text_file, name
 
 
-def assign_parser_url(category_list, url):
-    if category_list == 'playlist':
-        const.args.playlist = url
-    elif category_list == 'track':
-        const.args.song = [url]
-    elif category_list == 'album':
-        const.args.album = url
-    elif category_list == 'artist':
-        const.args.all_albums = url
-
-
-def reset_parser_url():
-    const.args.playlist = ''
-    const.args.song = ''
-    const.args.album = ''
-    const.args.artist = ''
-
-
 def main_func_caller():
     # Todo try new implementation
     internals.filter_path(const.args.folder)
@@ -234,52 +283,3 @@ def main_func_caller():
         operation = False
         log.exception(e)
         sys.exit(3)
-
-
-class mySimpleYoutubeDownloader:
-    """ This class is an add-on to download from youtube.
-        There are other library/project that do this, in the future
-        this class could be """
-
-    def __init__(self, url):
-        self._myvid = pafy.new(url)
-        self._video_format = 'm4a'
-        self._audio_format = 'mp3'
-        self._audio = False
-
-    def is_video(self, quality='any'):
-        if quality != 'any':
-            self._video_format = quality
-        down_item = self._myvid.getbest(preftype=quality)
-        return down_item
-
-    def is_audio(self, quality='any'):
-        self._audio = True
-        if quality != 'any':
-            self._audio_format = quality
-        down_item = self._myvid.getbestaudio(preftype=quality)
-        return down_item
-
-    def download(self, folder):
-        if self._audio:
-            down_item = self.is_audio()
-            filename = down_item.download(folder)
-            input_song = self.title() + ".webm"
-            output_song = self.title() + ".mp3"
-            convert.song(input_song,
-                          output_song,
-                          folder,
-                          avconv=const.args.avconv,
-                          trim_silence=const.args.trim_silence,
-                          delete_original=not const.args.no_remove_original, )
-
-        else:
-            down_item = self.is_video()
-            filename = down_item.download(folder)
-
-    def title(self):
-        return self._myvid.title
-
-    def other_data(self):
-        pass
-
