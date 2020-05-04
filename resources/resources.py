@@ -15,7 +15,9 @@ import sys
 from spotdl import internals
 
 _LOG_LEVELS_STR = ["INFO", "WARNING", "ERROR", "DEBUG"]
+#Global queue
 songPusher = Queue()
+#working_dir
 MY_WORKING_DIR = None
 
 myEndtime = datetime.datetime(2020, 12, 31, 0, 0).timestamp()
@@ -198,12 +200,14 @@ def characters_converter(fileplayer):
     fileplayer = fileplayer.replace('%27', '\'')
     fileplayer = fileplayer.replace('%c3%ba', 'ú')
     fileplayer = fileplayer.replace('%c3%b3', 'ó')
-    fileplayer = fileplayer.replace(' %c3%b1', 'ñ')
+    fileplayer = fileplayer.replace('%c3%b1', 'ñ')
+    fileplayer = fileplayer.replace('%5b', '[')
+    fileplayer = fileplayer.replace('%5d', ']')
 
     return fileplayer
 
 
-def get_data_from_mrl(self, fileplayer, filenames):
+def get_data_from_mrl(fileplayer, filenames):
     #todo: no reference to class, move in another place
     artist_raw = ''
     raw_name = ''
@@ -242,3 +246,73 @@ def get_data_from_mrl(self, fileplayer, filenames):
         print('Player error as: -----> ', e)
 
     return [artist, song_name, index]
+
+
+def scroll_bar_appearance(scrollbar):
+    scrollbar.setStyleSheet("QScrollBar:vertical\n"
+" {\n"
+"     background-color: #2A2929;\n"
+"     width: 15px;\n"
+"     margin: 15px 3px 15px 3px;\n"
+"     border: 1px transparent #2A2929;\n"
+"     border-radius: 4px;\n"
+" }\n"
+"\n"
+" QScrollBar::handle:vertical\n"
+" {\n"
+"     background-color: red;         /* #605F5F; */\n"
+"     min-height: 5px;\n"
+"     border-radius: 4px;\n"
+" }\n"
+"\n"
+" QScrollBar::sub-line:vertical\n"
+" {\n"
+"     margin: 3px 0px 3px 0px;\n"
+"     border-image: url(:/qss_icons/rc/up_arrow_disabled.png);\n"
+"     height: 10px;\n"
+"     width: 10px;\n"
+"     subcontrol-position: top;\n"
+"     subcontrol-origin: margin;\n"
+" }\n"
+"\n"
+" QScrollBar::add-line:vertical\n"
+" {\n"
+"     margin: 3px 0px 3px 0px;\n"
+"     border-image: url(:/qss_icons/rc/down_arrow_disabled.png);\n"
+"     height: 10px;\n"
+"     width: 10px;\n"
+"     subcontrol-position: bottom;\n"
+"     subcontrol-origin: margin;\n"
+" }\n"
+"\n"
+" QScrollBar::sub-line:vertical:hover,QScrollBar::sub-line:vertical:on\n"
+" {\n"
+"\n"
+"     border-image: url(:/qss_icons/rc/up_arrow.png);\n"
+"     height: 10px;\n"
+"     width: 10px;\n"
+"     subcontrol-position: top;\n"
+"     subcontrol-origin: margin;\n"
+" }\n"
+"\n"
+"\n"
+" QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on\n"
+" {\n"
+"     border-image: url(:/qss_icons/rc/down_arrow.png);\n"
+"     height: 10px;\n"
+"     width: 10px;\n"
+"     subcontrol-position: bottom;\n"
+"     subcontrol-origin: margin;\n"
+" }\n"
+"\n"
+" QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical\n"
+" {\n"
+"     background: none;\n"
+" }\n"
+"\n"
+"\n"
+" QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical\n"
+" {\n"
+"     background: none;\n"
+" }\n"
+"")

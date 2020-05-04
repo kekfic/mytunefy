@@ -60,7 +60,7 @@ class SongPlayer(QObject):
         self.timer.stop()
 
     def play_track(self):
-        self._mediaplayer.play_item_at_index(0)
+        #self._mediaplayer.play_item_at_index(0)
         self._mediaplayer.play()
         self.timer.start()
 
@@ -121,7 +121,7 @@ class SongPlayer(QObject):
         filepath = self._mediaplayer.get_media_player().\
             get_media().get_mrl().title().replace('%20', ' ')
 
-        artist, song_name, index = self.rs.get_data_from_mrl\
+        artist, song_name, index = rs.get_data_from_mrl\
                                         (filepath, self.filenames)
 
         return artist, song_name, index
@@ -130,7 +130,7 @@ class SongPlayer(QObject):
     def set_volume(self, volume):
         """Set the volume
         """
-        self._mediaplayer.audio_set_volume(volume)
+        self._mediaplayer.get_media_player().audio_set_volume(volume)
 
     def _open_file(self, filenames):
 

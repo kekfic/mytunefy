@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main_player.ui',
 # licensing of '.\gui_main_player.ui' applies.
 #
-# Created: Thu Apr 30 18:44:23 2020
+# Created: Mon May  4 00:37:07 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_PlayerMainWindow(object):
     def setupUi(self, PlayerMainWindow):
         PlayerMainWindow.setObjectName("PlayerMainWindow")
-        PlayerMainWindow.resize(1141, 803)
+        PlayerMainWindow.resize(1097, 831)
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(254, 254, 254))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -53,7 +53,7 @@ class Ui_PlayerMainWindow(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
         PlayerMainWindow.setPalette(palette)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/spotify/resources/icons/play1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/play1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         PlayerMainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(PlayerMainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -61,7 +61,7 @@ class Ui_PlayerMainWindow(object):
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.frameTop = QtWidgets.QFrame(self.centralwidget)
-        self.frameTop.setMinimumSize(QtCore.QSize(0, 50))
+        self.frameTop.setMinimumSize(QtCore.QSize(0, 70))
         self.frameTop.setMaximumSize(QtCore.QSize(16777215, 90))
         self.frameTop.setStyleSheet("QFrame:hover{\n"
 " background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
@@ -192,19 +192,20 @@ class Ui_PlayerMainWindow(object):
         self.pushButton.setText("")
         self.pushButton.setObjectName("pushButton")
         self.TopLayout.addWidget(self.pushButton)
-        self.label_2 = QtWidgets.QLabel(self.frameTop)
-        self.label_2.setMinimumSize(QtCore.QSize(185, 0))
-        self.label_2.setMaximumSize(QtCore.QSize(180, 70))
+        self.label_User = QtWidgets.QLabel(self.frameTop)
+        self.label_User.setMinimumSize(QtCore.QSize(185, 0))
+        self.label_User.setMaximumSize(QtCore.QSize(180, 70))
         font = QtGui.QFont()
-        font.setPointSize(12)
-        self.label_2.setFont(font)
-        self.label_2.setStyleSheet("QLabel{\n"
+        font.setFamily("Gill Sans MT")
+        font.setPointSize(10)
+        self.label_User.setFont(font)
+        self.label_User.setStyleSheet("QLabel{\n"
 "\n"
 "    color: rgb(41, 111, 255);\n"
 "}")
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
-        self.TopLayout.addWidget(self.label_2)
+        self.label_User.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_User.setObjectName("label_User")
+        self.TopLayout.addWidget(self.label_User)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.TopLayout.addItem(spacerItem1)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -577,7 +578,7 @@ class Ui_PlayerMainWindow(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.playlist_label = QtWidgets.QLabel(self.frame_songs)
         self.playlist_label.setMinimumSize(QtCore.QSize(50, 35))
-        self.playlist_label.setMaximumSize(QtCore.QSize(350, 45))
+        self.playlist_label.setMaximumSize(QtCore.QSize(650, 45))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -617,7 +618,10 @@ class Ui_PlayerMainWindow(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
         self.playlist_label.setPalette(palette)
         font = QtGui.QFont()
+        font.setFamily("Gill Sans MT")
         font.setPointSize(18)
+        font.setWeight(75)
+        font.setBold(True)
         self.playlist_label.setFont(font)
         self.playlist_label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.playlist_label.setObjectName("playlist_label")
@@ -757,7 +761,7 @@ class Ui_PlayerMainWindow(object):
 "")
         self.pushButtonPlaylist.setObjectName("pushButtonPlaylist")
         self.horizontalLayout.addWidget(self.pushButtonPlaylist)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem5)
         self.toolButtonPlaylist = QtWidgets.QToolButton(self.frame_songs)
         self.toolButtonPlaylist.setMinimumSize(QtCore.QSize(45, 30))
@@ -770,194 +774,13 @@ class Ui_PlayerMainWindow(object):
 "}")
         self.toolButtonPlaylist.setObjectName("toolButtonPlaylist")
         self.horizontalLayout.addWidget(self.toolButtonPlaylist)
-        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem6)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setContentsMargins(15, -1, -1, -1)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.label_3 = QtWidgets.QLabel(self.frame_songs)
-        self.label_3.setMinimumSize(QtCore.QSize(90, 0))
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_3.addWidget(self.label_3)
-        self.title_label = QtWidgets.QLabel(self.frame_songs)
-        self.title_label.setMinimumSize(QtCore.QSize(360, 0))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(231, 231, 231))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(231, 231, 231))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.title_label.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.title_label.setFont(font)
-        self.title_label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.title_label.setObjectName("title_label")
-        self.horizontalLayout_3.addWidget(self.title_label)
-        self.artist_label = QtWidgets.QLabel(self.frame_songs)
-        self.artist_label.setMinimumSize(QtCore.QSize(200, 0))
-        palette = QtGui.QPalette()
-        brush = QtGui.QBrush(QtGui.QColor(222, 222, 222))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(222, 222, 222))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
-        brush = QtGui.QBrush(QtGui.QColor(120, 120, 120))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(25, 25, 25))
-        brush.setStyle(QtCore.Qt.SolidPattern)
-        palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
-        self.artist_label.setPalette(palette)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.artist_label.setFont(font)
-        self.artist_label.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.artist_label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.artist_label.setObjectName("artist_label")
-        self.horizontalLayout_3.addWidget(self.artist_label)
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem7)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.verticalLayout_QTableView = QtWidgets.QVBoxLayout()
         self.verticalLayout_QTableView.setSpacing(10)
         self.verticalLayout_QTableView.setContentsMargins(10, 5, 0, 0)
         self.verticalLayout_QTableView.setObjectName("verticalLayout_QTableView")
         self.verticalLayout.addLayout(self.verticalLayout_QTableView)
         self.centralhorizontalLayout.addWidget(self.frame_songs)
-        self.verticalScrollBar_2 = QtWidgets.QScrollBar(self.centralwidget)
-        self.verticalScrollBar_2.setMinimumSize(QtCore.QSize(20, 0))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.verticalScrollBar_2.setFont(font)
-        self.verticalScrollBar_2.setCursor(QtCore.Qt.ArrowCursor)
-        self.verticalScrollBar_2.setStyleSheet("QScrollBar:vertical\n"
-" {\n"
-"     background-color: #2A2929;\n"
-"     width: 15px;\n"
-"     margin: 15px 3px 15px 3px;\n"
-"     border: 1px transparent #2A2929;\n"
-"     border-radius: 4px;\n"
-" }\n"
-"\n"
-" QScrollBar::handle:vertical\n"
-" {\n"
-"     background-color: red;         /* #605F5F; */\n"
-"     min-height: 5px;\n"
-"     border-radius: 4px;\n"
-" }\n"
-"\n"
-" QScrollBar::sub-line:vertical\n"
-" {\n"
-"     margin: 3px 0px 3px 0px;\n"
-"     border-image: url(:/qss_icons/rc/up_arrow_disabled.png);\n"
-"     height: 10px;\n"
-"     width: 10px;\n"
-"     subcontrol-position: top;\n"
-"     subcontrol-origin: margin;\n"
-" }\n"
-"\n"
-" QScrollBar::add-line:vertical\n"
-" {\n"
-"     margin: 3px 0px 3px 0px;\n"
-"     border-image: url(:/qss_icons/rc/down_arrow_disabled.png);\n"
-"     height: 10px;\n"
-"     width: 10px;\n"
-"     subcontrol-position: bottom;\n"
-"     subcontrol-origin: margin;\n"
-" }\n"
-"\n"
-" QScrollBar::sub-line:vertical:hover,QScrollBar::sub-line:vertical:on\n"
-" {\n"
-"\n"
-"     border-image: url(:/qss_icons/rc/up_arrow.png);\n"
-"     height: 10px;\n"
-"     width: 10px;\n"
-"     subcontrol-position: top;\n"
-"     subcontrol-origin: margin;\n"
-" }\n"
-"\n"
-"\n"
-" QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on\n"
-" {\n"
-"     border-image: url(:/qss_icons/rc/down_arrow.png);\n"
-"     height: 10px;\n"
-"     width: 10px;\n"
-"     subcontrol-position: bottom;\n"
-"     subcontrol-origin: margin;\n"
-" }\n"
-"\n"
-" QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical\n"
-" {\n"
-"     background: none;\n"
-" }\n"
-"\n"
-"\n"
-" QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical\n"
-" {\n"
-"     background: none;\n"
-" }\n"
-"")
-        self.verticalScrollBar_2.setOrientation(QtCore.Qt.Vertical)
-        self.verticalScrollBar_2.setObjectName("verticalScrollBar_2")
-        self.centralhorizontalLayout.addWidget(self.verticalScrollBar_2)
         self.verticalLayout_2.addLayout(self.centralhorizontalLayout)
         self.frame_bottom = QtWidgets.QFrame(self.centralwidget)
         self.frame_bottom.setMinimumSize(QtCore.QSize(0, 0))
@@ -1049,7 +872,8 @@ class Ui_PlayerMainWindow(object):
 "QLabel:hover{\n"
 "color: rgb(255, 255, 255);\n"
 "}")
-        self.song_name_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.song_name_label.setText("")
+        self.song_name_label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.song_name_label.setObjectName("song_name_label")
         self.verticalLayout_5.addWidget(self.song_name_label)
         self.song_artist_label = QtWidgets.QLabel(self.frame_3)
@@ -1120,12 +944,13 @@ class Ui_PlayerMainWindow(object):
 "QLabel:hover{\n"
 "color: rgb(255, 255, 255);\n"
 "}")
-        self.song_artist_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.song_artist_label.setText("")
+        self.song_artist_label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.song_artist_label.setObjectName("song_artist_label")
         self.verticalLayout_5.addWidget(self.song_artist_label)
         self.bottomLayout.addWidget(self.frame_3)
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.bottomLayout.addItem(spacerItem8)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.bottomLayout.addItem(spacerItem6)
         self.frame_control = QtWidgets.QFrame(self.frame_bottom)
         self.frame_control.setMinimumSize(QtCore.QSize(0, 100))
         self.frame_control.setMaximumSize(QtCore.QSize(16777215, 115))
@@ -1172,8 +997,8 @@ class Ui_PlayerMainWindow(object):
         self.shuffleButton.setFlat(True)
         self.shuffleButton.setObjectName("shuffleButton")
         self.horizontalLayout_4.addWidget(self.shuffleButton)
-        spacerItem9 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem9)
+        spacerItem7 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem7)
         self.backTrackButton = QtWidgets.QPushButton(self.frame_control)
         self.backTrackButton.setMinimumSize(QtCore.QSize(35, 35))
         self.backTrackButton.setMaximumSize(QtCore.QSize(35, 35))
@@ -1205,8 +1030,8 @@ class Ui_PlayerMainWindow(object):
         self.backTrackButton.setFlat(True)
         self.backTrackButton.setObjectName("backTrackButton")
         self.horizontalLayout_4.addWidget(self.backTrackButton)
-        spacerItem10 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem10)
+        spacerItem8 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem8)
         self.PlayPauseButton = QtWidgets.QPushButton(self.frame_control)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -1253,8 +1078,8 @@ class Ui_PlayerMainWindow(object):
         self.PlayPauseButton.setFlat(True)
         self.PlayPauseButton.setObjectName("PlayPauseButton")
         self.horizontalLayout_4.addWidget(self.PlayPauseButton)
-        spacerItem11 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem11)
+        spacerItem9 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem9)
         self.nextTrackButton = QtWidgets.QPushButton(self.frame_control)
         self.nextTrackButton.setMinimumSize(QtCore.QSize(35, 35))
         self.nextTrackButton.setMaximumSize(QtCore.QSize(35, 35))
@@ -1282,8 +1107,8 @@ class Ui_PlayerMainWindow(object):
         self.nextTrackButton.setFlat(True)
         self.nextTrackButton.setObjectName("nextTrackButton")
         self.horizontalLayout_4.addWidget(self.nextTrackButton)
-        spacerItem12 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem12)
+        spacerItem10 = QtWidgets.QSpacerItem(30, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem10)
         self.repeatButton = QtWidgets.QPushButton(self.frame_control)
         self.repeatButton.setMinimumSize(QtCore.QSize(25, 25))
         self.repeatButton.setMaximumSize(QtCore.QSize(25, 25))
@@ -1389,8 +1214,8 @@ class Ui_PlayerMainWindow(object):
         self.horizontalSlider.setObjectName("horizontalSlider")
         self.verticalLayout_3.addWidget(self.horizontalSlider)
         self.bottomLayout.addWidget(self.frame_control)
-        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.bottomLayout.addItem(spacerItem13)
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.bottomLayout.addItem(spacerItem11)
         self.frame_2 = QtWidgets.QFrame(self.frame_bottom)
         self.frame_2.setMinimumSize(QtCore.QSize(125, 0))
         self.frame_2.setMaximumSize(QtCore.QSize(150, 16777215))
@@ -1406,7 +1231,7 @@ class Ui_PlayerMainWindow(object):
         self.IconLogo = QtWidgets.QLabel(self.frame_2)
         self.IconLogo.setMaximumSize(QtCore.QSize(60, 60))
         self.IconLogo.setText("")
-        self.IconLogo.setPixmap(QtGui.QPixmap(":/spotify/resources/icons/music4.png"))
+        self.IconLogo.setPixmap(QtGui.QPixmap(":/mytunefy/resources/icons/cuffie-azul.png"))
         self.IconLogo.setScaledContents(True)
         self.IconLogo.setObjectName("IconLogo")
         self.horizontalLayout_5.addWidget(self.IconLogo)
@@ -1464,7 +1289,7 @@ class Ui_PlayerMainWindow(object):
         self.toolButtonGeneral.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "...", None, -1))
         self.Folder.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "PushButton", None, -1))
         self.pushButton.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Impostazioni", None, -1))
-        self.label_2.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "User Name", None, -1))
+        self.label_User.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "User Name", None, -1))
         self.StreamModeButton.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Play streaming quando la canzone non si trova nella cartella locale", None, -1))
         self.StreamModeButton.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Streaming Music", None, -1))
         self.pushButton_2.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Scarica Musica", None, -1))
@@ -1480,10 +1305,5 @@ class Ui_PlayerMainWindow(object):
         self.playlist_label.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Playlist name", None, -1))
         self.pushButtonPlaylist.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Play", None, -1))
         self.toolButtonPlaylist.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "...", None, -1))
-        self.label_3.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "TextLabel", None, -1))
-        self.title_label.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "TITOLO", None, -1))
-        self.artist_label.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "ARTISTA", None, -1))
-        self.song_name_label.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "SONG NAME", None, -1))
-        self.song_artist_label.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Artist", None, -1))
 
 from .import icons_rc

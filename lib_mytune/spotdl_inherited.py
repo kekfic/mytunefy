@@ -35,15 +35,21 @@ class EnhancedDownloader(downloader.Downloader):
 
         song_existence = downloader.CheckExists(songname, self.meta_tags)
         if not song_existence.already_exists(self.raw_song):
-            return self._download_single(songname)
-
-        rs.songPusher.put(['track', songname+const.args.output_ext, self.raw_song, self.meta_tags, const.args])
+            down_song = self._download_single(songname)
+            if down_song:
+                rs.songPusher.put(['track', songname+const.args.output_ext,
+                                   self.raw_song, self.meta_tags, const.args])
+            return down_song
+        else:
+            rs.songPusher.put(['track', songname + const.args.output_ext,
+                               self.raw_song, self.meta_tags, const.args])
 
 
 class ListDownloaderInherited(downloader.ListDownloader):
     """Inherited class"""
     def __init__(self, tracks_file, skip_file, write_successful_file):
         super().__init__(tracks_file, skip_file=None, write_successful_file=None)
+
 
     def _download_list(self):
         downloaded_songs = []

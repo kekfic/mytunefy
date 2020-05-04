@@ -26,65 +26,63 @@ class MyTableModel(QAbstractTableModel):
             return None
         column = index.column()
         if role == Qt.DisplayRole:
-            if column == 2:
+            if column == 0:
+                pass
+            elif column == 1:
+                pass
+            elif column == 2:
                 return self.mylist[index.row()][1]
             elif column == 3:
                 return self.mylist[index.row()][0]
             elif column == 4:
                 return self.mylist[index.row()][2]
             elif column == 5:
-                return self.mylist[index.row()][3]
-            elif column == 0:
-                return QtWidgets.QPushButton
-
-        # elif role == Qt.BackgroundRole:
-        #      return QBrush(Qt.black)
+                try:
+                    song_path = self.mylist[index.row()][3].rsplit('/', 1)[0]
+                except Exception as e:
+                    song_path = self.mylist[index.row()][3]
+                return song_path
 
         elif role == Qt.FontRole:
             font = QFont()
             font.setFamily('Comic Sans MS')
             font.setPointSize(10)
-
             return font
 
         else:
             return None
 
-    def headerData(self, col, orientation, role = Qt.DisplayRole):
+    def headerData(self, col, orientation, role=Qt.DisplayRole):
+
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:
             return self.header[col]
         if role == Qt.BackgroundRole and Qt.BackgroundColorRole:
-            return QColor(Qt.black)
+            return QColor(Qt.white)
         elif role == Qt.ForegroundRole:
-            return QBrush(Qt.black)
+            return QBrush(Qt.white)
         elif role == Qt.FontRole:
             font = QFont()
             font.setPointSize(13)
             font.setFamily('MS Shell Dig 2')
-
             return font
+        elif role == Qt.TextAlignmentRole:
+            return Qt.AlignLeft
 
-        return None
-
-        # if role == Qt.FontRole:
-        #     if orientation == Qt.Vertical:
-        #         font = QFont()
-        #         font.setBold(True)
-        #         return font
-        # if role == Qt.BackgroundColorRole:
-        #     return QColor('blue')
-        # if role == Qt.ForegroundRole:
-        #     return QBrush('Black')
 
 
     def sort(self, col, order):
         """sort table by given column number col"""
         self.emit(SIGNAL("layoutAboutToBeChanged()"))
-        self.mylist = sorted(self.mylist,
-                             key=operator.itemgetter(col))
-        if order == Qt.AscendingOrder:
-            self.mylist.reverse()
-        self.emit(SIGNAL("layoutChanged()"))
+        #todo : something wrong when sorting by song name
+        if col == 2:
+            col = 1
+
+        if col == 1 or col == 3:
+            self.mylist = sorted(self.mylist,
+                                 key=operator.itemgetter(col))
+            if order == Qt.AscendingOrder:
+                self.mylist.reverse()
+            self.emit(SIGNAL("layoutChanged()"))
 
 
 class MyTableView(QTableView):
@@ -101,13 +99,15 @@ class MyTableView(QTableView):
         self.setStyleSheet("QTableView{\n"
                                      "    background-color: rgb(30, 30, 30);\n"
                                      "    color: white;\n"
-                                     "    selection-background-color: rgb(230, 230, 230, 50);\n"
+                                     "    selection-background-color: rgb(40, 80, 230, 50);\n"
+                                     "    selection-color: white\n"
                                      "}\n"
-                                     "QHeaderView::section { background-color:black}")
+                                     "QHeaderView::section { background-color:black}\n"
+                                     "QHeaderView::section { background-color:rgb(30, 30, 30) }")
         self.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.setShowGrid(False)
         self.setGridStyle(QtCore.Qt.NoPen)
-        header = ['', '', 'Title', 'Artist', 'Album', 'Date', '', '']
+        header = ['', '', 'Title', 'Artist', 'Album', 'Date', 'Folder', '']
 
         table_model = MyTableModel(parent, tracks, header)
         self.setModel(table_model)
@@ -115,22 +115,26 @@ class MyTableView(QTableView):
         self.setColumnWidth(0, 10)
         self.setColumnWidth(1, 10)
         self.setColumnWidth(2, 390)
-        self.setColumnWidth(3, 280)
-        self.setColumnWidth(4, 240)
-        self.setColumnWidth(5, 350)
+        self.setColumnWidth(3, 260)
+        self.setColumnWidth(4, 260)
+        self.setColumnWidth(5, 500)
         self.resizeRowsToContents()
         self.setSelectionBehavior(QTableView.SelectRows)
         self.setShowGrid(False)
         self.verticalHeader().hide()
-        self.horizontalHeader().hide()
+        self.horizontalHeader().show()
         self.horizontalScrollBar().hide()
+        self.set_scroll_bar_style()
+        self.setSortingEnabled(True)
         #self.sortByColumn(2)
+
 
     def set_new_model(self, parent, tracks, header):
         header = ['', '', 'Title', 'Artist', 'Album', 'Folder', '', '']
         table_model = MyTableModel(parent, tracks, header)
         self.setModel(table_model)
         self.resizeRowsToContents()
+
 
     def mouseMoveEvent(self, event):
 
@@ -153,30 +157,72 @@ class MyTableView(QTableView):
     def playing_behavior(self, index):
         # todo: find method to keep selected even when plylist is changed
         self.selectRow(index)
-       # self.setBackgroundRole(QtGui.QColor('rgb(45, 200, 0)'))
 
-       # if (self.selectionBehavior() == SelectRows and oldHoverRow != mHoverRow):
-       #     for (int i in range columnCount()):
-       #
-       #         update(model()->index(mHoverRow, i))
-       #
-       #  if (selectionBehavior() == SelectColumns & & oldHoverColumn != mHoverColumn) {
-       #  for (int i = 0; i < model()->rowCount(); ++i) {
-       #  update(model()->index(i, mHoverColumn));
-       #  update(model()->index(i, oldHoverColumn))
-
-# def tableViewConf(parent, tableView, tracks=[]):
-#
-#     header = ['', '', 'Title', 'Artist', 'Album', 'Date', '', '']
-#
-#     table_model = MyTableModel(parent, tracks, header)
-#     tableView.setModel(table_model)
-#     tableView.resizeColumnsToContents()
-#     tableView.setColumnWidth(2, 280)
-#     tableView.setColumnWidth(3, 230)
-#     tableView.setSelectionBehavior(QTableView.SelectRows)
-#     tableView.setShowGrid(False)
-#     tableView.verticalHeader().hide()
-#     tableView.horizontalHeader().hide()
-#     #tableView.setAlternatingRowColors(True)
-#
+    def set_scroll_bar_style(self):
+        self.verticalScrollBar().setStyleSheet("QScrollBar:vertical\n"
+                                               " {\n"
+                                               "     background-color: #2A2929;\n"
+                                               "     width: 15px;\n"
+                                               "     margin: 15px 3px 15px 3px;\n"
+                                               "     border: 1px transparent #2A2929;\n"
+                                               "     border-radius: 4px;\n"
+                                               " }\n"
+                                               "\n"
+                                               " QScrollBar::handle:vertical\n"
+                                               " {\n"
+                                               "     background-color: red;         /* #605F5F; */\n"
+                                               "     min-height: 5px;\n"
+                                               "     border-radius: 4px;\n"
+                                               " }\n"
+                                               "\n"
+                                               " QScrollBar::sub-line:vertical\n"
+                                               " {\n"
+                                               "     margin: 3px 0px 3px 0px;\n"
+                                               "     border-image: url(:/qss_icons/rc/up_arrow_disabled.png);\n"
+                                               "     height: 10px;\n"
+                                               "     width: 10px;\n"
+                                               "     subcontrol-position: top;\n"
+                                               "     subcontrol-origin: margin;\n"
+                                               " }\n"
+                                               "\n"
+                                               " QScrollBar::add-line:vertical\n"
+                                               " {\n"
+                                               "     margin: 3px 0px 3px 0px;\n"
+                                               "     border-image: url(:/qss_icons/rc/down_arrow_disabled.png);\n"
+                                               "     height: 10px;\n"
+                                               "     width: 10px;\n"
+                                               "     subcontrol-position: bottom;\n"
+                                               "     subcontrol-origin: margin;\n"
+                                               " }\n"
+                                               "\n"
+                                               " QScrollBar::sub-line:vertical:hover,QScrollBar::sub-line:vertical:on\n"
+                                               " {\n"
+                                               "\n"
+                                               "     border-image: url(:/qss_icons/rc/up_arrow.png);\n"
+                                               "     height: 10px;\n"
+                                               "     width: 10px;\n"
+                                               "     subcontrol-position: top;\n"
+                                               "     subcontrol-origin: margin;\n"
+                                               " }\n"
+                                               "\n"
+                                               "\n"
+                                               " QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on\n"
+                                               " {\n"
+                                               "     border-image: url(:/qss_icons/rc/down_arrow.png);\n"
+                                               "     height: 10px;\n"
+                                               "     width: 10px;\n"
+                                               "     subcontrol-position: bottom;\n"
+                                               "     subcontrol-origin: margin;\n"
+                                               " }\n"
+                                               "\n"
+                                               " QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical\n"
+                                               " {\n"
+                                               "     background: none;\n"
+                                               " }\n"
+                                               "\n"
+                                               "\n"
+                                               " QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical\n"
+                                               " {\n"
+                                               "     background: none;\n"
+                                               " }\n"
+                                               "")
