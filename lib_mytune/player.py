@@ -2,6 +2,8 @@ import platform
 import os
 import sys
 import random
+import time
+
 from resources import resources as rs
 
 import vlc
@@ -11,6 +13,7 @@ from PySide2.QtCore import QObject, Signal
 
 class SongPlayer(QObject):
     songChanged = Signal(object)
+    timerEnded = Signal()
 
     def __init__(self, slider, audio_slider):
         super().__init__()
@@ -24,105 +27,103 @@ class SongPlayer(QObject):
         self._media = None
         self._shuffle = False
         self._repeat = False
-
+        self._current_playlist = ''
         # Create an empty vlc media player
         self._mediaplayer = self.instance.media_list_player_new()
         self._mediaplayer.event_manager().event_attach(vlc.EventType.MediaListPlayerNextItemSet, self._song_finished)
         self._mediaplayer.event_manager().event_attach(vlc.EventType.MediaListEndReached, self._list_ended)
+       # self._mediaplayer.event_manager().event_attach(vlc.EventType.M, self._list_ended)
         self.is_paused = False
         self.timer = QtCore.QTimer()
 
-    def set_list(self, filenames, current_playlist, shuffle=False):
+
+    def set_list(self, filenames, current_playlist):
+
         #Todo: shuffle strategy is wrong
         self.duration = None
         self._song_number = len(filenames)
-
-        if self._current_playing == current_playlist:
-            pass
-        else:
-            self.set_current_playlist(current_playlist)
-
+        self.set_current_playlist(current_playlist)
         self.filenames = filenames
-        current_filenames = filenames.copy()
-
         if self._shuffle:
-            random.shuffle(current_filenames)
-            print('shuffle')
-        self._open_file(current_filenames)
+            self.temp_playlist = self.filenames.copy()
+            random.shuffle(self.temp_playlist)
+            self._open_file(self.temp_playlist)
+        else:
+            self._open_file(self.filenames)
 
-    def _plays_song(self, current_filenames):
+    def _open_file(self, filenames):
+        self._media = self.instance.media_list_new(filenames)
+        # Set the the file list
+        self._mediaplayer.set_media_list(self._media)
 
+    "Song command-------------------------"
+
+    def play_track(self):
         self._mediaplayer.play()
-        self.is_paused = False
+        self.timer.start()
 
     def pause_track(self):
         self._mediaplayer.pause()
         self.timer.stop()
 
-    def play_track(self):
-        #self._mediaplayer.play_item_at_index(0)
-        self._mediaplayer.play()
-        self.timer.start()
-
     def next_track(self):
-        if self._mediaplayer.is_playing():
-            self._mediaplayer.next()
+        self._mediaplayer.next()
 
     def back_track(self):
-        if self._mediaplayer.is_playing():
-            self._mediaplayer.previous()
+     self._mediaplayer.previous()
 
     def set_track(self, index):
         self._mediaplayer.play_item_at_index(index)
 
+    def stop(self):
+        self._mediaplayer.stop()
+
+    "--------------------------------------------------------------------"
+
     def play_this_item(self, index, songlist, current_playlist):
-        if self._current_playing == current_playlist:
-            pass
-        else:
+
+        if self._current_playlist != current_playlist:
             self.set_current_playlist(current_playlist)
-        if self.filenames:
-            if self.filenames == songlist:
-                self._mediaplayer.play_item_at_index(index)
-            else:
-                self.set_list(songlist, current_playlist)
-                self._mediaplayer.play()
-                self._mediaplayer.play_item_at_index(index)
-        else:
             self.set_list(songlist, current_playlist)
-            self._mediaplayer.play()
-            self._mediaplayer.play_item_at_index(index)
+        if self._shuffle:
+            index_temp= self.temp_playlist.index(self.filenames[index])
+            self.set_track(index_temp)
+        else:
+            self.set_track(index)
+
+    def play_random(self):
+        index = random.randint(0, self._song_number - 1)
+        self.set_track(index)
 
     def set_current_playlist(self, playlist):
         self._current_playlist = playlist
+
     def return_playlist_name(self):
         return self._current_playlist
-
-
-    def stop(self):
-        """Stop player
-        """
-        self._mediaplayer.stop()
 
     def _list_ended(self, event):
         pass
 
     def _song_finished(self, event):
-        artist, song_name, index = self.current_playing()
+        artist, song_name, index = self.current_playing(self.filenames)
         self.songChanged.emit([artist, song_name, index])
-
 
     def is_playing(self):
         return self._mediaplayer.is_playing()
 
     def shuffle_mode(self, mode=False):
+        #todo: not working
         self._shuffle = mode
+        if mode:
+            self.set_list(self.filenames, self._current_playlist)
+            self.play_track()
 
-    def current_playing(self):
+    def current_playing(self, filenames):
         filepath = self._mediaplayer.get_media_player().\
             get_media().get_mrl().title().replace('%20', ' ')
 
         artist, song_name, index = rs.get_data_from_mrl\
-                                        (filepath, self.filenames)
+                                        (filepath, filenames)
 
         return artist, song_name, index
 
@@ -132,13 +133,7 @@ class SongPlayer(QObject):
         """
         self._mediaplayer.get_media_player().audio_set_volume(volume)
 
-    def _open_file(self, filenames):
 
-        self._media = self.instance.media_list_new(filenames)
-        # Set the the file list
-        self._mediaplayer.set_media_list(self._media)
-        # Parse the metadata of the file
-#        self._media.parse()
 
 
     def set_position(self):
@@ -176,6 +171,7 @@ class SongPlayer(QObject):
         self.timer.stop()
         #pos = self._slider.value()
         self._mediaplayer.get_media_player().set_position(value / 100.0)
+
         self.timer.start()
 
 
@@ -201,3 +197,7 @@ class SongPlayer(QObject):
             # This fixes that "bug".
             if not self.is_paused:
                 self.stop()
+
+
+
+

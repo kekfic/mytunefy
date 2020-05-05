@@ -203,6 +203,8 @@ def characters_converter(fileplayer):
     fileplayer = fileplayer.replace('%c3%b1', 'ñ')
     fileplayer = fileplayer.replace('%5b', '[')
     fileplayer = fileplayer.replace('%5d', ']')
+    fileplayer = fileplayer.replace('%c3%ac', 'ì')
+    fileplayer = fileplayer.replace('%c3%b2', 'ò')
 
     return fileplayer
 
@@ -223,19 +225,12 @@ def get_data_from_mrl(fileplayer, filenames):
             songs_in_path.append(text_s)
         if fileplayer in songs_in_path:
             index = songs_in_path.index(fileplayer)
-            if fileplayer.count(' - ') > 1:
-                fileplayer = fileplayer.replace(' - live', '')
-                fileplayer = fileplayer.replace(' - remastered', '')
-                fileplayer = fileplayer.replace(' - remix', '')
-                fileplayer = fileplayer.replace(' - spanish', '')
-                fileplayer = fileplayer.replace(' - 2001', '')
-                fileplayer = fileplayer.replace(' - 2012', '')
 
-                if fileplayer.count(' - ') > 1:
-                    print('NOTE: Unable to sanitize song. Song name or artist name could be wrong.')
-                    artist_raw, raw_name, junk = fileplayer.split(' - ')
-                else:
-                    artist_raw, raw_name = fileplayer.split(' - ')
+            if fileplayer.count(' - ') > 1:
+                print('NOTE: Song name or artist name could be wrong.')
+                artist_raw, raw_name, junk = fileplayer.split(' - ')
+            else:
+                artist_raw, raw_name = fileplayer.split(' - ')
 
             artist = artist_raw.strip()
             song_name = raw_name.split('.mp')[0].strip()

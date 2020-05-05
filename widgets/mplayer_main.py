@@ -1,9 +1,11 @@
 # Importing Required Modules & libraries
 import operator
+import subprocess
 import time
 from tkinter import *
 import os
 
+import vlc
 from PySide2 import QtCore, QtGui
 from PySide2.QtCore import QObject, Signal, Qt
 from PySide2.QtWidgets import QMainWindow, QMessageBox
@@ -53,7 +55,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         self.my_song_player = SongPlayer(self.horizontalSlider, self.verticalSlider)
         self.horizontalSlider.sliderReleased.connect(self.h_slider_hanlder)
-        self.horizontalSlider.sliderMoved.connect(self.h_slider_hanlder)
+        #self.horizontalSlider.sliderMoved.connect(self.h_slider_hanlder)
         self.verticalSlider.valueChanged.connect(self.volume_hanler)
         # self.horizontalSlider.valueChanged.connect(self.h_slider_hanlder)
         rs.scroll_bar_appearance(self.listWidget.verticalScrollBar())
@@ -94,7 +96,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         # self.tableView.setItemDelegate(ButtonDelegate(self))
         # self.connect(self.tableView.mouseDoubleClickEvent, SIGNAL("triggered()"), self.double_click_table)
 
-        self.main_window_player.closeSignal.connect(self.clearExit)
+        self.main_window_player.closeSignal.connect(self.cleanExit)
 
         # this three signal do almost the same thing, condensate
         #self.tableView.horizontalHeader.sectionClicked.connect(self.sort_table_view)
@@ -113,8 +115,17 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         self.repeatButton.clicked.connect(self.repeat_mode)
         self.my_song_player.songChanged.connect(self._song_changed)
 
-    def clearExit(self):
-        print('Use thi function for saving data and cleaning')
+
+    def cleanExit(self):
+        print('Use this function for saving data and cleaning')
+        self.my_song_player.stop()
+        # vlc.libvlc_media_player_stop(self.my_song_player._mediaplayer.get_media_player())
+        # vlc.libvlc_release(self.my_song_player.instance)
+        # vlc.AudioFlushCb()
+        # vlc.AudioCleanupCb()
+        # vlc.libvlc_vlm_del_media(self.my_song_player.instance, self.my_song_player._media)
+
+        #vlc.libvlc_wait(self.my_song_player.instance)
 
     def h_slider_hanlder(self):
 
@@ -149,15 +160,24 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
     def sort_table_view(self, index):
         order = self.tableView.horizontalHeader().sortIndicatorOrder().name.decode()
+        position = self.my_song_player.get_slider_position()
+        artist, song_name, index = self.playing_song_data
+        if not song_name:
+            song_name = self.songs_category.song_names()[index]
 
         if index == 2:
             self.songs_category.sort_data('song_names', order)
         elif index == 3:
             self.songs_category.sort_data(order=order)
 
+        index = self.songs_category.song_names().index(song_name)
+
         self.my_song_player.stop()
-        self.my_song_player.set_list(self.songs_category.filenames(), self.current_list)
+        self.my_song_player.play_this_item(index, self.songs_category.filenames(), self.current_list)
+        self.tableView.playing_behavior(index)
         self.my_song_player.play_track()
+        self.my_song_player.set_song_position(position*100)
+
     def play_item(self):
         pass
 
@@ -208,6 +228,8 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
             self.play_track()
             self.label_song_text_setter(self.songs_category.tracks()[0][0],
                                         self.songs_category.tracks()[0][1])
+            self.playing_song_data = [self.songs_category.tracks()[0][0],
+                                      self.songs_category.tracks()[0][1], 0]
             self.tableView.playing_behavior(0)
 
     def reset_list_widget_color(self):
@@ -232,6 +254,8 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         item.setForeground(QtGui.QBrush(QtGui.QColor(40, 40, 180)))
         self.PlayPauseButton.setChecked(True)
         self.my_song_player.set_list(self.songs_category.filenames(), self.current_list)
+        self.playing_song_data = [self.songs_category.tracks()[0][0],
+                                  self.songs_category.tracks()[0][1], 0]
         self.play_track()
 
     def double_click_table(self, index):
@@ -245,6 +269,10 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
             self.label_song_text_setter(self.songs_category.tracks()[row][1],
                                         self.songs_category.tracks()[row][0])
+
+            self.playing_song_data = [self.songs_category.tracks()[row][0],
+                                      self.songs_category.tracks()[row][1], row]
+
             self.filenames = self.songs_category.filenames()
 
             self.current_list = self.item.text()
@@ -253,6 +281,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         self.tableView.playing_behavior(row)
         self.my_song_player.play_this_item(row, self.filenames, self.current_list)
+
         self.PlayPauseButton.setChecked(True)
         self.pushButtonPlaylist.setText('Pause')
 
@@ -300,6 +329,18 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         if res:
             self.playlist, self.album, self.artist, \
             plname, alname, arname = parsing_user_db_data(res)
+            # plname.sort()
+            # alname.sort()
+            # arname.sort()
+            # plname, self.playlist = [list(x) for x in zip(*sorted(zip(plname,
+            #                         self.playlist), key=operator.itemgetter(0)))]
+            #
+            # alname, self.album = [list(x) for x in zip(*sorted(zip(alname,
+            #                                                           self.album ), key=operator.itemgetter(0)))]
+            #
+            # arname, self.artist = [list(x) for x in zip(*sorted(zip(arname,
+            #                                                         self.artist ), key=operator.itemgetter(0)))]
+
         else:
             return [None, None, None]
 
@@ -393,6 +434,79 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         func = switcher.get(key)(datalist)
         return func
 
+class SongData:
+    def __init__(self, data, category_list):
+        #Todo: check category list
+        self._data = data
+        self._tracks = []
+        self._filenames = []
+        self._artists = []
+        self._song_names = []
+        self._durations = []
+        self._category_list = category_list
+
+        self._data_parser(self._data, self._category_list)
+
+    def _data_parser(self, data, category_list):
+        tracks = []
+        for item in data:
+            artist_id = item[4]
+            album_id = item[3]
+            self._artists.append(category_list[2][artist_id - 1])
+            self._song_names.append(item[2])
+
+            tracks.append([category_list[2][artist_id - 1], item[2],
+                           category_list[1][album_id - 1], item[5]])
+
+            self._filenames.append(item[5])
+            self._durations.append(item[6])
+
+        self.set_tracks(tracks)
+
+    def set_tracks(self, tracks):
+        self._tracks = tracks
+
+    def split_filename(self,filename):
+        only_file_name = []
+        for item in filename:
+            only_file_name.append(item.split('/')[-1])
+
+        return only_file_name
+
+    def sort_data(self, main_list='filename', order='Descending'):
+        "Sort list for artist or songname"
+        #todo sorting is working only for artist
+        filename = self.split_filename(self._filenames)
+        list1 = filename
+        list2 = self._song_names
+
+        if order == 'AscendingOrder':
+            list2.sort()
+            junk, self._song_names, self._filenames, self._artists, \
+                self._tracks = [list(x) for x in zip(*sorted(zip(list1, list2, self._filenames, self._artists,
+                                              self._tracks), key=operator.itemgetter(0), reverse=True))]
+        else:
+            junk, self._song_names, self._filenames, self._artists,\
+                    self._tracks = [list(x) for x in zip(*sorted(zip(list1, list2, self._filenames, self._artists,
+                                                                              self._tracks),
+                                                                          key=operator.itemgetter(0)))]
+
+    def song_names(self):
+        return self._song_names
+
+    def tracks(self):
+        return self._tracks
+
+    def artists(self):
+        return self._artists
+
+    def duration(self):
+        return self._durations
+
+    def filenames(self):
+        return self._filenames
+
+
 
 class spotyfyDataRetrievier:
     """This class save data"""
@@ -431,80 +545,3 @@ class spotyfyDataRetrievier:
         elif self._category == 'Playlist':
             self.data, self._song_numb = get_tracks_playlist(self._url)
             self._tracks = self.data
-
-
-class SongData:
-    def __init__(self, data, category_list):
-        #Todo: check category list
-        self._data = data
-        self._tracks = []
-        self._filenames = []
-        self._artists = []
-        self._song_names = []
-        self._durations = []
-        self._category_list = category_list
-
-        self._data_parser(self._data, self._category_list)
-
-    def _data_parser(self, data, category_list):
-        tracks = []
-        for item in data:
-            artist_id = item[4]
-            album_id = item[3]
-            self._artists.append(category_list[2][artist_id - 1])
-            self._song_names.append(item[2])
-
-            tracks.append([category_list[2][artist_id - 1], item[2],
-                           category_list[1][album_id - 1], item[5]])
-
-            self._filenames.append(item[5])
-            self._durations.append(item[6])
-
-        self.set_tracks(tracks)
-
-    def set_tracks(self, tracks):
-        self._tracks = tracks
-
-    def sort_data(self, main_list='artists', order='Descending'):
-        "Sort list for artist or songname"
-        list1 = self._artists
-        list2 = self._song_names
-        # if order == 'Random':
-        #     pass
-        # elif order == 'Ascending':
-        #     pass
-        # elif order == 'Descending':
-        #     pass
-
-        if main_list == 'song_names':
-            list1 = self._song_names
-            list2 = self._artists
-        elif main_list == 'whatever':
-            pass
-
-        if order == 'AscendingOrder':
-            list2.sort()
-            self._artists, self._song_names, self._filenames, \
-                self._tracks = [list(x) for x in zip(*sorted(zip(list1, list2,
-                                    self._filenames,
-                                              self._tracks), key=operator.itemgetter(0), reverse=True))]
-        else:
-            self._artists, self._song_names, self._filenames, \
-                        self._tracks = [list(x) for x in zip(*sorted(zip(list1, list2,
-                                                                              self._filenames,
-                                                                              self._tracks),
-                                                                          key=operator.itemgetter(0)))]
-
-
-
-    def tracks(self):
-        return self._tracks
-
-    def artists(self):
-        return self._artists
-
-    def duration(self):
-        return self._durations
-
-    def filenames(self):
-        return self._filenames
