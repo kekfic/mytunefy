@@ -9,6 +9,8 @@ tougher part of the job).
 Contributions are very much appreciated!
 
 * Tested on Python 3.6
+## Note
+spotify id and secret key are needed ----> in resources.resources
 
 ## Dependency
 
