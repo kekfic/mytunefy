@@ -26,6 +26,8 @@ check each packages dependency
 Graphic interface of the program
 ![alt text](https://github.com/kekfic/mytunefy/blob/master/resources/icons/mytune_player.PNG)
 
+![alt text](https://github.com/kekfic/mytunefy/blob/master/resources/icons/mytune_downloader.PNG)
+
 ## Code conventions
 
 * Maximum line length is 80 characters
