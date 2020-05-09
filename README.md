@@ -22,6 +22,10 @@ PySide2\
 
 check each packages dependency
 
+## Usage
+
+![alt text](https://github.com/kekfic/mytunefy/blob/master/resources/icons/mytune_player.PNG)
+
 ## Code conventions
 
 * Maximum line length is 80 characters
