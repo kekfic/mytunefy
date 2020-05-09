@@ -6,9 +6,8 @@ import threading
 import time
 
 from widgets.downld_main import MainWin
-import vlc
-from PySide2 import QtCore, QtGui
-from PySide2.QtCore import QObject, Signal, Qt
+from PySide2 import QtGui
+from PySide2.QtCore import QObject, Signal
 from PySide2.QtWidgets import QMainWindow, QMessageBox
 from spotdl import internals, const
 from resources import resources as rs, graphics
@@ -58,22 +57,12 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         self.setupUi(self.main_window_player)
 
         QObject.__init__(self)
-
+        "Initial variables"
         self._id_artist_list = []
         self._id_album_list = []
         self._artists_name_list = []
         self._album_name_list = []
         self._stream_mode = False
-        self.my_song_player = SongPlayer(self.horizontalSlider, self.verticalSlider)
-        self.pushButtonDownloader.clicked.connect(self.down_main_window)
-        self.StreamModeButton.clicked.connect(self.stream_mode_button)
-
-
-        self.verticalSlider.valueChanged.connect(self.volume_hanler)
-
-        graphics.scroll_bar_appearance(self.listWidget.verticalScrollBar())
-        self.verticalSlider.setValue(100)
-
         self.shuffle = False
         self.current_playing_list = ''
         self.playing_song_data = ''
@@ -82,6 +71,13 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         self.current_playing_tracks_list = [['', ''], ['', '']]
         self.current_p_tracks_list_url = [['', ''], ['', '']]
         self.label_User.setText(os.getlogin())
+        self.my_song_player = SongPlayer(self.horizontalSlider, self.verticalSlider)
+        self.pushButtonDownloader.clicked.connect(self.down_main_window)
+        self.StreamModeButton.clicked.connect(self.stream_mode_button)
+        self.verticalSlider.valueChanged.connect(self.volume_hanler)
+
+        graphics.scroll_bar_appearance(self.listWidget.verticalScrollBar())
+        self.verticalSlider.setValue(100)
 
         self.comboBoxCategory.setCurrentIndex(4)  # setting index at cartella
         if os.path.isfile('db_data/song_db'):

@@ -1,26 +1,18 @@
 # This is MyTuneFy
-
+I developed this program to improve my python programming skills. 
+This program is based on already existing library (that actually made the 
+tougher part of the job). 
 Contributions are very much appreciated!
 
 * 
 
-* 
-
-* a
 
 * Python 3.3+ and Windows.
 
 ## Dependency
 
 youtube-dl\
-spotdl ---> modified for handling youtube cache download error:\
-at youtube_tools, line 193\
-
-`
-with youtube_dl.YoutubeDL(pafy.g.def_ydl_opts) as ydl:
-    ydl.cache.remove()
-                 `\
-                 
+spotdl\                  
 pafy\
 sqlalchemy\
 PySide2\
@@ -36,5 +28,5 @@ code is PEP8 compliant.
 
 ## Purpose
 
-Downloading music may be illegal in your country. Please support artists respecting copyrights.
+Downloading music is illegal. Please support artists, respect copyrights.
 This application is only for didactic purpose.
