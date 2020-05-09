@@ -10,7 +10,7 @@ Contributions are very much appreciated!
 
 * Tested on Python 3.6
 ## Note
-spotify id and secret key are needed ----> in resources.resources
+Need FFmpeg for converting music
 
 ## Dependency
 
