@@ -38,28 +38,21 @@ if __name__ == "__main__":
     while movie.state() == QMovie.Running and time.time() < start + 5:
         app.processEvents()
 
-    if valid_user():
+   
 
-        "downloader"
-        #  -------------------working on player
-        #
-        # guiDown = MainWin()
-        # guiDown.mainwindow.show()
-        #
-        guiPlayer = MainWinPlayer()
-        guiPlayer.main_window_player.show()
-        splash.close()
-        # gui.mainwindow.showMaximized()
+    "downloader"
+    #  -------------------working on player
+    #
+    # guiDown = MainWin()
+    # guiDown.mainwindow.show()
+    #
+    guiPlayer = MainWinPlayer()
+    guiPlayer.main_window_player.show()
+    splash.close()
+    # gui.mainwindow.showMaximized()
 
-        sys.exit(app.exec_())
+    sys.exit(app.exec_())
 
 
 
-    else:
-        # Todo: add type of error (Db not found, no user, time licence, other).
-        # Todo: add some system to have logs when executable crash (a log file)
-        splash.close()
-        mydialog = QDialog()
-        result = QMessageBox.information(mydialog, "Invalid USER", 'Invalid User - Please contact administrator.')
-        print('User not allowed')
-        sys.exit(3)
+  
