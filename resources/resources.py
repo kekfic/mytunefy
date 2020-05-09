@@ -162,8 +162,8 @@ def get_arguments(raw_args=None, to_group=True, to_merge=True):
     parser.music_videos_only = False
     parser.avconv = False
     parser.no_remove_original = False
-    parser.spotify_client_id = ""
-    parser.spotify_client_secret = ""
+    parser.spotify_client_id = "45642ced0f5a4bedaec1f86b4ed7f89e"
+    parser.spotify_client_secret = "6532f359d2f14d9e9d24fd4b3d269dba"
 
     return parser
 
