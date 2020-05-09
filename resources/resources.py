@@ -50,8 +50,8 @@ default_conf = {
         "skip": None,
         "write-successful": None,
         "log-level": "INFO",
-        "spotify_client_id": "4fe3fecfe5334023a1472516cc99d805",
-        "spotify_client_secret": "0f02b7c483c04257984695007a4a8d5c",
+        "spotify_client_id": " ",
+        "spotify_client_secret": " ",
     }
 }
 
@@ -162,8 +162,8 @@ def get_arguments(raw_args=None, to_group=True, to_merge=True):
     parser.music_videos_only = False
     parser.avconv = False
     parser.no_remove_original = False
-    parser.spotify_client_id = "4fe3fecfe5334023a1472516cc99d805"
-    parser.spotify_client_secret = "0f02b7c483c04257984695007a4a8d5c"
+    parser.spotify_client_id = ""
+    parser.spotify_client_secret = ""
 
     return parser
 
