@@ -10,6 +10,7 @@ Contributions are very much appreciated!
 
 * Tested on Python 3.6
 ## Note
+------WORK IN PROGRESS----
 Need FFmpeg for converting music
 
 ## Dependency
