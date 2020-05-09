@@ -100,6 +100,7 @@ class MainWin(QObject, Ui_MainWindow):
         self.menu_connection()
 
         self.pushButtonYoutube.clicked.connect(self.youtube_button)
+        self.pu
 
         'Setting thread tha take care of the download, this allow a responsive main window'
         # self.mythread = MyClassThread(target=self.startDownload)
@@ -223,6 +224,9 @@ class MainWin(QObject, Ui_MainWindow):
         temp = YoutubeDialog(QDialog(self.mainwindow), self.dialogSignal)
         if temp.dialog.exec_():
             pass
+
+    def playlist_button(self):
+        pass
     """ 
         ------------------------------------------------------------
                                 Menu

@@ -7,6 +7,8 @@ from spotdl import downloader, spotify_tools, const, convert, metadata, internal
 from logzero import logger as log
 import youtube_dl
 import pafy
+from spotdl.spotify_tools import get_playlists, write_playlist
+
 from resources import resources as rs
 from slugify import slugify
 
@@ -15,6 +17,12 @@ class EnhancedDownloader(downloader.Downloader):
     """Inherited class"""
     def __init__(self, raw_song, number=None):
         super().__init__(raw_song, number=None)
+
+
+    def return_song_name(self):
+        songname = self.refine_songname(self.content.title)
+
+        return songname, self.meta_tags
 
     def download_single(self):
         """ Logic behind downloading a song. """
@@ -79,6 +87,13 @@ class ListDownloaderInherited(downloader.ListDownloader):
 
 
 # spotify_tools.write_all_albums_from_artist()
+
+def write_user_playlist(username, text_file=None):
+    """ Write user playlists to text_file """
+    links = get_playlists(username=username)
+    for playlist in links:
+        write_playlist(playlist, text_file)
+
 
 def download_song(file_name, content):
     """ Download the audio file from YouTube. """
@@ -150,15 +165,15 @@ def match_args():
         operation = 'all_album'
 
     # Todo: the user playlist require user input in cmd. I will exclude it for now.
-    """     
+
     elif const.args.username:
         spotify_tools.write_user_playlist(
             username=const.args.username, text_file=const.args.write_to
         )
-        playlist = fetch_playlist(const.args.playlist)
-        text_file = u"{0}.txt".format(slugify(playlist["name"], ok="-_()[]{}"))
-        operation = 'username'
-    """
+        # playlist = spotify_tools.fetch_playlist(const.args.playlist)
+        # text_file = u"{0}.txt".format(slugify(playlist["name"], ok="-_()[]{}"))
+        # operation = 'username'
+        #
 
     return operation, text_file, tracks_url
 
@@ -187,33 +202,36 @@ def list_downloader(operation, text_file, tracks_url):
 def get_tracks_playlist(url):
     playlist = spotify_tools.fetch_playlist(url)
     tracks_very_raw = playlist["tracks"]
-    songs_in_playlist = len(tracks_very_raw)
-    i = 0
     track = []
     for item in tracks_very_raw['items']:
         data = item['track']
+        track_url = data["external_urls"]["spotify"]
         song_name = data['name']
         artist_name = data['artists'][0]['name']
+        artist_url = data['artists'][0]['external_urls']['spotify']
         album = data['album']['name']
+        album_url = data['album']['external_urls']['spotify']
         duration_ms = data['duration_ms']
-        track.append([song_name, artist_name, album, duration_ms])
-        i = i + 1
+        track.append([song_name, artist_name, album, duration_ms, track_url, album_url, artist_url])
 
-    return track, i
+    return track
 
 
 def get_tracks_album(url):
     album = spotify_tools.fetch_album(url)
     album_name = album['name']
-    artist = album['artists'][0]['name']
-    num_song = len(album['tracks']['items'])
-    song_name = []
-    duration = []
-    for item in album['tracks']['items']:
-        song_name.append(item['name'])
-        duration.append(item['duration_ms'])
+    artist_name = album['artists'][0]['name']
+    artist_url = album['artists'][0]["external_urls"]["spotify"]
 
-    return ([song_name, artist, album_name, duration], num_song)
+    track = []
+    for item in album['tracks']['items']:
+        song_name = item['name']
+        duration = item['duration_ms']
+        track_url = item["external_urls"]["spotify"]
+
+        track.append([song_name, artist_name, album_name, duration, track_url, artist_url])
+
+    return track
 
 
 def get_song_data(url):
@@ -289,3 +307,43 @@ def main_func_caller():
         operation = False
         log.exception(e)
         sys.exit(3)
+
+
+class spotyfyDataRetrievier:
+    """This class save data"""
+
+    def __init__(self, name, category, url):
+
+        self._name = name
+        self._category = category
+        self._url = url
+        self._tracks = []
+        self._get_tracks_from_url()
+        self._only_tracks = []
+
+    def numb_songs(self):
+        return self._song_numb
+
+    def track_data(self):
+        return self._tracks
+
+    def name(self):
+        return self._name
+
+    def only_tracks(self):
+        return self._only_tracks
+
+    def _get_tracks_from_url(self):
+
+        if self._category == 'Album':
+            self.data, self._song_numb = get_tracks_playlist(self._url)
+
+            for i in range(self._song_numb):
+                self._only_tracks.append(self.data[0][i])
+                self._tracks.append([self.data[0][i],
+                                     self.data[1], self.data[2], self.data[3][i]])
+
+        elif self._category == 'Playlist':
+            self.data, self._song_numb = get_tracks_playlist(self._url)
+            self._tracks = self.data
+

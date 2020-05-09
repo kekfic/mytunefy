@@ -1,3 +1,4 @@
+import operator
 import string
 from _hashlib import pbkdf2_hmac
 from binascii import hexlify
@@ -14,9 +15,11 @@ import logging
 import sys
 from spotdl import internals
 
+
 _LOG_LEVELS_STR = ["INFO", "WARNING", "ERROR", "DEBUG"]
 #Global queue
 songPusher = Queue()
+streamData = Queue()
 #working_dir
 MY_WORKING_DIR = None
 
@@ -65,6 +68,7 @@ def log_leveller(log_level_str):
     return loggin_level
 
 def refine_string(string_to_refine):
+    #todo don't know if it is useful, there should be some library
     mystring = string_to_refine.lower()
     mystring = mystring.replace('-', ' ')
     mystring = mystring.replace('_', ' ')
@@ -107,13 +111,6 @@ def key_id_creator(variable):
 
     return key_bin
 
-def parser_db(res):
-    pass
-# def return_directory():
-#     global MY_WORKING_DIR
-#
-#     return MY_WORKING_DIR
-
 
 def url_parser(url):
     category_list = ''
@@ -134,6 +131,7 @@ def url_parser(url):
 
 
 def get_arguments(raw_args=None, to_group=True, to_merge=True):
+    #todo: define a better way to set this configuration
     # help = 'Load tracks from playlist URL into {}'.format()
     parser = type("", (), {})()
     parser.youtube_api_key = None
@@ -186,8 +184,19 @@ def reset_parser_url():
     const.args.album = ''
     const.args.artist = ''
 
-def characters_converter(fileplayer):
+def parsing_song(song):
+    # todo call with another name and move from here
+    # poping format
+    listsplit = re.split(r'[-.]', song)
+    listsong = [x.strip() for x in listsplit]
+    art = listsong[1].split('(')[0]
+    artist = art.strip()
 
+    return [listsong[0], artist, 'Album', 'Current Folder']
+
+def characters_converter(fileplayer):
+    #todo check if there is some library
+    # or directly with some vlx configuration
     fileplayer = fileplayer.split('/')[-1].lower()
     fileplayer = fileplayer.replace('%c3%a9', 'é')
     fileplayer = fileplayer.replace('%c3%a8', 'è')
@@ -210,7 +219,10 @@ def characters_converter(fileplayer):
 
 
 def get_data_from_mrl(fileplayer, filenames):
-    #todo: no reference to class, move in another place
+    #todo: check if splitter '.m' works for every songs
+    # ideally a would have two possible formats mp3 and m4a
+    # even if flac format is possible
+
     artist_raw = ''
     raw_name = ''
     artist = ''
@@ -233,7 +245,8 @@ def get_data_from_mrl(fileplayer, filenames):
                 artist_raw, raw_name = fileplayer.split(' - ')
 
             artist = artist_raw.strip()
-            song_name = raw_name.split('.mp')[0].strip()
+            song_name = raw_name.split('.m')[0].strip()
+            #song_name = song_name.split('.m4a')[0].strip()
         else:
             print('Song Not Found!!')
 
@@ -243,71 +256,17 @@ def get_data_from_mrl(fileplayer, filenames):
     return [artist, song_name, index]
 
 
-def scroll_bar_appearance(scrollbar):
-    scrollbar.setStyleSheet("QScrollBar:vertical\n"
-" {\n"
-"     background-color: #2A2929;\n"
-"     width: 15px;\n"
-"     margin: 15px 3px 15px 3px;\n"
-"     border: 1px transparent #2A2929;\n"
-"     border-radius: 4px;\n"
-" }\n"
-"\n"
-" QScrollBar::handle:vertical\n"
-" {\n"
-"     background-color: red;         /* #605F5F; */\n"
-"     min-height: 5px;\n"
-"     border-radius: 4px;\n"
-" }\n"
-"\n"
-" QScrollBar::sub-line:vertical\n"
-" {\n"
-"     margin: 3px 0px 3px 0px;\n"
-"     border-image: url(:/qss_icons/rc/up_arrow_disabled.png);\n"
-"     height: 10px;\n"
-"     width: 10px;\n"
-"     subcontrol-position: top;\n"
-"     subcontrol-origin: margin;\n"
-" }\n"
-"\n"
-" QScrollBar::add-line:vertical\n"
-" {\n"
-"     margin: 3px 0px 3px 0px;\n"
-"     border-image: url(:/qss_icons/rc/down_arrow_disabled.png);\n"
-"     height: 10px;\n"
-"     width: 10px;\n"
-"     subcontrol-position: bottom;\n"
-"     subcontrol-origin: margin;\n"
-" }\n"
-"\n"
-" QScrollBar::sub-line:vertical:hover,QScrollBar::sub-line:vertical:on\n"
-" {\n"
-"\n"
-"     border-image: url(:/qss_icons/rc/up_arrow.png);\n"
-"     height: 10px;\n"
-"     width: 10px;\n"
-"     subcontrol-position: top;\n"
-"     subcontrol-origin: margin;\n"
-" }\n"
-"\n"
-"\n"
-" QScrollBar::add-line:vertical:hover, QScrollBar::add-line:vertical:on\n"
-" {\n"
-"     border-image: url(:/qss_icons/rc/down_arrow.png);\n"
-"     height: 10px;\n"
-"     width: 10px;\n"
-"     subcontrol-position: bottom;\n"
-"     subcontrol-origin: margin;\n"
-" }\n"
-"\n"
-" QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical\n"
-" {\n"
-"     background: none;\n"
-" }\n"
-"\n"
-"\n"
-" QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical\n"
-" {\n"
-"     background: none;\n"
-" }\n"
-"")
+
+def comboBoxParser(self, key, datalist):
+
+    # todo: implement it
+    print("Starting the data parsing.")
+    switcher = {
+        'Artista': self.get_songs,
+        'Album': self.get_songs,
+        'Playlist': self.fanc3,
+        'Brani': self.func4,
+        'Cartella': self.func5,
+    }
+    func = switcher.get(key)(datalist)
+    return func

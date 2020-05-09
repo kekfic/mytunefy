@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1097</width>
-    <height>831</height>
+    <width>1052</width>
+    <height>785</height>
    </rect>
   </property>
   <property name="palette">
@@ -370,60 +370,6 @@ border-radius: 5px;</string>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="Folder">
-           <property name="minimumSize">
-            <size>
-             <width>124</width>
-             <height>45</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton {
-    border: 2px solid #8f8f91;
-    border-radius: 20px;
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #2566ff, stop: 1 #3a93ff);
-	color: white;
-    min-width: 120px;
-}
-
-QPushButton:pressed {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
-}
-
-QPushButton:flat {
-    border: none; /* no border for a flat push button */
-}
-
-QPushButton:default {
-    border-color: navy; /* make the default button prominent */
-}</string>
-           </property>
-           <property name="text">
-            <string>PushButton</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_8">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <widget class="QPushButton" name="pushButton">
            <property name="minimumSize">
             <size>
@@ -465,6 +411,73 @@ QPushButton:hover{
           </widget>
          </item>
          <item>
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="FolderButton">
+           <property name="minimumSize">
+            <size>
+             <width>124</width>
+             <height>45</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+    border: 2px solid #8f8f91;
+    border-radius: 20px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #2566ff, stop: 1 #3a93ff);
+	color: white;
+    min-width: 120px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: navy; /* make the default button prominent */
+}</string>
+           </property>
+           <property name="text">
+            <string>Cartella Locale</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_10">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QLabel" name="label_User">
            <property name="minimumSize">
             <size>
@@ -499,19 +512,6 @@ QPushButton:hover{
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_10">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <spacer name="horizontalSpacer_11">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -531,6 +531,11 @@ QPushButton:hover{
              <width>16777215</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPlainTextEdit {
+color: white;
+}</string>
            </property>
           </widget>
          </item>
@@ -899,10 +904,31 @@ QPushButton:hover{
 	image-position: left;
 	image: url(:/mytunefy/resources/icons/stream_light-grey.png);
 	}
-</string>
+
+QPushButton:hover:checked{
+	color: white;
+	  background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+	image-position: left;
+	image: url(:/mytunefy/resources/icons/stream_light-grey.png);
+	}
+QPushButton:checked{
+	color: red;
+	  background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);
+	image-position: left;
+	
+	image: url(:/mytunefy/resources/icons/stream_icon.png);
+	}</string>
             </property>
             <property name="text">
              <string>Streaming Music</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
             </property>
             <property name="default">
              <bool>false</bool>
@@ -910,7 +936,7 @@ QPushButton:hover{
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="pushButtonDownloader">
             <property name="minimumSize">
              <size>
               <width>200</width>
@@ -2500,10 +2526,10 @@ color: rgb(255, 255, 255);
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <property name="leftMargin">
-               <number>65</number>
+               <number>85</number>
               </property>
               <property name="rightMargin">
-               <number>65</number>
+               <number>85</number>
               </property>
               <item>
                <widget class="QPushButton" name="shuffleButton">
@@ -2868,7 +2894,7 @@ image: url(:/mytunefy/resources/icons/repeat-track-green.png);
              <widget class="QSlider" name="horizontalSlider">
               <property name="minimumSize">
                <size>
-                <width>0</width>
+                <width>520</width>
                 <height>30</height>
                </size>
               </property>

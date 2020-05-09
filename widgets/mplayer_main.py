@@ -1,21 +1,26 @@
 # Importing Required Modules & libraries
 import operator
-import subprocess
-import time
-from tkinter import *
-import os
 
+import os
+import threading
+import time
+
+from widgets.downld_main import MainWin
 import vlc
 from PySide2 import QtCore, QtGui
 from PySide2.QtCore import QObject, Signal, Qt
 from PySide2.QtWidgets import QMainWindow, QMessageBox
-from spotdl import internals
-from resources import resources as rs
+from spotdl import internals, const
+from resources import resources as rs, graphics
 from gui.gui_main_player import Ui_PlayerMainWindow
 from list_class.tableViewClass import MyTableView
 from lib_mytune.player import SongPlayer
-from resources.db_handler import player_get_all_user_data, parsing_user_db_data, get_songs_from_db
-from lib_mytune.spotdl_inherited import get_tracks_playlist
+from resources.internal_classes import SongData
+from resources.db_handler import player_get_all_user_data, parsing_user_db_data,\
+    get_songs_from_db
+from lib_mytune import spotdl_inherited as spt_dl_in
+
+from widgets.stream_main import MainStream
 
 
 class MyReimplementedWindow(QMainWindow):
@@ -46,6 +51,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         "Cartella": 4
     }
 
+
     def __init__(self):
         self.main_window_player = MyReimplementedWindow()
         Ui_PlayerMainWindow.__init__(self)
@@ -53,38 +59,44 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         QObject.__init__(self)
 
+        self._id_artist_list = []
+        self._id_album_list = []
+        self._artists_name_list = []
+        self._album_name_list = []
+        self._stream_mode = False
         self.my_song_player = SongPlayer(self.horizontalSlider, self.verticalSlider)
-        self.horizontalSlider.sliderReleased.connect(self.h_slider_hanlder)
-        #self.horizontalSlider.sliderMoved.connect(self.h_slider_hanlder)
+        self.pushButtonDownloader.clicked.connect(self.down_main_window)
+        self.StreamModeButton.clicked.connect(self.stream_mode_button)
+
+
         self.verticalSlider.valueChanged.connect(self.volume_hanler)
-        # self.horizontalSlider.valueChanged.connect(self.h_slider_hanlder)
-        rs.scroll_bar_appearance(self.listWidget.verticalScrollBar())
+
+        graphics.scroll_bar_appearance(self.listWidget.verticalScrollBar())
         self.verticalSlider.setValue(100)
 
-        self.checkThreadTimer = QtCore.QTimer(self)
-        self.checkThreadTimer.setInterval(2000)  # .5 seconds
-        self.checkThreadTimer.start()
-
-        self.checkThreadTimer.timeout.connect(self.slider_update)
-
         self.shuffle = False
-        self.current_list = ''
+        self.current_playing_list = ''
         self.playing_song_data = ''
         self.playing_category = ''
+        self.current_item = None
+        self.current_playing_tracks_list = [['', ''], ['', '']]
+        self.current_p_tracks_list_url = [['', ''], ['', '']]
         self.label_User.setText(os.getlogin())
 
         self.comboBoxCategory.setCurrentIndex(4)  # setting index at cartella
         if os.path.isfile('db_data/song_db'):
             self.category = self.comboBoxCategory.currentText()
-            self.category_list = self.get_list_in_db()
+            self.category_list = self.get_list_in_db(db_name='song_db')
             if self.category != 'Cartella':
                 self.fill_list_view(self.category, self.category_list)
 
         self.comboBoxCategory.currentIndexChanged.connect(self.combo_box_handler)
         # todo set
+
+        self.set_local_folder()
         self.local_tracks, self.filenames_local = self.get_local_songs()
 
-        self.header = ['', '', 'Title', 'Artist', 'Album', 'Date', '', '']
+        self.header = ['', '', 'Title', 'Artist', 'Album', 'Folder', '', '']
         self.tableView = MyTableView(self.frame_songs, self.local_tracks)
 
         self.playlist_label.setText("Cartella Locale - ~/Musica")
@@ -98,8 +110,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         self.main_window_player.closeSignal.connect(self.cleanExit)
 
-        # this three signal do almost the same thing, condensate
-        #self.tableView.horizontalHeader.sectionClicked.connect(self.sort_table_view)
+
         header = self.tableView.horizontalHeader()
         header.sectionClicked.connect(self.sort_table_view)
       #  header.sectionsClide
@@ -113,33 +124,13 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         self.backTrackButton.clicked.connect(self.back_track)
         self.shuffleButton.clicked.connect(self.shuffle_mode)
         self.repeatButton.clicked.connect(self.repeat_mode)
+        # ----------------------------------------------------
+
         self.my_song_player.songChanged.connect(self._song_changed)
 
+        self.streaming_thread = threading.Thread(target=self.downloader_stream, args=(), daemon=True)
+        self.streaming_thread.start()
 
-    def cleanExit(self):
-        print('Use this function for saving data and cleaning')
-        self.my_song_player.stop()
-        # vlc.libvlc_media_player_stop(self.my_song_player._mediaplayer.get_media_player())
-        # vlc.libvlc_release(self.my_song_player.instance)
-        # vlc.AudioFlushCb()
-        # vlc.AudioCleanupCb()
-        # vlc.libvlc_vlm_del_media(self.my_song_player.instance, self.my_song_player._media)
-
-        #vlc.libvlc_wait(self.my_song_player.instance)
-
-    def h_slider_hanlder(self):
-
-        value = self.horizontalSlider.value()
-        self.my_song_player.set_song_position(value)
-
-    def slider_update(self):
-        if self.my_song_player.is_playing():
-            value = self.my_song_player.get_slider_position() * 100
-            self.horizontalSlider.setValue(value)
-
-    def volume_hanler(self):
-        value = self.verticalSlider.value()
-        self.my_song_player.set_volume(value)
 
     def _song_changed(self, data):
         # Todo: something strange with index
@@ -153,12 +144,16 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
             else:
                 item = self.listWidget.currentItem()
-                if item.text() == self.current_list:
+                if item.text() == self.current_playing_list:
                     self.label_song_text_setter(self.songs_category.tracks()[index][1],
-                                                self.songs_category.tracks()[index][0])
+                                                 self.songs_category.tracks()[index][0])
                     self.tableView.playing_behavior(index)
+                else:
+                    self.label_song_text_setter(self.current_playing_tracks_list[index][1],
+                                                self.current_playing_tracks_list[index][0])
+                    
 
-    def sort_table_view(self, index):
+    def sort_table_view(self):
         order = self.tableView.horizontalHeader().sortIndicatorOrder().name.decode()
         position = self.my_song_player.get_slider_position()
         artist, song_name, index = self.playing_song_data
@@ -173,43 +168,43 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         index = self.songs_category.song_names().index(song_name)
 
         self.my_song_player.stop()
-        self.my_song_player.play_this_item(index, self.songs_category.filenames(), self.current_list)
+        self.my_song_player.play_this_item(index, self.songs_category.filenames(), self.current_playing_list)
         self.tableView.playing_behavior(index)
         self.my_song_player.play_track()
         self.my_song_player.set_song_position(position*100)
 
-    def play_item(self):
-        pass
 
     def select_list(self):
-        self.list_selected = True
+        #Todo: meditate if is safer and more efficient use local variable(not self)
+        # ------ Important------
         self.item = self.listWidget.currentItem()
         if self.item is None:
-            list_widget = self.current_list
+            list_widget = self.current_item
         else:
             list_widget = self.item.text()
 
-        songtracks = self.get_songs(list_widget, self.category, self.category_list)
+        if self._stream_mode:
+            songtracks = self.get_songs(list_widget, self.category, self.category_list, dbname='song_stream_db')
+        else:
+            songtracks = self.get_songs(list_widget, self.category, self.category_list)
+
         self.playlist_label.setText(self.item.text())
 
-        # songtracks = sorted(songtracks, key=operator.itemgetter(3))
-        # songtracks.reverse()
-
         self.tableView.set_new_model(self.frame_songs, songtracks, self.header)
-        if self.item.text() == self.current_list:
+        if self.item.text() == self.current_playing_list:
             self.pushButtonPlaylist.setText('Pause')
         else:
             self.pushButtonPlaylist.setText('Play')
 
-        if self.playing_song_data and self.item.text() == self.current_list:
+        if self.playing_song_data and self.item.text() == self.current_playing_list:
             artist, song_name, index = self.playing_song_data
-            self.label_song_text_setter(self.songs_category.tracks()[index][1],
-                                        self.songs_category.tracks()[index][0])
-            self.tableView.playing_behavior(index)
+            if index:
+                self.tableView.playing_behavior(index)
 
         return self.item, songtracks
 
     def play_list_button(self):
+        #Todo: reorganize this function
         item = self.listWidget.currentItem()
         if self.pushButtonPlaylist.text() == 'Pause':
             self.my_song_player.pause_track()
@@ -217,52 +212,77 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
             self.PlayPauseButton.setChecked(False)
         else:
             self.pushButtonPlaylist.setText('Pause')
-            self.current_list = item.text()
+            if self.category == 'Cartella':
+                self.my_song_player.stop()
+                self.current_playing_list = 'Local'
+                self.filenames = self.filenames_local.copy()
+                self.my_song_player.set_list(self.filenames, self.current_playing_list)
+                self.play_track()
+                self.label_song_text_setter(self.local_tracks[0][0],
+                                            self.local_tracks[0][1])
+                self.PlayPauseButton.setChecked(True)
+                self.tableView.playing_behavior(0)
 
-            self.reset_list_widget_color()
-            item.setForeground(QtGui.QBrush(QtGui.QColor(40, 40, 180)))
+            else:
+                self.current_playing_list = item.text()
 
-            self.PlayPauseButton.setChecked(True)
-            self.my_song_player.stop()
-            self.my_song_player.set_list(self.songs_category.filenames(), self.current_list)
-            self.play_track()
-            self.label_song_text_setter(self.songs_category.tracks()[0][0],
-                                        self.songs_category.tracks()[0][1])
-            self.playing_song_data = [self.songs_category.tracks()[0][0],
-                                      self.songs_category.tracks()[0][1], 0]
-            self.tableView.playing_behavior(0)
 
-    def reset_list_widget_color(self):
-        for i in range(self.listWidget.count()):
-            item = self.listWidget.item(i)
-            item.setForeground(QtGui.QBrush(QtGui.QColor(255, 255, 255)))
-        pass
+                self.reset_list_widget_color()
+                item.setForeground(QtGui.QBrush(QtGui.QColor(40, 40, 180)))
+                self.my_song_player.stop()
+                self.label_song_text_setter(self.songs_category.tracks()[0][0],
+                                            self.songs_category.tracks()[0][1])
+                self.playing_song_data = [self.songs_category.tracks()[0][0],
+                                          self.songs_category.tracks()[0][1], 0]
+                "Setting current playing list because when select list I change this values"
+                self.current_playing_tracks_list = self.songs_category.tracks().copy()
+                self.current_p_tracks_list_url = self.songs_category.url().copy()
+                self.PlayPauseButton.setChecked(True)
+                self.tableView.playing_behavior(0)
+
+                "streaming data are downloaded"
+                if self._stream_mode:
+                    self.download_streaming_songs(self.songs_category.url()[0:5])
+                    time.sleep(5)
+                self.my_song_player.set_list(self.songs_category.filenames(), self.current_playing_list)
+                self.play_track()
+
 
     def play_list(self):
-        # todo:wrong logic, shoul take into account which list
+        # todo:wrong logic, should take into account which list
 
         sender_object = self.sender().objectName()
-
         self.my_song_player.stop()
         self.pushButtonPlaylist.setText('Pause')
 
         item, self.songtracks = self.select_list()
+        self.current_playing_list = item.text()
 
-        self.current_list = item.text()
-
+            
         self.reset_list_widget_color()
         item.setForeground(QtGui.QBrush(QtGui.QColor(40, 40, 180)))
-        self.PlayPauseButton.setChecked(True)
-        self.my_song_player.set_list(self.songs_category.filenames(), self.current_list)
+        self.label_song_text_setter(self.songs_category.tracks()[0][0],
+                                    self.songs_category.tracks()[0][1])
         self.playing_song_data = [self.songs_category.tracks()[0][0],
                                   self.songs_category.tracks()[0][1], 0]
+        self.PlayPauseButton.setChecked(True)
+
+        if self._stream_mode:
+            if not os.path.isfile(self.songs_category.filenames()[0]):
+                self.download_streaming_songs(self.songs_category.url()[0:5])
+                time.sleep(5)
+
+        self.my_song_player.set_list(self.songs_category.filenames(), self.current_playing_list)
         self.play_track()
+
+        self.current_playing_tracks_list = self.songs_category.tracks().copy()
+        self.current_p_tracks_list_url = self.songs_category.url().copy()
 
     def double_click_table(self, index):
         row = index.row()
         #        self.tableView.rowAt()
         if self.category == 'Cartella':
-            self.current_list = 'Local'
+            self.current_playing_list = 'Local'
             self.filenames = self.filenames_local.copy()
             pass
         else:
@@ -275,22 +295,66 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
             self.filenames = self.songs_category.filenames()
 
-            self.current_list = self.item.text()
+            self.current_playing_list = self.item.text()
             self.reset_list_widget_color()
             self.item.setForeground(QtGui.QBrush(QtGui.QColor(40, 60, 200)))
+            self.current_playing_tracks_list = self.songs_category.tracks().copy()
+            self.current_p_tracks_list_url = self.songs_category.url().copy()
 
         self.tableView.playing_behavior(row)
-        self.my_song_player.play_this_item(row, self.filenames, self.current_list)
-
         self.PlayPauseButton.setChecked(True)
         self.pushButtonPlaylist.setText('Pause')
+        "test streaming mode"
+        if self._stream_mode:
+            if not os.path.isfile(self.songs_category.filenames()[row]):
+                self.download_streaming_songs([self.songs_category.url()[row]])
+                time.sleep(6)
+
+        self.my_song_player.play_this_item(row, self.filenames, self.current_playing_list)
+
+
 
     # self.playsong(self.playlist[row], self.folder_song[row])
+
+    def download_streaming_songs(self, url_cache_list, url_category='', shuffle_mode=False, folder=''):
+        "I plan to precharge 5 songs"
+        if shuffle_mode:
+            print('get next song in list')
+        if url_category:
+            "here I could do a pre-charging"
+            pass
+
+        const.args = rs.get_arguments()
+        "To speed up download I do not require metadata or conversion "
+        const.args.output_ext = ".m4a"
+        if folder:
+            pass
+        else:
+            const.args.folder = os.getcwd() + '/cache/'
+
+        for url_song in url_cache_list:
+            rs.streamData.put(['track', url_song])
+
+
+    def downloader_stream(self):
+        data = True
+        while data:
+            category, url = rs.streamData.get()
+            rs.assign_parser_url(category, url)
+            "Starting the main according url parsing"
+            spt_dl_in.main_func_caller()
+            "Resetting the parser because it is unique"
+            rs.reset_parser_url()
+
+    def reset_list_widget_color(self):
+        for i in range(self.listWidget.count()):
+            item = self.listWidget.item(i)
+            item.setForeground(QtGui.QBrush(QtGui.QColor(255, 255, 255)))
+        pass
 
     def label_song_text_setter(self, songname='', artist=''):
         self.song_name_label.setText(songname)
         self.song_artist_label.setText(artist)
-
 
 
     # ---------------------------------------------------------------------------------
@@ -324,23 +388,24 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
     # -----------------------------------------------------------------------
 
-    def get_list_in_db(self):
-        res = player_get_all_user_data()
+    def get_list_in_db(self, db_name):
+        res = player_get_all_user_data(db_name)
         if res:
-            self.playlist, self.album, self.artist, \
-            plname, alname, arname = parsing_user_db_data(res)
-            # plname.sort()
-            # alname.sort()
-            # arname.sort()
-            # plname, self.playlist = [list(x) for x in zip(*sorted(zip(plname,
-            #                         self.playlist), key=operator.itemgetter(0)))]
-            #
-            # alname, self.album = [list(x) for x in zip(*sorted(zip(alname,
-            #                                                           self.album ), key=operator.itemgetter(0)))]
-            #
-            # arname, self.artist = [list(x) for x in zip(*sorted(zip(arname,
-            #                                                         self.artist ), key=operator.itemgetter(0)))]
+            try:
+                self.playlist, self.album, self.artist, \
+                plname, alname, arname = parsing_user_db_data(res)
 
+                plname, self.playlist = [list(x) for x in zip(*sorted(zip(plname,
+                                         self.playlist), key=operator.itemgetter(0)))]
+
+                alname, self.album = [list(x) for x in zip(*sorted(zip(alname,
+                                                                           self.album), key=operator.itemgetter(0)))]
+
+                arname, self.artist = [list(x) for x in zip(*sorted(zip(arname,
+                                                                        self.artist), key=operator.itemgetter(0)))]
+            except Exception as e:
+                print('Error when getting values from db, as:', e)
+                return [None, None, None]
         else:
             return [None, None, None]
 
@@ -352,20 +417,32 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         if self.category == 'Cartella':
             self.local_tracks, self.filenames_local = self.get_local_songs()
             self.tableView.set_new_model(self.frame_songs, self.local_tracks, self.header)
+        elif self.category == 'Brani':
+            pass
         else:
             self.fill_list_view(self.category, self.category_list)
+
+
 
     def fill_list_view(self, category, category_list):
         # Todo: aggiungere selezione da cartella locale
         item = self.dictListView[category]
         self.listWidget.addItems(category_list[item])
 
-    def get_songs(self, option, category, category_list):
+    def get_songs(self, option, category, category_list, dbname='song_db'):
         """Option indicate a single category, if not all song will be returned
             song structure:
             artist, song_name, album, folder
 
         """
+        # Todo: add functionality
+        fullDictSongs = {
+            0 : self.playlist,
+            1 : self.album,
+            2 : self.artist ,
+            "Brani": 3,
+            "Cartella": 4
+        }
 
         if category == 'Cartella':
             raw_songs = self.get_local_songs()
@@ -375,18 +452,29 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         else:
             "if id is for brani, nothing happens"
             index_cat = category_list[self.dictListView[category]]
-            id = index_cat.index(option) + 1
-            raw_songs = get_songs_from_db(id, category)
-            tracks = []
+            index_in_list = index_cat.index(option)
 
-            self.songs_category = SongData(raw_songs, category_list)
+            index_list = fullDictSongs[self.dictListView[category]][index_in_list][0]
+            raw_songs = get_songs_from_db(index_list, category, dbname)
+            tracks = []
+            id_data = [self._id_artist_list, self._id_album_list, self._artists_name_list, self._album_name_list]
+
+            self.songs_category = SongData(raw_songs, category_list, self.artist, self.album)
+            data_list_id = self.songs_category.run_parser(id_data, dbname)
+
+            self._id_artist_list, self._id_album_list, self._artists_name_list, self._album_name_list = data_list_id
+            #if category == 'Playlist':
             self.songs_category.sort_data()
 
             return self.songs_category.tracks()
 
-    def get_local_songs(self):
-        self.music_folder = internals.get_music_dir()
+    def set_local_folder(self, folder=''):
+        if folder:
+            self.music_folder = folder
+        else:
+            self.music_folder = internals.get_music_dir()
 
+    def get_local_songs(self):
         # Fetching Songs
         raw_song_tracks = os.listdir(self.music_folder)
         self.raw_songs = raw_song_tracks.copy()
@@ -397,7 +485,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
             if '.mp3' in item:
                 try:
                     filenames_local.append(self.music_folder + '/' + item)
-                    labels = self.parsing_song(item)
+                    labels = rs.parsing_song(item)
                     #  labels.insert(0, QPushButton(''))
                     songtracks.append(labels)
 
@@ -411,137 +499,68 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
 
         return songtracks, filenames_local
 
-    def parsing_song(self, song):
-        # todo call with another name and move from here
-        # poping format
-        listsplit = re.split(r'[-.]', song)
-        listsong = [x.strip() for x in listsplit]
-        art = listsong[1].split('(')[0]
-        artist = art.strip()
 
-        return [listsong[0], artist, 'Album', 'Current Folder']
+    def volume_hanler(self):
+        value = self.verticalSlider.value()
+        self.my_song_player.set_volume(value)
 
-    def comboBoxParser(self, key, datalist):
-        # todo: implement it
-        print("Starting the data parsing.")
-        switcher = {
-            'Artista': self.get_songs,
-            'Album': self.get_songs,
-            'Playlist': self.fanc3,
-            'Brani': self.func4,
-            'Cartella': self.func5,
-        }
-        func = switcher.get(key)(datalist)
-        return func
+    def cleanExit(self):
+        # Todo: I have a warning/error for mmdevice when closing the program.
+        print('Use this function for saving data and cleaning')
+        self.my_song_player.stop()
+        # vlc.libvlc_media_player_stop(self.my_song_player._mediaplayer.get_media_player())
+        # vlc.libvlc_release(self.my_song_player.instance)
+        # vlc.AudioFlushCb()
+        # vlc.AudioCleanupCb()
+        # vlc.libvlc_vlm_del_media(self.my_song_player.instance, self.my_song_player._media)
 
-class SongData:
-    def __init__(self, data, category_list):
-        #Todo: check category list
-        self._data = data
-        self._tracks = []
-        self._filenames = []
-        self._artists = []
-        self._song_names = []
-        self._durations = []
-        self._category_list = category_list
+        # vlc.libvlc_wait(self.my_song_player.instance)
 
-        self._data_parser(self._data, self._category_list)
 
-    def _data_parser(self, data, category_list):
-        tracks = []
-        for item in data:
-            artist_id = item[4]
-            album_id = item[3]
-            self._artists.append(category_list[2][artist_id - 1])
-            self._song_names.append(item[2])
 
-            tracks.append([category_list[2][artist_id - 1], item[2],
-                           category_list[1][album_id - 1], item[5]])
+    def reset_combobox_downloader(self):
+        if os.path.isfile('db_data/song_db'):
+            self.category = self.comboBoxCategory.currentText()
+            self.category_list = self.get_list_in_db(db_name='song_db')
+            if self.category != 'Cartella':
+                self.fill_list_view(self.category, self.category_list)
 
-            self._filenames.append(item[5])
-            self._durations.append(item[6])
 
-        self.set_tracks(tracks)
-
-    def set_tracks(self, tracks):
-        self._tracks = tracks
-
-    def split_filename(self,filename):
-        only_file_name = []
-        for item in filename:
-            only_file_name.append(item.split('/')[-1])
-
-        return only_file_name
-
-    def sort_data(self, main_list='filename', order='Descending'):
-        "Sort list for artist or songname"
-        #todo sorting is working only for artist
-        filename = self.split_filename(self._filenames)
-        list1 = filename
-        list2 = self._song_names
-
-        if order == 'AscendingOrder':
-            list2.sort()
-            junk, self._song_names, self._filenames, self._artists, \
-                self._tracks = [list(x) for x in zip(*sorted(zip(list1, list2, self._filenames, self._artists,
-                                              self._tracks), key=operator.itemgetter(0), reverse=True))]
+    def down_main_window(self):
+        #todo: check if this window works when db is not created
+        if self._stream_mode:
+            ListStream = MainStream(self.main_window_player)
+            ListStream.stream_window.show()
         else:
-            junk, self._song_names, self._filenames, self._artists,\
-                    self._tracks = [list(x) for x in zip(*sorted(zip(list1, list2, self._filenames, self._artists,
-                                                                              self._tracks),
-                                                                          key=operator.itemgetter(0)))]
-
-    def song_names(self):
-        return self._song_names
-
-    def tracks(self):
-        return self._tracks
-
-    def artists(self):
-        return self._artists
-
-    def duration(self):
-        return self._durations
-
-    def filenames(self):
-        return self._filenames
+            guiDown = MainWin()
+            guiDown.mainwindow.show()
 
 
 
-class spotyfyDataRetrievier:
-    """This class save data"""
+    def stream_mode_button(self):
+        #Todo: check thread logic, start and join...
+        if self._stream_mode:
+            self._stream_mode = False
+            #self.pushButtonDownloader.setEnabled(True)
+            self.reset_combobox_downloader()
+            self.pushButtonDownloader.setText("Download")
 
-    def __init__(self, name, category, url):
+        else:
+            #self.pushButtonDownloader.setEnabled(False)
+            self.pushButtonDownloader.setText("Aggiungi Playlist")
+            self._stream_mode = True
+            self.StreamModeButton.isChecked()
+            self.stream_db = None
 
-        self._name = name
-        self._category = category
-        self._url = url
-        self._tracks = []
-        self._get_tracks_from_url()
-        self._only_tracks = []
+            self._artists_name_list.clear()
+            self._artists_name_list.clear()
+            self._id_album_list.clear()
+            self._id_artist_list.clear()
+            self.listWidget.clear()
 
-    def numb_songs(self):
-        return self._song_numb
-
-    def track_data(self):
-        return self._tracks
-
-    def name(self):
-        return self._name
-
-    def only_tracks(self):
-        return self._only_tracks
-
-    def _get_tracks_from_url(self):
-
-        if self._category == 'Album':
-            self.data, self._song_numb = get_tracks_playlist(self._url)
-
-            for i in range(self._song_numb):
-                self._only_tracks.append(self.data[0][i])
-                self._tracks.append([self.data[0][i],
-                                     self.data[1], self.data[2], self.data[3][i]])
-
-        elif self._category == 'Playlist':
-            self.data, self._song_numb = get_tracks_playlist(self._url)
-            self._tracks = self.data
+            if os.path.isfile('db_data/song_stream_db'):
+                self.category = self.comboBoxCategory.currentText()
+                self.category_list = self.get_list_in_db(db_name='song_stream_db')
+        #        self.comboBoxCategory.setCurrentIndex(0)
+        #         if self.category != 'Cartella':
+        #             self.fill_list_view(self.category, self.category_list)

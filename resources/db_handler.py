@@ -5,11 +5,12 @@ from sqlalchemy.exc import IntegrityError, OperationalError
 from lib_mytune.spotdl_inherited import get_song_data
 from logzero import logger as log
 from resources import resources as rs
+from resources.resources import set_current_directory
 
 # Global Variables
 
 # -----------------------------
-rs.set_current_directory()
+set_current_directory()
 
 
 #
@@ -110,11 +111,11 @@ def db_music_inserter(mydatabase):
     -----------------------------------------------------------
 """
 
-def player_get_all_user_data():
+def player_get_all_user_data(dbname='song_db'):
     """ Player function for geting all playlist and songs in db """
     file_name = rs.MY_WORKING_DIR + '\\db_data\\song_db'
     if file_name:
-        mydbObj = MySongDatabase(dbtype='sqlite', dbname='song_db')
+        mydbObj = MySongDatabase(dbtype='sqlite', dbname=dbname)
         artist_row = mydbObj.query_select_all('artists')
         album_row = mydbObj.query_select_all('albums')
         playlist_row = mydbObj.query_select_all('playlists')
@@ -147,13 +148,13 @@ def player_get_all_songs():
     pass
 
 
-def get_songs_from_db(id_type, option):
+def get_songs_from_db(id_type, option, dbname):
     """ Player function for geting all playlist and songs in db """
     file_name = rs.MY_WORKING_DIR + '\\db_data\\song_db'
     if not option:
         return None
     if file_name:
-        mydbObj = MySongDatabase(dbtype='sqlite', dbname='song_db')
+        mydbObj = MySongDatabase(dbtype='sqlite', dbname=dbname)
         if option == 'Brani':
             result = mydbObj.query_select_all('songs')
         else:
@@ -162,6 +163,23 @@ def get_songs_from_db(id_type, option):
         return result
     else:
         return None
+
+def get_artist_data_from_db(id_artist, dbname='song_db'):
+    file_name = rs.MY_WORKING_DIR + '\\db_data\\song_db'
+    if file_name:
+        mydbObj = MySongDatabase(dbtype='sqlite', dbname=dbname)
+        result = mydbObj.query_select_specified_rows('artists', 'id', id_artist)
+        return result
+
+def get_album_data_from_db(id_album, dbname='song_db'):
+    file_name = rs.MY_WORKING_DIR + '\\db_data\\song_db'
+    if file_name:
+        mydbObj = MySongDatabase(dbtype='sqlite', dbname=dbname)
+        result = mydbObj.query_select_specified_rows('albums', 'id', id_album)
+        return result
+
+
+
 
 """
 --------------------------------------------------------------------    
@@ -195,11 +213,12 @@ class MySongDatabase:
         'play_song': 'db_play_song'
     }
 
-    MY_SONG_DB = rs.MY_WORKING_DIR + '\\db_data\\song_db'
+    database_name = 'song_db'
+    MY_SONG_DB = rs.MY_WORKING_DIR + '\\db_data\\'
 
     # http://docs.sqlalchemy.org/en/latest/core/engines.html
     DB_ENGINE = {
-        SQLITE: 'sqlite:///' + MY_SONG_DB
+        SQLITE: 'sqlite:///' + MY_SONG_DB + '{DB}'
     }
     # Main DB Connection Ref Obj
     db_engine = None
@@ -388,8 +407,9 @@ class MySongDatabase:
         myid = rs.key_id_creator(songname + str(artist_id))
         query = "SELECT id FROM {TABL} where key = ? ".format(TABL=self.SONGTot)
         song_id = self.execute_select_query(query, variable=myid)
-
-        if not song_id:
+        if song_id:
+            song_id = song_id[0][0]
+        else:
             song_id = self.insert_song(songname, album_id, artist_id, filename, url_song, duration)
 
         if playlist:

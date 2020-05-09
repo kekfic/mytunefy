@@ -32,6 +32,17 @@ class SongPlayer(QObject):
         self._mediaplayer = self.instance.media_list_player_new()
         self._mediaplayer.event_manager().event_attach(vlc.EventType.MediaListPlayerNextItemSet, self._song_finished)
         self._mediaplayer.event_manager().event_attach(vlc.EventType.MediaListEndReached, self._list_ended)
+
+        # self.horizontalSlider.sliderMoved.connect(self.h_slider_hanlder)
+        self._slider.sliderPressed.connect(self.h_slider_hanlder)
+        self._slider.sliderReleased.connect(self.h_slider_hanlder)
+
+        self.checkThreadTimer = QtCore.QTimer(self)
+        self.checkThreadTimer.setInterval(1000)  # .5 seconds
+        self.checkThreadTimer.start()
+
+        self.checkThreadTimer.timeout.connect(self.slider_update)
+
        # self._mediaplayer.event_manager().event_attach(vlc.EventType.M, self._list_ended)
         self.is_paused = False
         self.timer = QtCore.QTimer()
@@ -137,7 +148,7 @@ class SongPlayer(QObject):
 
 
     def set_position(self):
-        """Set the movie position according to the position slider.
+        """Set position according to the position slider.
         """
 
         # The vlc MediaPlayer needs a float value between 0 and 1, Qt uses
@@ -159,13 +170,8 @@ class SongPlayer(QObject):
         self._slider.setRange(0, time)
 
     def set_song_position(self, value):
-        """Set the movie position according to the position slider.
+        """Set the position according to the position slider.
         """
-
-        # The vlc MediaPlayer needs a float value between 0 and 1, Qt uses
-        # integer variables, so you need a factor; the higher the factor, the
-        # more precise are the results (1000 should suffice).
-
         # todo: check positon of slider
         # Set the media position to where the slider was dragged
         self.timer.stop()
@@ -179,25 +185,25 @@ class SongPlayer(QObject):
         pos = self._mediaplayer.get_media_player().get_position()
         return pos
 
-    def update_ui(self):
-        """Updates the user interface"""
+    def h_slider_hanlder(self):
+        sender_object = self.sender().objectName()
+        self.checkThreadTimer.stop()
+        value = self._slider.value()
+        self.set_song_position(value)
 
-        # Set the slider's position to its corresponding media position
-        # Note that the setValue function only takes values of type int,
-        # so we must first convert the corresponding media position.
-        media_pos = int(self.mediaplayer.get_position() * 1000)
-        self._slider.setValue(media_pos)
+        self.checkThreadTimer.start()
 
-        # No need to call this function if nothing is played
-        if not self.mediaplayer.is_playing():
-            self.timer.stop()
+    def h_slider_value_changed(self):
+        sender_object = self.sender().objectName()
 
-            # After the video finished, the play button stills shows "Pause",
-            # which is not the desired behavior of a media player.
-            # This fixes that "bug".
-            if not self.is_paused:
-                self.stop()
+    def slider_update(self):
+        sender_object = self.sender().objectName()
+        # if sender_object == 'horizontalSlider':
+        #     value = self._slider.value()
+        #     self.set_song_position(value)
 
-
+        if self.is_playing():
+            value = self.get_slider_position() * 100
+            self._slider.setValue(value)
 
 

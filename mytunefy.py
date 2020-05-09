@@ -43,8 +43,8 @@ if __name__ == "__main__":
         "downloader"
         #  -------------------working on player
         #
-        guiDown = MainWin()
-        guiDown.mainwindow.show()
+        # guiDown = MainWin()
+        # guiDown.mainwindow.show()
         #
         guiPlayer = MainWinPlayer()
         guiPlayer.main_window_player.show()

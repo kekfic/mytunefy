@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '.\gui_main_player.ui',
 # licensing of '.\gui_main_player.ui' applies.
 #
-# Created: Mon May  4 00:37:07 2020
+# Created: Wed May  6 20:10:30 2020
 #      by: pyside2-uic  running on PySide2 5.12.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -134,12 +134,12 @@ class Ui_PlayerMainWindow(object):
         self.toolButtonGeneral.setObjectName("toolButtonGeneral")
         self.verticalLayout_4.addWidget(self.toolButtonGeneral)
         self.TopLayout.addWidget(self.frame)
-        self.Folder = QtWidgets.QPushButton(self.frameTop)
-        self.Folder.setMinimumSize(QtCore.QSize(124, 45))
+        self.FolderButton = QtWidgets.QPushButton(self.frameTop)
+        self.FolderButton.setMinimumSize(QtCore.QSize(124, 45))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.Folder.setFont(font)
-        self.Folder.setStyleSheet("QPushButton {\n"
+        self.FolderButton.setFont(font)
+        self.FolderButton.setStyleSheet("QPushButton {\n"
 "    border: 2px solid #8f8f91;\n"
 "    border-radius: 20px;\n"
 "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
@@ -160,8 +160,8 @@ class Ui_PlayerMainWindow(object):
 "QPushButton:default {\n"
 "    border-color: navy; /* make the default button prominent */\n"
 "}")
-        self.Folder.setObjectName("Folder")
-        self.TopLayout.addWidget(self.Folder)
+        self.FolderButton.setObjectName("FolderButton")
+        self.TopLayout.addWidget(self.FolderButton)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.TopLayout.addItem(spacerItem)
         self.pushButton = QtWidgets.QPushButton(self.frameTop)
@@ -212,6 +212,9 @@ class Ui_PlayerMainWindow(object):
         self.TopLayout.addItem(spacerItem2)
         self.plainTextEdit = QtWidgets.QPlainTextEdit(self.frameTop)
         self.plainTextEdit.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.plainTextEdit.setStyleSheet("QPlainTextEdit {\n"
+"color: white;\n"
+"}")
         self.plainTextEdit.setObjectName("plainTextEdit")
         self.TopLayout.addWidget(self.plainTextEdit)
         self.horizontalLayout_7.addLayout(self.TopLayout)
@@ -351,17 +354,34 @@ class Ui_PlayerMainWindow(object):
 "    image-position: left;\n"
 "    image: url(:/mytunefy/resources/icons/stream_light-grey.png);\n"
 "    }\n"
-"")
+"\n"
+"QPushButton:hover:checked{\n"
+"    color: white;\n"
+"      background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+"    image-position: left;\n"
+"    image: url(:/mytunefy/resources/icons/stream_light-grey.png);\n"
+"    }\n"
+"QPushButton:checked{\n"
+"    color: red;\n"
+"      background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+"    image-position: left;\n"
+"    \n"
+"    image: url(:/mytunefy/resources/icons/stream_icon.png);\n"
+"    }")
+        self.StreamModeButton.setCheckable(True)
+        self.StreamModeButton.setChecked(False)
         self.StreamModeButton.setDefault(False)
         self.StreamModeButton.setObjectName("StreamModeButton")
         self.verticalLayout_7.addWidget(self.StreamModeButton)
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(200, 40))
-        self.pushButton_2.setMaximumSize(QtCore.QSize(200, 40))
+        self.pushButtonDownloader = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButtonDownloader.setMinimumSize(QtCore.QSize(200, 40))
+        self.pushButtonDownloader.setMaximumSize(QtCore.QSize(200, 40))
         font = QtGui.QFont()
         font.setPointSize(9)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setStyleSheet("QPushButton {\n"
+        self.pushButtonDownloader.setFont(font)
+        self.pushButtonDownloader.setStyleSheet("QPushButton {\n"
 "  \n"
 "    border-radius: 20px;\n"
 "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
@@ -389,8 +409,8 @@ class Ui_PlayerMainWindow(object):
 "    image: url(:/mytunefy/resources/icons/down_music_light_grey.png);\n"
 "    }\n"
 "")
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.verticalLayout_7.addWidget(self.pushButton_2)
+        self.pushButtonDownloader.setObjectName("pushButtonDownloader")
+        self.verticalLayout_7.addWidget(self.pushButtonDownloader)
         self.comboBoxCategory = QtWidgets.QComboBox(self.centralwidget)
         self.comboBoxCategory.setMinimumSize(QtCore.QSize(220, 30))
         self.comboBoxCategory.setMaximumSize(QtCore.QSize(220, 35))
@@ -1287,13 +1307,13 @@ class Ui_PlayerMainWindow(object):
     def retranslateUi(self, PlayerMainWindow):
         PlayerMainWindow.setWindowTitle(QtWidgets.QApplication.translate("PlayerMainWindow", "MyTuneFy Player", None, -1))
         self.toolButtonGeneral.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "...", None, -1))
-        self.Folder.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "PushButton", None, -1))
+        self.FolderButton.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "PushButton", None, -1))
         self.pushButton.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Impostazioni", None, -1))
         self.label_User.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "User Name", None, -1))
         self.StreamModeButton.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Play streaming quando la canzone non si trova nella cartella locale", None, -1))
         self.StreamModeButton.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Streaming Music", None, -1))
-        self.pushButton_2.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Scarica Musica", None, -1))
-        self.pushButton_2.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Download", None, -1))
+        self.pushButtonDownloader.setStatusTip(QtWidgets.QApplication.translate("PlayerMainWindow", "Scarica Musica", None, -1))
+        self.pushButtonDownloader.setText(QtWidgets.QApplication.translate("PlayerMainWindow", "Download", None, -1))
         self.comboBoxCategory.setCurrentText(QtWidgets.QApplication.translate("PlayerMainWindow", "Playlist", None, -1))
         self.comboBoxCategory.setItemText(0, QtWidgets.QApplication.translate("PlayerMainWindow", "Playlist", None, -1))
         self.comboBoxCategory.setItemText(1, QtWidgets.QApplication.translate("PlayerMainWindow", "Album", None, -1))

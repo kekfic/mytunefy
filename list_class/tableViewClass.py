@@ -48,7 +48,9 @@ class MyTableModel(QAbstractTableModel):
             font.setFamily('Comic Sans MS')
             font.setPointSize(10)
             return font
-
+        #
+        # elif role == Qt.ForegroundRole:
+        #     if
         else:
             return None
 
@@ -157,6 +159,8 @@ class MyTableView(QTableView):
     def playing_behavior(self, index):
         # todo: find method to keep selected even when plylist is changed
         self.selectRow(index)
+        row = self.rootIndex()
+
 
     def set_scroll_bar_style(self):
         self.verticalScrollBar().setStyleSheet("QScrollBar:vertical\n"

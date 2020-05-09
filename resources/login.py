@@ -11,6 +11,7 @@ from resources.db_handler import MySongDatabase, get_user_database
 
 
 
+
 def time_licence():
     """Function for time licence comproval"""
     try:
@@ -72,11 +73,25 @@ def valid_user():
 
     return valid
 
-def db_song_conn():
+def db_song_conn(dbname='song_db'):
     #check if database exist
     try:
-        file_name = MY_WORKING_DIR + '\\db_data\\song_db'
-        mydbObj = MySongDatabase(dbtype='sqlite', dbname='song_db')
+        file_name = MY_WORKING_DIR + '\\db_data\\' + dbname
+        mydbObj = MySongDatabase(dbtype='sqlite', dbname=dbname)
+        if not path.isfile(file_name):
+            mydbObj.create_db_tables()
+    except Exception as e:
+        print('Database connection error as:', e)
+        mydbObj = []
+
+    return mydbObj
+
+def db_song_stream_conn(dbname='song_db'):
+    try:
+        #todo: ajdust when moving to complete program.
+        file_name = MY_WORKING_DIR + '\\db_data\\song_stream_db'
+        file_name ='D:\\Programmi\\Python\\MusicApp\\Gitea\\MyTuneFy' + '\\db_data\\song_stream_db'
+        mydbObj = MySongDatabase(dbtype='sqlite', dbname='song_stream_db')
         if not path.isfile(file_name):
             mydbObj.create_db_tables()
     except Exception as e:
