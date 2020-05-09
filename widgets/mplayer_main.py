@@ -70,7 +70,7 @@ class MainWinPlayer(QObject, Ui_PlayerMainWindow):
         self.current_item = None
         self.current_playing_tracks_list = [['', ''], ['', '']]
         self.current_p_tracks_list_url = [['', ''], ['', '']]
-        self.label_User.setText(os.getlogin())
+        #self.label_User.setText(os.getlogin())
         self.my_song_player = SongPlayer(self.horizontalSlider, self.verticalSlider)
         self.pushButtonDownloader.clicked.connect(self.down_main_window)
         self.StreamModeButton.clicked.connect(self.stream_mode_button)
