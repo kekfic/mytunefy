@@ -23,7 +23,7 @@ PySide2\
 check each packages dependency
 
 ## Usage
-
+Graphic interface of the program
 ![alt text](https://github.com/kekfic/mytunefy/blob/master/resources/icons/mytune_player.PNG)
 
 ## Code conventions
