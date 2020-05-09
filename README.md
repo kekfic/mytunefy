@@ -4,8 +4,9 @@ Player developed with vlc, spotify download with spotdl, youtube with youtube dl
 A sqlite database is created for saving songs downloaded, position, filename
 
 I developed this program to improve my python programming skills.
-This program is based on already existing library (that actually made the
+This program is based on already existing library (which actually did the
 tougher part of the job).
+
 Contributions are very much appreciated!
 
 * Tested on Python 3.6
