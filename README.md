@@ -1,13 +1,14 @@
 # This is MyTuneFy
-I developed this program to improve my python programming skills. 
-This program is based on already existing library (that actually made the 
-tougher part of the job). 
+Playling, downloading and streaming your music (spotify and youtube).
+Player developed with vlc, spotify download with spotdl, youtube with youtube dl and pafy.
+A sqlite database is created for saving songs downloaded, position, filename
+
+I developed this program to improve my python programming skills.
+This program is based on already existing library (that actually made the
+tougher part of the job).
 Contributions are very much appreciated!
 
-* 
-
-
-* Python 3.3+ and Windows.
+* Tested on Python 3.6
 
 ## Dependency
 
@@ -16,6 +17,8 @@ spotdl\
 pafy\
 sqlalchemy\
 PySide2\
+
+check each packages dependency
 
 ## Code conventions
 
