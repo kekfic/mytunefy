@@ -252,7 +252,7 @@ class MainWin(QObject, Ui_MainWindow):
         pass
 
     def open_manual(self):
-        webbrowser.open('https://nextcloud-theficos.duckdns.org/s/BHwEPTxrfyFiyWp')
+        pass
 
     def out_format(self):
         "Function"
